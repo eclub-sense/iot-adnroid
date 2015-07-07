@@ -64,10 +64,6 @@ public class CameraActivity extends Activity implements ZBarScannerView.ResultHa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // set portrait orientation ONLY
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        mScannerView = (ZBarScannerView) findViewById(R.id.fullscreen_content);
         setContentView(R.layout.activity_camera);
         setupActionBar();
 
