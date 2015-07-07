@@ -4,6 +4,7 @@ import com.eclubprague.weissmydeweiss.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
@@ -62,6 +63,9 @@ public class CameraActivity extends Activity implements ZBarScannerView.ResultHa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // set portrait orientation ONLY
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         mScannerView = (ZBarScannerView) findViewById(R.id.fullscreen_content);
         setContentView(R.layout.activity_camera);
