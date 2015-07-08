@@ -1,4 +1,4 @@
-package com.eclubprague.weissmydeweiss;
+package com.eclubprague.iot.android.weissmydeweiss;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

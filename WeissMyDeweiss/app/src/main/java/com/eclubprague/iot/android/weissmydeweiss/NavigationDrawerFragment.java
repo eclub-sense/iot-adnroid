@@ -1,4 +1,4 @@
-package com.eclubprague.weissmydeweiss;
+package com.eclubprague.iot.android.weissmydeweiss;
 
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;

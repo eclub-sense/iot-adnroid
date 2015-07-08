@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.eclubprague.weissmydeweiss" >
+    package="com.eclubprague.iot.android.weissmydeweiss" >
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -29,7 +29,7 @@
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.eclubprague.weissmydeweiss.MainActivity" />
+                android:value="com.eclubprague.iot.android.weissmydeweiss.MainActivity" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

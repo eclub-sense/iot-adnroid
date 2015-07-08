@@ -1,10 +1,9 @@
-package com.eclubprague.weissmydeweiss;
+package com.eclubprague.iot.android.weissmydeweiss;
 
-import com.eclubprague.weissmydeweiss.util.SystemUiHider;
+import com.eclubprague.iot.android.weissmydeweiss.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
+import android.widget.Toast;
 
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
@@ -222,6 +222,8 @@ public class CameraActivity extends Activity implements ZBarScannerView.ResultHa
 
     @Override
     public void handleResult(Result result) {
+        Toast t = Toast.makeText(this, String.format("%s: %s", result.getContents(), result.getBarcodeFormat().getName()), Toast.LENGTH_LONG);
+        t.show();
         // Do something with the result here
         Log.v("barcodeReader", result.getContents()); // Prints scan results
         Log.v("barcodeReader", result.getBarcodeFormat().getName()); // Prints the scan format (qrcode, pdf417 etc.)
