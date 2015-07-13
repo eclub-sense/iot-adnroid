@@ -19,9 +19,19 @@ android {
     }
 }
 
+repositories {
+    mavenCentral() /* The standard Java Maven repository. */
+    maven { url "http://maven.restlet.org" }
+}
+
+ext.restletVersion = "2.2.3"
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'me.dm7.barcodescanner:zbar:1.7.2'
     compile 'com.android.support:support-v4:22.2.0'
+
+    compile "org.restlet.android:org.restlet:${restletVersion}"
+    compile "org.restlet.android:org.restlet.ext.json:${restletVersion}"
 }
