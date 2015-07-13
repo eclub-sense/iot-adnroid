@@ -33,5 +33,5 @@ dependencies {
     compile 'com.android.support:support-v4:22.2.0'
 
     compile "org.restlet.android:org.restlet:${restletVersion}"
-    compile "org.restlet.android:org.restlet.ext.jackson:${restletVersion}"
+    /*compile "org.restlet.android:org.restlet.ext.jackson:${restletVersion}"*/
 }
