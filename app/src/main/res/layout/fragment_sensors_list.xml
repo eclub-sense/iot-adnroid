@@ -18,8 +18,11 @@
         android:layout_above="@+id/qr_scan_button">
     </ListView>
 
-    <Button android:id="@+id/qr_scan_button" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:text="@string/qr_scan_button" android:onClick="launchQRScanner"
-        android:layout_alignParentBottom="true" android:layout_alignParentEnd="true"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_add_sensor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:onClick="launchQRScanner"
+        android:layout_alignParentBottom="true" android:layout_alignParentEnd="true"
+        android:src="@drawable/icon_plus"/>
 
 </RelativeLayout>
