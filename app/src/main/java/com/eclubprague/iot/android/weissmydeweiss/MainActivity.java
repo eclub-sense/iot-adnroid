@@ -132,9 +132,9 @@ public class MainActivity extends ActionBarActivity
     }
 
     /**
-     * A placeholder fragment containing a simple view.
+     * Launch a QR code scanner.
      */
-    public void naskenujKod(View view) {
+    public void launchQRScanner(View view) {
         Intent myIntent = new Intent(MainActivity.this, CameraActivity.class);
         //myIntent.putExtra("key", value); //Optional parameters
         MainActivity.this.startActivityForResult(myIntent, CameraActivity.REQUEST_SCAN_QR_CODE);
