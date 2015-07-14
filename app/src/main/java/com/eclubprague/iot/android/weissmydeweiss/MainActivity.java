@@ -1,6 +1,8 @@
 package com.eclubprague.iot.android.weissmydeweiss;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -104,6 +106,12 @@ public class MainActivity extends ActionBarActivity
     /**
      * A placeholder fragment containing a simple view.
      */
+    public void naskenujKod(View view) {
+        Intent myIntent = new Intent(MainActivity.this, CameraActivity.class);
+        //myIntent.putExtra("key", value); //Optional parameters
+        MainActivity.this.startActivity(myIntent);
+    }
+
     public static class PlaceholderFragment extends Fragment {
         /**
          * The fragment argument representing the section number for this
