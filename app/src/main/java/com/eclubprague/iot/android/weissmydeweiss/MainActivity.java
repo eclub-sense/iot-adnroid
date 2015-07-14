@@ -14,6 +14,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.Toast;
+
+import com.eclubprague.iot.android.weissmydeweiss.cloud.SensorRegistrator;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;
+
+import org.restlet.engine.Engine;
+import org.restlet.ext.gson.GsonConverter;
+import org.restlet.resource.ClientResource;
 
 
 public class MainActivity extends ActionBarActivity
@@ -109,7 +118,41 @@ public class MainActivity extends ActionBarActivity
     public void naskenujKod(View view) {
         Intent myIntent = new Intent(MainActivity.this, CameraActivity.class);
         //myIntent.putExtra("key", value); //Optional parameters
-        MainActivity.this.startActivity(myIntent);
+        MainActivity.this.startActivityForResult(myIntent, CameraActivity.REQUEST_SCAN_QR_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+            if(requestCode == CameraActivity.REQUEST_SCAN_QR_CODE) {
+                if(resultCode == RESULT_OK) {
+                    try {
+                        final String qrcode = data.getStringExtra(CameraActivity.RESULT_BARCODE);
+                        // send the code to the audience
+                        final int numero = Integer.parseInt(qrcode.split(";")[0]);
+
+                        Thread thr = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Engine.getInstance().getRegisteredConverters().add(new GsonConverter());
+
+                                // try connection
+                                ClientResource cr = new ClientResource("http://192.168.200.255:8080/iot-cloud/sensor_registration");
+                                SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
+
+                                Sensor sensor = new Sensor(numero, SensorType.THERMOMETER, 12345);
+                                sr.store(sensor);
+                            }
+                        });
+                        thr.start();
+
+                    } catch(NumberFormatException e) {
+                        Toast t2 = Toast.makeText(this, "Exception: NaN", Toast.LENGTH_SHORT);
+                        t2.show();
+                    }
+                }
+            }
     }
 
     public static class PlaceholderFragment extends Fragment {
