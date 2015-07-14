@@ -1,7 +1,6 @@
 package com.eclubprague.iot.android.weissmydeweiss;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -46,10 +45,24 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+        Fragment fragment;
+        FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
+        switch(position) {
+            default:
+            case 0:
+                fragment = SensorsListFragment.newInstance();
+                break;
+            case 1:
+                fragment = HubsListFragment.newInstance();
+                break;
+            case 2:
+                fragment = PlaceholderFragment.newInstance(position + 1);
+                break;
+        }
+
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .replace(R.id.container, fragment)
                 .commit();
     }
 
@@ -57,6 +70,7 @@ public class MainActivity extends ActionBarActivity
         switch (number) {
             case 1:
                 mTitle = getString(R.string.title_section1);
+
                 break;
             case 2:
                 mTitle = getString(R.string.title_section2);
@@ -106,9 +120,8 @@ public class MainActivity extends ActionBarActivity
     /**
      * A placeholder fragment containing a simple view.
      */
-    public void naskenujKod(View view) {
+    public void launchQRScanner(View view) {
         Intent myIntent = new Intent(MainActivity.this, CameraActivity.class);
-        //myIntent.putExtra("key", value); //Optional parameters
         MainActivity.this.startActivity(myIntent);
     }
 

@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Weiss My Deweiss</string>
 
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
+    <string name="title_section1">Sensors</string>
+    <string name="title_section2">Hubs</string>
     <string name="title_section3">Section 3</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -15,4 +15,5 @@
     <string name="title_activity_camera">Scan QR code</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="qr_scan_button">Scan QR</string>
 </resources>

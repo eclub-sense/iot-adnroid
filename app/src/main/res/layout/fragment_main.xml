@@ -9,7 +9,7 @@
     <TextView android:id="@+id/section_label" android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <Button android:id="@+id/newButton" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:text="Naskenuj Kod" android:onClick="naskenujKod"/>
+    <Button android:id="@+id/qr_scan_button" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:text="@string/qr_scan_button" android:onClick="launchQRScanner"/>
 
 </RelativeLayout>
