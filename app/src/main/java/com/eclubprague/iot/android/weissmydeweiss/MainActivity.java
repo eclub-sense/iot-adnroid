@@ -52,14 +52,6 @@ public class MainActivity extends ActionBarActivity
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
-        List<Sensor> sensorList = new ArrayList<>();
-        sensorList.add(new Sensor(123, SensorType.THERMOMETER, 12345));
-        sensorList.add(new Sensor(34345, SensorType.LED, 8878));
-        sensorList.add(new Sensor(3677, SensorType.THERMOMETER, 33442));
-
-        ListView sensors = (ListView) findViewById(R.id.sensorsListView);
-        sensors.setAdapter(new SensorListViewAdapter(this, R.layout.item_img_twolines, sensorList));
-
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
@@ -150,36 +142,34 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == CameraActivity.REQUEST_SCAN_QR_CODE) {
+            if(resultCode == RESULT_OK) {
+                try {
+                    final String qrcode = data.getStringExtra(CameraActivity.RESULT_BARCODE);
+                    // send the code to the audience
+                    final int numero = Integer.parseInt(qrcode.split(";")[0]);
 
-            if(requestCode == CameraActivity.REQUEST_SCAN_QR_CODE) {
-                if(resultCode == RESULT_OK) {
-                    try {
-                        final String qrcode = data.getStringExtra(CameraActivity.RESULT_BARCODE);
-                        // send the code to the audience
-                        final int numero = Integer.parseInt(qrcode.split(";")[0]);
+                    Thread thr = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Engine.getInstance().getRegisteredConverters().add(new GsonConverter());
 
-                        Thread thr = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Engine.getInstance().getRegisteredConverters().add(new GsonConverter());
+                            // try connection
+                            ClientResource cr = new ClientResource("http://192.168.201.222:8080/sensor_registration");
+                            SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
 
-                                // try connection
-                                ClientResource cr = new ClientResource("http://192.168.201.222:8080/sensor_registration");
-                                SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
+                            Sensor sensor = new Sensor(numero, SensorType.THERMOMETER, 12345);
+                            sr.store(sensor);
+                        }
+                    });
+                    thr.start();
 
-                                Sensor sensor = new Sensor(numero, SensorType.THERMOMETER, 12345);
-                                sr.store(sensor);
-                            }
-                        });
-                        thr.start();
-
-                    } catch(NumberFormatException e) {
-                        Toast t2 = Toast.makeText(this, "Exception: NaN", Toast.LENGTH_SHORT);
-                        t2.show();
-                    }
+                } catch(NumberFormatException e) {
+                    Toast t2 = Toast.makeText(this, "Exception: NaN", Toast.LENGTH_SHORT);
+                    t2.show();
                 }
             }
+        }
     }
 
     public static class PlaceholderFragment extends Fragment {

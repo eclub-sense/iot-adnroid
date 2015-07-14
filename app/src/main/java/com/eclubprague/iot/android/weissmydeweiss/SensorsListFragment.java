@@ -11,6 +11,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;
+import com.eclubprague.iot.android.weissmydeweiss.ui.SensorListViewAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Dat on 14.7.2015.
  */
@@ -33,22 +40,14 @@ public class SensorsListFragment extends Fragment {
         listView = (ListView) rootView.findViewById(R.id.sensors_list);
 
         // Defined Array values to show in ListView
-        String[] values = new String[] { "Sensor 1",
-                "Sensor 2"
-        };
+        List<Sensor> sensorList = new ArrayList<>();
+        sensorList.add(new Sensor(123, SensorType.THERMOMETER, 12345));
+        sensorList.add(new Sensor(34345, SensorType.LED, 8878));
+        sensorList.add(new Sensor(3677, SensorType.THERMOMETER, 33442));
 
         // Define a new Adapter
-        // First parameter - Context
-        // Second parameter - Layout for the row
-        // Third parameter - ID of the TextView to which the data is written
-        // Forth - the Array of data
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, values);
-
-
         // Assign adapter to ListView
-        listView.setAdapter(adapter);
+        listView.setAdapter(new SensorListViewAdapter(getActivity(), R.layout.item_img_twolines, sensorList));
 
         return rootView;
     }
