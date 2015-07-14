@@ -55,10 +55,24 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+        Fragment fragment;
+        FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
+        switch(position) {
+            default:
+            case 0:
+                fragment = SensorsListFragment.newInstance();
+                break;
+            case 1:
+                fragment = HubsListFragment.newInstance();
+                break;
+            case 2:
+                fragment = PlaceholderFragment.newInstance(position + 1);
+                break;
+        }
+
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .replace(R.id.container, fragment)
                 .commit();
     }
 
