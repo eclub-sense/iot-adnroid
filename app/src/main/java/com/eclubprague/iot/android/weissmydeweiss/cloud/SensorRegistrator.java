@@ -11,10 +11,10 @@ import org.restlet.resource.Result;
  * Created by paulos on 13. 7. 2015.
  */
 public interface SensorRegistrator {
-    @Get
+    @Get("json")
     public Sensor retrieve();
 
-    @Post
+    @Post("json")
     public void store(Sensor sensor);
 
     @Delete

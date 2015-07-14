@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import android.widget.Toast;
 
+import org.restlet.engine.Engine;
+import org.restlet.ext.gson.GsonConverter;
 import org.restlet.resource.ClientResource;
 
 import me.dm7.barcodescanner.zbar.Result;
@@ -239,12 +241,13 @@ public class CameraActivity extends Activity implements ZBarScannerView.ResultHa
             Thread thr = new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    Engine.getInstance().getRegisteredConverters().add(new GsonConverter());
+
                     // try connection
                     ClientResource cr = new ClientResource("http://192.168.200.255:8080/iot-cloud/sensor_registration");
                     SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
 
-                    Sensor sensor = new Sensor(numero, SensorType.LED, 12345);
-
+                    Sensor sensor = new Sensor(numero, SensorType.THERMOMETER, 12345);
                     sr.store(sensor);
                 }
             });
