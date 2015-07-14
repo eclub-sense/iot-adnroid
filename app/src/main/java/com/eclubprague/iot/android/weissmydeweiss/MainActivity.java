@@ -1,6 +1,7 @@
 package com.eclubprague.iot.android.weissmydeweiss;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -13,6 +14,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.Toast;
+
+import com.eclubprague.iot.android.weissmydeweiss.cloud.SensorRegistrator;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;
+
+import org.restlet.engine.Engine;
+import org.restlet.ext.gson.GsonConverter;
+import org.restlet.resource.ClientResource;
 
 
 public class MainActivity extends ActionBarActivity
@@ -45,24 +55,10 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        Fragment fragment;
-        FragmentManager fragmentManager = getSupportFragmentManager(); // For AppCompat use getSupportFragmentManager
-        switch(position) {
-            default:
-            case 0:
-                fragment = SensorsListFragment.newInstance();
-                break;
-            case 1:
-                fragment = HubsListFragment.newInstance();
-                break;
-            case 2:
-                fragment = PlaceholderFragment.newInstance(position + 1);
-                break;
-        }
-
         // update the main content by replacing fragments
+        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
+                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                 .commit();
     }
 
@@ -70,7 +66,6 @@ public class MainActivity extends ActionBarActivity
         switch (number) {
             case 1:
                 mTitle = getString(R.string.title_section1);
-
                 break;
             case 2:
                 mTitle = getString(R.string.title_section2);
@@ -120,9 +115,44 @@ public class MainActivity extends ActionBarActivity
     /**
      * A placeholder fragment containing a simple view.
      */
-    public void launchQRScanner(View view) {
+    public void naskenujKod(View view) {
         Intent myIntent = new Intent(MainActivity.this, CameraActivity.class);
-        MainActivity.this.startActivity(myIntent);
+        //myIntent.putExtra("key", value); //Optional parameters
+        MainActivity.this.startActivityForResult(myIntent, CameraActivity.REQUEST_SCAN_QR_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+            if(requestCode == CameraActivity.REQUEST_SCAN_QR_CODE) {
+                if(resultCode == RESULT_OK) {
+                    try {
+                        final String qrcode = data.getStringExtra(CameraActivity.RESULT_BARCODE);
+                        // send the code to the audience
+                        final int numero = Integer.parseInt(qrcode.split(";")[0]);
+
+                        Thread thr = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Engine.getInstance().getRegisteredConverters().add(new GsonConverter());
+
+                                // try connection
+                                ClientResource cr = new ClientResource("http://192.168.200.255:8080/iot-cloud/sensor_registration");
+                                SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
+
+                                Sensor sensor = new Sensor(numero, SensorType.THERMOMETER, 12345);
+                                sr.store(sensor);
+                            }
+                        });
+                        thr.start();
+
+                    } catch(NumberFormatException e) {
+                        Toast t2 = Toast.makeText(this, "Exception: NaN", Toast.LENGTH_SHORT);
+                        t2.show();
+                    }
+                }
+            }
     }
 
     public static class PlaceholderFragment extends Fragment {

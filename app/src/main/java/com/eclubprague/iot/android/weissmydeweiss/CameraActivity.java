@@ -7,6 +7,7 @@ import com.eclubprague.iot.android.weissmydeweiss.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,6 +34,13 @@ import me.dm7.barcodescanner.zbar.ZBarScannerView;
  * @see SystemUiHider
  */
 public class CameraActivity extends Activity implements ZBarScannerView.ResultHandler {
+
+
+    public static final int REQUEST_SCAN_QR_CODE = 1;
+    public static final String RESULT_BARCODE = "RESULT_BARCODE";
+    public static final String RESULT_BARCODE_TYPE = "RESULT_BARCODE_TYPE";
+
+
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -235,27 +243,11 @@ public class CameraActivity extends Activity implements ZBarScannerView.ResultHa
         Log.v("barcodeReader", result.getContents()); // Prints scan results
         Log.v("barcodeReader", result.getBarcodeFormat().getName()); // Prints the scan format (qrcode, pdf417 etc.)
 
-        try {
-            final int numero = Integer.parseInt(result.getContents());
-
-            Thread thr = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Engine.getInstance().getRegisteredConverters().add(new GsonConverter());
-
-                    // try connection
-                    ClientResource cr = new ClientResource("http://192.168.200.255:8080/iot-cloud/sensor_registration");
-                    SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
-
-                    Sensor sensor = new Sensor(numero, SensorType.THERMOMETER, 12345);
-                    sr.store(sensor);
-                }
-            });
-            thr.start();
-
-        } catch(NumberFormatException e) {
-            Toast t2 = Toast.makeText(this, "Exception: " + result.getContents() + " - NaN", Toast.LENGTH_SHORT);
-            t.show();
-        }
+        // return back to the caller
+        Intent data = new Intent();
+        data.putExtra(RESULT_BARCODE, result.getContents());
+        data.putExtra(RESULT_BARCODE_TYPE, result.getBarcodeFormat().getName());
+        setResult(RESULT_OK, data);
+        finish();
     }
 }
