@@ -41,9 +41,9 @@ public class SensorsListFragment extends Fragment {
 
         // Defined Array values to show in ListView
         List<Sensor> sensorList = new ArrayList<>();
-        sensorList.add(new Sensor(123, SensorType.THERMOMETER, 12345));
-        sensorList.add(new Sensor(34345, SensorType.LED, 8878));
-        sensorList.add(new Sensor(3677, SensorType.THERMOMETER, 33442));
+        sensorList.add(new Sensor(123, SensorType.THERMOMETER, "12345"));
+        sensorList.add(new Sensor(34345, SensorType.LED, "8878"));
+        sensorList.add(new Sensor(3677, SensorType.THERMOMETER, "33442"));
 
         // Define a new Adapter
         // Assign adapter to ListView

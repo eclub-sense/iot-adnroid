@@ -6,10 +6,10 @@ public class Sensor {
 
 	private int uuid;
 	private SensorType type;
-	private int secret;
+	private String secret;
 	private SensorData data;
 	
-	public Sensor(int uuid, SensorType type, int secret) {
+	public Sensor(int uuid, SensorType type, String secret) {
 		this.uuid = uuid;
 		this.type = type;
 		this.secret = secret;
@@ -31,7 +31,7 @@ public class Sensor {
 		return type;
 	}
 
-	public int getSecret() {
+	public String getSecret() {
 		return secret;
 	}
 

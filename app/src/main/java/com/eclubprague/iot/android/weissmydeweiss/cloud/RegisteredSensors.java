@@ -15,7 +15,7 @@ public interface RegisteredSensors {
     public JsonElement retrieve();
 
     @Post("json")
-    public void store(Sensor sensor);
+    public void store(JsonElement collection);
 
     @Delete
     public void remove();

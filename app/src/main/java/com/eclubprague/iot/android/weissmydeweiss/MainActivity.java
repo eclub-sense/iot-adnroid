@@ -147,24 +147,34 @@ public class MainActivity extends ActionBarActivity
                 try {
                     final String qrcode = data.getStringExtra(CameraActivity.RESULT_BARCODE);
                     // send the code to the audience
-                    final int numero = Integer.parseInt(qrcode.split(";")[0]);
+                    String[] qrCodeSplit = qrcode.split(";");
+                    final int sensorId = Integer.parseInt(qrCodeSplit[0]);
+                    final int sensorType = Integer.parseInt(qrCodeSplit[1]);
+                    final String sensorSecret = qrCodeSplit[2];
 
                     Thread thr = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            Engine.getInstance().getRegisteredConverters().add(new GsonConverter());
+                            try {
+                                Engine.getInstance().getRegisteredConverters().add(new GsonConverter());
 
-                            // try connection
-                            ClientResource cr = new ClientResource("http://192.168.201.222:8080/sensor_registration");
-                            SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
+                                // try connection
+                                ClientResource cr = new ClientResource("http://192.168.201.222:8080/sensor_registration");
+                                SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
 
-                            Sensor sensor = new Sensor(numero, SensorType.THERMOMETER, 12345);
-                            sr.store(sensor);
+                                Sensor sensor = new Sensor(sensorId, SensorType.THERMOMETER, sensorSecret);
+                                sr.store(sensor);
+
+                            }catch(Throwable e) {
+                                e.printStackTrace();
+                                Toast t2 = Toast.makeText(MainActivity.this, ":-( Exception: " + e.getMessage(), Toast.LENGTH_LONG);
+                                t2.show();
+                            }
                         }
                     });
                     thr.start();
-
-                } catch(NumberFormatException e) {
+                }
+                catch(NumberFormatException e) {
                     Toast t2 = Toast.makeText(this, "Exception: NaN", Toast.LENGTH_SHORT);
                     t2.show();
                 }
