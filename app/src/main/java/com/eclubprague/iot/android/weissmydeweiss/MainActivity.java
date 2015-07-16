@@ -16,21 +16,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.eclubprague.iot.android.weissmydeweiss.cloud.PaginatedCollection;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.SensorRegistrator;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.RefreshSensorsTask;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorListViewAdapter;
+import com.eclubprague.iot.android.weissmydeweiss.ui.SensorsExpandableListViewAdapter;
 
 import org.restlet.engine.Engine;
 import org.restlet.ext.gson.GsonConverter;
 import org.restlet.resource.ClientResource;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -193,10 +198,16 @@ public class MainActivity extends ActionBarActivity
     public void handleSensorsRefreshed(String hubId, PaginatedCollection<Sensor> sensorsCollection) {
         Toast.makeText(this, "Refresh done", Toast.LENGTH_SHORT).show();
 
-        ListView sensorsList = (ListView) findViewById(R.id.sensors_list);
-        ArrayAdapter<Sensor> adapter = (ArrayAdapter<Sensor>) sensorsList.getAdapter();
-        adapter.clear();
-        adapter.addAll(sensorsCollection.getItems());
+        ExpandableListView sensorsList = (ExpandableListView) findViewById(R.id.sensors_expList);
+        Hub hub1 = new Hub(12456, "example", "that's so secret");
+        List<Hub> hubs = new ArrayList<>();
+        hubs.add(hub1);
+        HashMap<Hub, List<Sensor>> hubSensors = new LinkedHashMap<>();
+        hubSensors.put(hub1, sensorsCollection.getItems());
+        SensorsExpandableListViewAdapter adapter = new SensorsExpandableListViewAdapter(
+                this, hubs, hubSensors);
+
+        sensorsList.setAdapter(adapter);
     }
 
     @Override
