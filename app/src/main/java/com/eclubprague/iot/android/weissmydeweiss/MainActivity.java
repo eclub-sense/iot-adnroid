@@ -24,6 +24,7 @@ import com.eclubprague.iot.android.weissmydeweiss.cloud.PaginatedCollection;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.SensorRegistrator;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorPaginatedCollection;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.RefreshSensorsTask;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorListViewAdapter;
@@ -195,7 +196,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
-    public void handleSensorsRefreshed(String hubId, PaginatedCollection<Sensor> sensorsCollection) {
+    public void handleSensorsRefreshed(String hubId, SensorPaginatedCollection sensorsCollection) {
         Toast.makeText(this, "Refresh done", Toast.LENGTH_SHORT).show();
 
         ExpandableListView sensorsList = (ExpandableListView) findViewById(R.id.sensors_expList);

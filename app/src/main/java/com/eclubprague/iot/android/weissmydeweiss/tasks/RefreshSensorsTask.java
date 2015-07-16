@@ -6,6 +6,7 @@ import com.eclubprague.iot.android.weissmydeweiss.cloud.PaginatedCollection;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.RegisteredSensors;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.SensorRegistrator;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorPaginatedCollection;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;
 
 import org.restlet.engine.Engine;
@@ -17,7 +18,7 @@ import java.lang.ref.WeakReference;
 /**
  * Refreshes sensor list from the server based on hub ID.
  */
-public class RefreshSensorsTask extends AsyncTask<String, Void, PaginatedCollection<Sensor>> {
+public class RefreshSensorsTask extends AsyncTask<String, Void, SensorPaginatedCollection> {
     private final WeakReference<RefreshSensorsCallbacks> callbacks;
 
     public RefreshSensorsTask(RefreshSensorsCallbacks callbacks) {
@@ -25,12 +26,12 @@ public class RefreshSensorsTask extends AsyncTask<String, Void, PaginatedCollect
     }
 
     public interface RefreshSensorsCallbacks {
-        void handleSensorsRefreshed(String hubId, PaginatedCollection<Sensor> sensorsCollection);
+        void handleSensorsRefreshed(String hubId, SensorPaginatedCollection sensorsCollection);
         void handleSensorsRefreshFailed(String hubId);
     }
 
     @Override
-    protected PaginatedCollection<Sensor> doInBackground(String... strings) {
+    protected SensorPaginatedCollection doInBackground(String... strings) {
         // TODO: actually use the hub ID
 
         Engine.getInstance().getRegisteredConverters().add(new GsonConverter());
@@ -49,7 +50,7 @@ public class RefreshSensorsTask extends AsyncTask<String, Void, PaginatedCollect
     }
 
     @Override
-    protected void onPostExecute(PaginatedCollection<Sensor> sensorPaginatedCollection) {
+    protected void onPostExecute(SensorPaginatedCollection sensorPaginatedCollection) {
         super.onPostExecute(sensorPaginatedCollection);
 
         RefreshSensorsCallbacks rsc = callbacks.get();
