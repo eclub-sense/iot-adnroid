@@ -6,7 +6,7 @@ import java.util.List;
  * Created by paulos on 15. 7. 2015.
  */
 public class PaginatedCollection<T> {
-    int count;
+    int totalCount;
     int offset;
 
     List<T> items;
@@ -19,7 +19,10 @@ public class PaginatedCollection<T> {
         return offset;
     }
 
-    public int getCount() {
-        return count;
+    public int getTotalCount() {
+        return totalCount;
+    }
+
+    public PaginatedCollection() {
     }
 }
