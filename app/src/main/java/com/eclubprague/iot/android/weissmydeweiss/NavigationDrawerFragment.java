@@ -248,7 +248,8 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         if (item.getItemId() == R.id.action_refresh) {
-            Toast.makeText(getActivity(), "Refresh", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Refreshing", Toast.LENGTH_SHORT).show();
+            ((MainActivity) getActivity()).refreshSensorsList(getView());
             return true;
         }
 

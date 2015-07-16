@@ -3,6 +3,7 @@ package com.eclubprague.iot.android.weissmydeweiss;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -14,12 +15,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.eclubprague.iot.android.weissmydeweiss.cloud.PaginatedCollection;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.SensorRegistrator;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;
+import com.eclubprague.iot.android.weissmydeweiss.tasks.RefreshSensorsTask;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorListViewAdapter;
 
 import org.restlet.engine.Engine;
@@ -31,7 +35,8 @@ import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        RefreshSensorsTask.RefreshSensorsCallbacks {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -128,6 +133,11 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
+    public void refreshSensorsList(View view) {
+        RefreshSensorsTask task = new RefreshSensorsTask(this);
+        task.execute("hub1");
+    }
+
     /**
      * Launch a QR code scanner.
      */
@@ -179,4 +189,18 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
+    @Override
+    public void handleSensorsRefreshed(String hubId, PaginatedCollection<Sensor> sensorsCollection) {
+        Toast.makeText(this, "Refresh done", Toast.LENGTH_SHORT).show();
+
+        ListView sensorsList = (ListView) findViewById(R.id.sensors_list);
+        ArrayAdapter<Sensor> adapter = (ArrayAdapter<Sensor>) sensorsList.getAdapter();
+        adapter.clear();
+        adapter.addAll(sensorsCollection.getItems());
+    }
+
+    @Override
+    public void handleSensorsRefreshFailed(String hubId) {
+        Toast.makeText(this, "Refresh FAILED :-(", Toast.LENGTH_SHORT).show();
+    }
 }

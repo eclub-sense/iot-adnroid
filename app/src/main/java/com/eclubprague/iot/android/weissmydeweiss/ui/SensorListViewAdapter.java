@@ -32,15 +32,17 @@ public class SensorListViewAdapter extends ArrayAdapter<Sensor> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.item_img_twolines, parent, false);
+        if(convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.item_img_twolines, parent, false);
+        }
 
         Sensor s = getItem(position);
-        TextView textView = (TextView) rowView.findViewById(R.id.firstLine);
+        TextView textView = (TextView) convertView.findViewById(R.id.firstLine);
         textView.setText(Integer.toString(s.getUuid()));
-        TextView textView2 = (TextView) rowView.findViewById(R.id.secondLine);
+        TextView textView2 = (TextView) convertView.findViewById(R.id.secondLine);
         textView2.setText(s.getType().getName());
 
-        return rowView;
+        return convertView;
     }
 }

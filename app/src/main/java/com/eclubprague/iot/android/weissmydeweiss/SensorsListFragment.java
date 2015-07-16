@@ -47,7 +47,8 @@ public class SensorsListFragment extends Fragment {
 
         // Define a new Adapter
         // Assign adapter to ListView
-        listView.setAdapter(new SensorListViewAdapter(getActivity(), R.layout.item_img_twolines, sensorList));
+        SensorListViewAdapter adapter = new SensorListViewAdapter(getActivity(), R.layout.item_img_twolines, sensorList);
+        listView.setAdapter(adapter);
 
         return rootView;
     }
