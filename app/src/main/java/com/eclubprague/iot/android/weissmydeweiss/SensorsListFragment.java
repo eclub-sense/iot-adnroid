@@ -63,7 +63,7 @@ public class SensorsListFragment extends Fragment {
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
                 new SensorInfoDialog(rootView.getContext(),
-                        (Sensor)((SensorsExpandableListViewAdapter)(parent.getExpandableListAdapter())).
+                        (Sensor) parent.getExpandableListAdapter().
                                 getChild(groupPosition, childPosition));
                 return false;
             }
