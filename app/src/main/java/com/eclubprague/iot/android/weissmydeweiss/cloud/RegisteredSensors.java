@@ -12,10 +12,10 @@ import org.restlet.resource.Post;
  */
 public interface RegisteredSensors {
     @Get("json")
-    public JsonElement retrieve();
+    public PaginatedCollection<Sensor> retrieve();
 
     @Post("json")
-    public void store(JsonElement collection);
+    public void store(PaginatedCollection<Sensor> collection);
 
     @Delete
     public void remove();
