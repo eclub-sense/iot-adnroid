@@ -88,13 +88,18 @@ public class BuiltInSensorInfoDialog extends AlertDialog.Builder implements Sens
                         "  z: " + String.format("%.2f", event.values[2]));
                 break;
             case Sensor.TYPE_PROXIMITY:
-                txt.setText("proximity: " + String.format("%.2f", event.values[0]));
+                txt.setText("proximity: " + String.format("%.2f", event.values[0]) + " cm");
                 break;
             case Sensor.TYPE_LIGHT:
-                txt.setText("illumination: " + String.format("%.2f", event.values[0]));
+                txt.setText("illumination: " + String.format("%.2f", event.values[0]) + " lx");
                 break;
             default:
-                txt.setText("Not Yet Implemented.");
+                String text = "data: ";
+                    for(int i = 0; i < event.values.length; i++) {
+                        text+= String.format("%.2f", event.values[i]);
+                        text += "   ";
+                    }
+                txt.setText(text);
 
         }
         layout.invalidate();
