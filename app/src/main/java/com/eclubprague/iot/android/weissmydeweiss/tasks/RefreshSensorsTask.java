@@ -4,9 +4,7 @@ import android.os.AsyncTask;
 
 import com.eclubprague.iot.android.weissmydeweiss.cloud.PaginatedCollection;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.RegisteredSensors;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.SensorRegistrator;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;
 
 import org.restlet.engine.Engine;
 import org.restlet.ext.gson.GsonConverter;

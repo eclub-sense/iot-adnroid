@@ -6,13 +6,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.VirtualSensorCreator;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorListViewAdapter;
 
 import java.util.ArrayList;
@@ -41,9 +39,9 @@ public class SensorsListFragment extends Fragment {
 
         // Defined Array values to show in ListView
         List<Sensor> sensorList = new ArrayList<>();
-        sensorList.add(new Sensor(123, SensorType.THERMOMETER, "12345"));
-        sensorList.add(new Sensor(34345, SensorType.LED, "8878"));
-        sensorList.add(new Sensor(3677, SensorType.THERMOMETER, "33442"));
+        sensorList.add(VirtualSensorCreator.createSensorInstance(123, SensorType.THERMOMETER, "12345"));
+        sensorList.add(VirtualSensorCreator.createSensorInstance(34345, SensorType.LED, "8878"));
+        sensorList.add(VirtualSensorCreator.createSensorInstance(3677, SensorType.THERMOMETER, "33442"));
 
         // Define a new Adapter
         // Assign adapter to ListView

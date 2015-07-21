@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -39,7 +38,7 @@ public class SensorListViewAdapter extends ArrayAdapter<Sensor> {
 
         Sensor s = getItem(position);
         TextView textView = (TextView) convertView.findViewById(R.id.firstLine);
-        textView.setText(Integer.toString(s.getUuid()));
+        textView.setText(s.getStringUuid());
         TextView textView2 = (TextView) convertView.findViewById(R.id.secondLine);
         textView2.setText(s.getType().getName());
 

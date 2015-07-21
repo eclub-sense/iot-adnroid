@@ -1,7 +1,6 @@
 package com.eclubprague.iot.android.weissmydeweiss.cloud;
 
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
-import com.google.gson.JsonElement;
 
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
