@@ -34,6 +34,7 @@ public class RefreshSensorsTask extends AsyncTask<String, Void, SensorPaginatedC
     protected SensorPaginatedCollection doInBackground(String... strings) {
         // TODO: actually use the hub ID
 
+        Engine.getInstance().getRegisteredConverters().clear();
         Engine.getInstance().getRegisteredConverters().add(new GsonCustomConverter());
 
         try {

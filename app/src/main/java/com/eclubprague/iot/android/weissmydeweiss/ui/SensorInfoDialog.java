@@ -7,9 +7,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.ESCLed;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.ESCThermometer;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Led;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
+
+import java.security.spec.ECField;
 
 /**
  * Created by Dat on 16.7.2015.
@@ -35,10 +37,11 @@ public class SensorInfoDialog extends AlertDialog.Builder {
         text2.setPadding(5, 5, 5, 5);
 
         if(sensor instanceof ESCThermometer) {
-            text1.setText(Integer.toString(((ESCThermometer) sensor).getTemperature()));
-            text2.setText(Integer.toString(((ESCThermometer) sensor).getPressure()));
+            text1.setText("Temperature: " + Integer.toString(((ESCThermometer) sensor).getTemperature()));
+            text2.setText("Pressure: " + Integer.toString(((ESCThermometer) sensor).getPressure()));
         }
-        else if(sensor instanceof Led) {
+        else if(sensor instanceof ESCLed) {
+            text1.setText("LED " + (((ESCLed) sensor).getLed().toString()));
         }
 
         layout.addView(text1);

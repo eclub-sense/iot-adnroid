@@ -22,17 +22,6 @@ public class Sensor implements Identificable {
 	protected Hub hub;
 	protected byte reserved[] = new byte[3];
 
-	@Expose (deserialize = false) protected int temperature;
-	@Expose (deserialize = false) protected int pressure;
-
-	public int getTemperature() {
-		return temperature;
-	}
-
-	public int getPressure() {
-		return pressure;
-	}
-
 	public Sensor() {
 		super();
 	}

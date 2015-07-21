@@ -28,16 +28,4 @@ public class GsonCustomConverter extends GsonConverter {
         return new GsonCustomRepresentation<T>(source, objectClass);
     }
 
-    @Override
-    public List<Class<?>> getObjectClasses(Variant source) {
-        List<Class<?>> result = null;
-
-        if (VARIANT_JSON.isCompatible(source)) {
-            result = addObjectClass(result, Object.class);
-            result = addObjectClass(result, GsonCustomRepresentation.class);
-        }
-
-        return result;
-    }
-
 }

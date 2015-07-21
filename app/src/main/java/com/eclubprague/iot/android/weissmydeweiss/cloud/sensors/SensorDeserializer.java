@@ -16,14 +16,14 @@ public class SensorDeserializer implements JsonDeserializer<Sensor> {
     @Override
     public Sensor deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jo = json.getAsJsonObject();
-        String sensorTypeName = jo.get("SensorType").getAsString();
+        String sensorTypeName = jo.get("type").getAsString();
         SensorType sensorType = SensorType.valueOf(sensorTypeName);
 
         if(sensorType != null) {
             if (sensorType.equals(SensorType.THERMOMETER)) {
                 return context.deserialize(json, ESCThermometer.class);
             } else if (sensorType.equals(SensorType.LED)) {
-                return context.deserialize(json, Led.class);
+                return context.deserialize(json, ESCLed.class);
             }
         }
         throw new JsonParseException("We can't deserialize this type of Sensor.");

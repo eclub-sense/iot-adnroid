@@ -47,6 +47,7 @@ public class GetSensorTask extends AsyncTask<Integer, Void, GetSensorTask.GetSen
 
     @Override
     protected GetSensorResult doInBackground(Integer... uuids) {
+        Engine.getInstance().getRegisteredConverters().clear();
         Engine.getInstance().getRegisteredConverters().add(new GsonCustomConverter());
 
         try {
