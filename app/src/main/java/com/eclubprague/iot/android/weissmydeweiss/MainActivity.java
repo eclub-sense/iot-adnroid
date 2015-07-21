@@ -202,7 +202,7 @@ public class MainActivity extends ActionBarActivity
         Toast.makeText(this, "Refresh done", Toast.LENGTH_SHORT).show();
 
         ExpandableListView sensorsList = (ExpandableListView) findViewById(R.id.sensors_expList);
-        Hub hub1 = new Hub(12456, "example", "that's so secret");
+        Hub hub1 = new Hub(12456);
         List<Hub> hubs = new ArrayList<>();
         hubs.add(hub1);
         HashMap<Hub, List<Sensor>> hubSensors = new LinkedHashMap<>();

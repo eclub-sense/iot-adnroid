@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.eclubprague.iot.android.weissmydeweiss.tasks.GetSensorTask;
 import com.eclubprague.iot.android.weissmydeweiss.ui.BuiltInSensorInfoDialog;
 import com.eclubprague.iot.android.weissmydeweiss.ui.BuiltInSensorsListViewAdapter;
 

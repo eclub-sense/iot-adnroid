@@ -10,7 +10,7 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
 
-public abstract class Sensor implements Identificable {
+public class Sensor implements Identificable {
 	
 	@Expose @SerializedName("@type") private String jsonType = "sensor";
 	@Expose protected int uuid;
@@ -21,18 +21,20 @@ public abstract class Sensor implements Identificable {
 	@Expose (deserialize = false) protected int hubID;
 	protected Hub hub;
 	protected byte reserved[] = new byte[3];
-	
+
 	public Sensor() {
 		super();
 	}
-	
+
 	public Sensor(int uuid, SensorType type, String secret) {
 		this.uuid = uuid;
 		this.type = type;
 		this.secret = secret;
 	}
 
-	public abstract void setPayload(byte[] data);
+	public void setPayload(byte[] data) {
+
+	}
 	
 	public void setMessageParts(String p) throws DecoderException {
 		byte[] packet = decrypt(p);
