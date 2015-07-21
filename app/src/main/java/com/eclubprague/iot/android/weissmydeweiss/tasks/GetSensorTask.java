@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import com.eclubprague.iot.android.weissmydeweiss.cloud.RegisteredSensors;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.SensorRegistrator;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.gsonmods.GsonCustomConverter;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 
 import org.restlet.engine.Engine;
@@ -46,7 +47,7 @@ public class GetSensorTask extends AsyncTask<Integer, Void, GetSensorTask.GetSen
 
     @Override
     protected GetSensorResult doInBackground(Integer... uuids) {
-        Engine.getInstance().getRegisteredConverters().add(new GsonConverter());
+        Engine.getInstance().getRegisteredConverters().add(new GsonCustomConverter());
 
         try {
             // try connection

@@ -7,6 +7,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.ESCThermometer;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Led;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 
 /**
@@ -27,12 +29,17 @@ public class SensorInfoDialog extends AlertDialog.Builder {
         layout.setOrientation(LinearLayout.VERTICAL);
 
         TextView text1=new TextView(this.context);
-        text1.setText("Info_1");
         text1.setPadding(5, 5, 5, 5);
 
         TextView text2=new TextView(this.context);
-        text2.setText("Info_2");
         text2.setPadding(5, 5, 5, 5);
+
+        if(sensor instanceof ESCThermometer) {
+            text1.setText(Integer.toString(((ESCThermometer) sensor).getTemperature()));
+            text2.setText(Integer.toString(((ESCThermometer) sensor).getPressure()));
+        }
+        else if(sensor instanceof Led) {
+        }
 
         layout.addView(text1);
         layout.addView(text2);

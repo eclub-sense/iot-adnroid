@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import com.eclubprague.iot.android.weissmydeweiss.cloud.PaginatedCollection;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.RegisteredSensors;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.gsonmods.GsonCustomConverter;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorPaginatedCollection;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;
@@ -33,7 +34,7 @@ public class RefreshSensorsTask extends AsyncTask<String, Void, SensorPaginatedC
     protected SensorPaginatedCollection doInBackground(String... strings) {
         // TODO: actually use the hub ID
 
-        Engine.getInstance().getRegisteredConverters().add(new GsonConverter());
+        Engine.getInstance().getRegisteredConverters().add(new GsonCustomConverter());
 
         try {
             // try connection
