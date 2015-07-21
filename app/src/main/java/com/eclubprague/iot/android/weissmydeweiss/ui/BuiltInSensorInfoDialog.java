@@ -61,12 +61,13 @@ public class BuiltInSensorInfoDialog extends AlertDialog.Builder implements Sens
         this.setView(layout);
 
         this.setTitle(sensor.getName());
-        this.setMessage("Message");
+        this.setMessage("INFO");
 
         this.setPositiveButton("Close",new DialogInterface.OnClickListener()
         {
             public void onClick(DialogInterface dialog,int id)
             {
+                senSensorManager.unregisterListener(BuiltInSensorInfoDialog.this);
                 dialog.dismiss();
             }
         });
@@ -89,6 +90,10 @@ public class BuiltInSensorInfoDialog extends AlertDialog.Builder implements Sens
                 break;
             case Sensor.TYPE_PROXIMITY:
                 txt.setText("proximity: " + String.format("%.2f", event.values[0]) + " cm");
+                if(event.values[0] < sensor.getMaximumRange()) {
+                    Toast t2 = Toast.makeText(context, "I SEE YOU", Toast.LENGTH_SHORT);
+                    t2.show();
+                }
                 break;
             case Sensor.TYPE_LIGHT:
                 txt.setText("illumination: " + String.format("%.2f", event.values[0]) + " lx");
