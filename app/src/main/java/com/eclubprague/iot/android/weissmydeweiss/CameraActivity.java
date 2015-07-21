@@ -1,8 +1,5 @@
 package com.eclubprague.iot.android.weissmydeweiss;
 
-import com.eclubprague.iot.android.weissmydeweiss.cloud.SensorRegistrator;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;
 import com.eclubprague.iot.android.weissmydeweiss.util.SystemUiHider;
 
 import android.annotation.TargetApi;
@@ -18,10 +15,6 @@ import android.view.View;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import android.widget.Toast;
-
-import org.restlet.engine.Engine;
-import org.restlet.ext.gson.GsonConverter;
-import org.restlet.resource.ClientResource;
 
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;

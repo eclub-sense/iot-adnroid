@@ -35,5 +35,7 @@ dependencies {
 
     compile "org.restlet.android:org.restlet:${restletVersion}"
     compile "org.restlet.android:org.restlet.ext.gson:${restletVersion}"
+
+    compile "commons-codec:commons-codec:1.10"
 }
 

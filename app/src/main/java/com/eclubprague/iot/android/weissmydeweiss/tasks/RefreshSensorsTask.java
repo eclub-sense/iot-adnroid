@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 
 import com.eclubprague.iot.android.weissmydeweiss.cloud.PaginatedCollection;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.RegisteredSensors;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.SensorRegistrator;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorPaginatedCollection;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;

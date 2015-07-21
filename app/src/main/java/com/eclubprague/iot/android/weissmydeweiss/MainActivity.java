@@ -1,19 +1,14 @@
 package com.eclubprague.iot.android.weissmydeweiss;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
@@ -25,7 +20,9 @@ import com.eclubprague.iot.android.weissmydeweiss.cloud.SensorRegistrator;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorPaginatedCollection;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorInstanceCreator;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.VirtualSensorCreator;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.RefreshSensorsTask;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorListViewAdapter;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorsExpandableListViewAdapter;
@@ -38,7 +35,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
@@ -175,7 +171,7 @@ public class MainActivity extends ActionBarActivity
                                 ClientResource cr = new ClientResource("http://192.168.201.222:8080/sensor_registration");
                                 SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
 
-                                Sensor sensor = new Sensor(sensorId, SensorType.THERMOMETER, sensorSecret);
+                                Sensor sensor = VirtualSensorCreator.createSensorInstance(sensorId, SensorType.THERMOMETER, sensorSecret);
                                 sr.store(sensor);
 
                             }catch(Throwable e) {
