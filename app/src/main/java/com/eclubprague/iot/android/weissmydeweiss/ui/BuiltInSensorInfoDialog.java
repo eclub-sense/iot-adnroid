@@ -63,11 +63,18 @@ public class BuiltInSensorInfoDialog extends AlertDialog.Builder implements Sens
         this.setTitle(sensor.getName());
         this.setMessage("INFO");
 
+        this.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                senSensorManager.unregisterListener(BuiltInSensorInfoDialog.this);
+            }
+        });
+
         this.setPositiveButton("Close",new DialogInterface.OnClickListener()
         {
             public void onClick(DialogInterface dialog,int id)
             {
-                senSensorManager.unregisterListener(BuiltInSensorInfoDialog.this);
+                //senSensorManager.unregisterListener(BuiltInSensorInfoDialog.this);
                 dialog.dismiss();
             }
         });

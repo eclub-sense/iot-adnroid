@@ -4,6 +4,7 @@
     <string name="title_section1">Sensors</string>
     <string name="title_section2">Hubs</string>
     <string name="title_section3">Built-ins</string>
+    <string name="title_section4">Bluetooth Devices</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -16,4 +17,5 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="qr_scan_button">Scan QR</string>
+    <string name="scan_devices_button">Scan Bluetooth Devices</string>
 </resources>
