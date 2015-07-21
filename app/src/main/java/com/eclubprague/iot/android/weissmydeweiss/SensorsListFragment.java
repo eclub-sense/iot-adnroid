@@ -15,6 +15,8 @@ import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.VirtualSensorCreator;
+import com.eclubprague.iot.android.weissmydeweiss.ui.SensorInfoDialog;
+import com.eclubprague.iot.android.weissmydeweiss.ui.SensorListViewAdapter;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorsExpandableListViewAdapter;
 
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ public class SensorsListFragment extends Fragment {
     SensorsExpandableListViewAdapter adapter;
     List<Hub> groupItems;
     HashMap<Hub, List<Sensor>> childItems;
+    View rootView;
 
     public static SensorsListFragment newInstance() {
         SensorsListFragment fragment = new SensorsListFragment();
@@ -41,16 +44,11 @@ public class SensorsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_sensors_list, container, false);
+        rootView = inflater.inflate(R.layout.fragment_sensors_list, container, false);
 
         // get the listview
         expListView = (ExpandableListView) rootView.findViewById(R.id.sensors_expList);
 
-        // Defined Array values to show in ListView
-        List<Sensor> sensorList = new ArrayList<>();
-        sensorList.add(VirtualSensorCreator.createSensorInstance(123, SensorType.THERMOMETER, "12345"));
-        sensorList.add(VirtualSensorCreator.createSensorInstance(34345, SensorType.LED, "8878"));
-        sensorList.add(VirtualSensorCreator.createSensorInstance(3677, SensorType.THERMOMETER, "33442"));
         // preparing list data
         prepareListData();
 
@@ -59,20 +57,17 @@ public class SensorsListFragment extends Fragment {
         // setting list adapter
         expListView.setAdapter(adapter);
 
+        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
 
-
-
-//        listView = (ListView) rootView.findViewById(R.id.sensors_list);
-//
-//        // Defined Array values to show in ListView
-//        List<Sensor> sensorList = new ArrayList<>();
-//        sensorList.add(new Sensor(123, SensorType.THERMOMETER, "12345"));
-//        sensorList.add(new Sensor(34345, SensorType.LED, "8878"));
-//        sensorList.add(new Sensor(3677, SensorType.THERMOMETER, "33442"));
-//
-//        // Define a new Adapter
-//        // Assign adapter to ListView
-//        listView.setAdapter(new SensorListViewAdapter(getActivity(), R.layout.item_img_twolines, sensorList));
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v,
+                                        int groupPosition, int childPosition, long id) {
+                new SensorInfoDialog(rootView.getContext(),
+                        (Sensor) parent.getExpandableListAdapter().
+                                getChild(groupPosition, childPosition));
+                return false;
+            }
+        });
 
         return rootView;
     }
@@ -104,7 +99,7 @@ public class SensorsListFragment extends Fragment {
         bathroom.add(VirtualSensorCreator.createSensorInstance(7001, SensorType.THERMOMETER, "0124"));
         bathroom.add(VirtualSensorCreator.createSensorInstance(1991, SensorType.LED, "12345"));
 
-        childItems.put(groupItems.get(0), livingRoom); // Header, Child data
+        childItems.put(groupItems.get(0), livingRoom);
         childItems.put(groupItems.get(1), kitchen);
         childItems.put(groupItems.get(2), bathroom);
     }

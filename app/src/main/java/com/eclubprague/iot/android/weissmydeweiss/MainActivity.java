@@ -1,6 +1,9 @@
 package com.eclubprague.iot.android.weissmydeweiss;
 
 import android.content.Intent;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -24,6 +27,7 @@ import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorInstanceCr
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.VirtualSensorCreator;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.RefreshSensorsTask;
+import com.eclubprague.iot.android.weissmydeweiss.ui.BuiltInSensorInfoDialog;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorListViewAdapter;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorsExpandableListViewAdapter;
 
@@ -77,6 +81,8 @@ public class MainActivity extends ActionBarActivity
             case 1:
                 fragment = HubsListFragment.newInstance();
                 break;
+            case 2:
+                fragment = BuiltInSensorsListFragment.newInstance();
         }
 
         // update the main content by replacing fragments
