@@ -3,7 +3,8 @@ package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors;
 public enum SensorType {
 	THERMOMETER(0x41, "thermometer"), // 0x41
 	LED(0x1, "led"),
-	GPS(0x42, "gps");
+	GPS(0x42, "gps"),
+	BUILTIN(0X2, "builtin");
 
 	private final int code;
 	private final String name;

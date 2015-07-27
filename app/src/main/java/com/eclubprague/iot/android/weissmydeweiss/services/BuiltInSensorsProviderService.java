@@ -14,10 +14,12 @@ import android.os.IBinder;
 import android.widget.Toast;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.BuiltInSensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.GPS;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.google.android.gms.location.LocationServices;
@@ -98,6 +100,7 @@ public class BuiltInSensorsProviderService extends Service implements Connection
     @Override
     public boolean onUnbind(Intent intent) {
         stopLocationUpdates();
+        unregisterSensorListeners();
         return super.onUnbind(intent);
     }
 
@@ -191,11 +194,11 @@ public class BuiltInSensorsProviderService extends Service implements Connection
         switch(event.sensor.getType()) {
 
             default:
-                String text = "data: ";
+                List<Float> data = new ArrayList<>();
                 for(int i = 0; i < event.values.length; i++) {
-                    text+= String.format("%.2f", event.values[i]);
-                    text += "   ";
+                    data.add(event.values[i]);
                 }
+                ( (BuiltInSensor)(builtInSensors.get(event.sensor.getName())) ).setData(data);
         }
     }
 
@@ -219,6 +222,17 @@ public class BuiltInSensorsProviderService extends Service implements Connection
         deviceSensors = mSensorManager.getSensorList(android.hardware.Sensor.TYPE_ALL);
 
         builtInSensors.put(gpsKey, new GPS(12346, "gps_secret"));
+
+        for(int i = 0; i < deviceSensors.size(); i++) {
+            android.hardware.Sensor sensor = deviceSensors.get(i);
+            builtInSensors.put(sensor.getName(),
+                    new BuiltInSensor(i, sensor.getName()));
+            mSensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
+    private void unregisterSensorListeners() {
+            mSensorManager.unregisterListener(this);
     }
 }
 
