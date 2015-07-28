@@ -19,9 +19,11 @@ public class SensorInstanceCreator {
 			e.printStackTrace();
 		}
 		switch ((String)type) {
-		case "THERMOMETER" : return gson.fromJson(json, ESCThermometer.class);
-		case "LED" : return gson.fromJson(json, ESCThermometer.class);
-		default : return null;
+			case "THERMOMETER" :
+				return gson.fromJson(json, ESCThermometer.class);
+			case "LED" :
+			default :
+				return null;
 		}
 	}
 }
