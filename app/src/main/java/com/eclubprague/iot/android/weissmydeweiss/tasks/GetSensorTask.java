@@ -52,7 +52,7 @@ public class GetSensorTask extends AsyncTask<Integer, Void, GetSensorTask.GetSen
 
         try {
             // try connection
-            ClientResource cr = new ClientResource("http://192.168.201.222:8080/registered_sensors");
+            ClientResource cr = new ClientResource("http://192.168.201.222:8080/registered_sensors/" + Integer.toString(uuids[0]));
             RegisteredSensors rs = cr.wrap(RegisteredSensors.class);
 
             return new GetSensorResult(true, rs.get(uuids[0]));

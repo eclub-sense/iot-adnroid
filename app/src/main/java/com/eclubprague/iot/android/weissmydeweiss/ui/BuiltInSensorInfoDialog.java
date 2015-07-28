@@ -39,7 +39,7 @@ public class BuiltInSensorInfoDialog extends AlertDialog.Builder implements Sens
         text1.setPadding(5, 5, 5, 5);
 
         TextView text2=new TextView(this.context);
-        text2.setText("type: " + sensor.getStringType());
+        //text2.setText("type: " + sensor.getStringType());
         text2.setPadding(5, 5, 5, 5);
 
         TextView text3=new TextView(this.context);
