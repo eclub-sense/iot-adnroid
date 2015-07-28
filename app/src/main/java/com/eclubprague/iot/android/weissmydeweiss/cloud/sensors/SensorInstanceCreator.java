@@ -22,9 +22,6 @@ public class SensorInstanceCreator {
 			case "THERMOMETER" :
 				return gson.fromJson(json, ESCThermometer.class);
 			case "LED" :
-				return gson.fromJson(json, ESCThermometer.class);
-			case "GPS" :
-				return gson.fromJson(json, GPS.class);
 			default :
 				return null;
 		}
