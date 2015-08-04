@@ -163,8 +163,8 @@ public class MainActivity extends ActionBarActivity
                     final String qrcode = data.getStringExtra(CameraActivity.RESULT_BARCODE);
                     // send the code to the audience
                     String[] qrCodeSplit = qrcode.split(";");
-                    final int sensorId = Integer.parseInt(qrCodeSplit[0]);
-                    final int sensorType = Integer.parseInt(qrCodeSplit[1]);
+                    final String sensorId = qrCodeSplit[0].trim();
+                    final int sensorType = Integer.parseInt(qrCodeSplit[1], 16);
                     final String sensorSecret = qrCodeSplit[2];
 
                     Thread thr = new Thread(new Runnable() {
@@ -177,7 +177,7 @@ public class MainActivity extends ActionBarActivity
                                 ClientResource cr = new ClientResource("http://192.168.201.222:8080/sensor_registration");
                                 SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
 
-                                Sensor sensor = VirtualSensorCreator.createSensorInstance(sensorId, SensorType.THERMOMETER, sensorSecret);
+                                Sensor sensor = VirtualSensorCreator.createSensorInstance(sensorId, sensorType, sensorSecret);
                                 sr.store(sensor);
 
                             }catch(Throwable e) {
@@ -202,7 +202,7 @@ public class MainActivity extends ActionBarActivity
         Toast.makeText(this, "Refresh done", Toast.LENGTH_SHORT).show();
 
         ExpandableListView sensorsList = (ExpandableListView) findViewById(R.id.sensors_expList);
-        Hub hub1 = new Hub(12456);
+        Hub hub1 = new Hub("12456");
         List<Hub> hubs = new ArrayList<>();
         hubs.add(hub1);
         HashMap<Hub, List<Sensor>> hubSensors = new LinkedHashMap<>();

@@ -8,7 +8,7 @@ public class ESCLed extends Sensor implements WriteableSensor {
 
 	@Expose (deserialize = false) protected Switch led;
 
-	public ESCLed(int uuid, String secret) {
+	public ESCLed(String uuid, String secret) {
 		super(uuid, SensorType.LED, secret);
 	}
 

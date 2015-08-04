@@ -13,7 +13,7 @@ public class GPS extends Sensor {
     public GPS() {
         super();
     }
-    public GPS(int uuid, String secret) {
+    public GPS(String uuid, String secret) {
         super(uuid, SensorType.GPS, secret);
     }
 

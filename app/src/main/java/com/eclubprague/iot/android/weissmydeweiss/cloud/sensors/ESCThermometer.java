@@ -10,7 +10,7 @@ public class ESCThermometer extends Sensor {
 	public ESCThermometer() {
 		super();
 	}
-	public ESCThermometer(int uuid, String secret) {
+	public ESCThermometer(String uuid, String secret) {
 		super(uuid, SensorType.THERMOMETER, secret);
 	}
 	

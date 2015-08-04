@@ -12,7 +12,6 @@ import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.ESCThermometer;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.GetSensorTask;
 
-import java.security.spec.ECField;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -53,7 +52,7 @@ public class SensorInfoDialog extends AlertDialog.Builder {
             @Override
             public void run() {
                 GetSensorTask getSensorTask = new GetSensorTask(this);
-                getSensorTask.execute(sensor.getIntUuid());
+                getSensorTask.execute(sensor.getUuid());
             }
 
             @Override
@@ -83,7 +82,7 @@ public class SensorInfoDialog extends AlertDialog.Builder {
 
         this.setView(layout);
 
-        this.setTitle(sensor.getType().getName());
+        this.setTitle(Integer.toString(sensor.getType()));
         this.setMessage(sensor.toString());
 
         this.setPositiveButton("Close", new DialogInterface.OnClickListener() {

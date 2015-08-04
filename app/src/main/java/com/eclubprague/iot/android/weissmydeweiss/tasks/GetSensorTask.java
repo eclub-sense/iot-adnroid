@@ -16,7 +16,7 @@ import java.lang.ref.WeakReference;
 /**
  * Refreshes sensor list from the server based on hub ID.
  */
-public class GetSensorTask extends AsyncTask<Integer, Void, GetSensorTask.GetSensorResult> {
+public class GetSensorTask extends AsyncTask<String, Void, GetSensorTask.GetSensorResult> {
     private final WeakReference<GetSensorCallbacks> callbacks;
 
     public GetSensorTask(GetSensorCallbacks callbacks) {
@@ -46,13 +46,13 @@ public class GetSensorTask extends AsyncTask<Integer, Void, GetSensorTask.GetSen
     }
 
     @Override
-    protected GetSensorResult doInBackground(Integer... uuids) {
+    protected GetSensorResult doInBackground(String... uuids) {
         Engine.getInstance().getRegisteredConverters().clear();
         Engine.getInstance().getRegisteredConverters().add(new GsonCustomConverter());
 
         try {
             // try connection
-            ClientResource cr = new ClientResource("http://192.168.201.222:8080/registered_sensors/" + Integer.toString(uuids[0]));
+            ClientResource cr = new ClientResource("http://192.168.201.222:8080/registered_sensors/" + uuids[0]);
             RegisteredSensors rs = cr.wrap(RegisteredSensors.class);
 
             return new GetSensorResult(true, rs.get(uuids[0]));

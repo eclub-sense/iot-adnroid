@@ -7,15 +7,15 @@ import com.google.gson.annotations.SerializedName;
 public class Hub implements Identificable {
 
 	@Expose @SerializedName("@type") private String jsonType = "hub";
-	@Expose protected int uuid;
+	@Expose protected String uuid;
 	@Expose (deserialize = false) protected String status = "connected";
 	
-	public Hub(int uuid) {
+	public Hub(String uuid) {
 		this.uuid = uuid;
 	}
 	
 	@Override
-	public int getIntUuid() {
+	public String getUuid() {
 		return uuid;
 	}
 	

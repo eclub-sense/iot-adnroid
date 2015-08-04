@@ -38,9 +38,9 @@ public class SensorListViewAdapter extends ArrayAdapter<Sensor> {
 
         Sensor s = getItem(position);
         TextView textView = (TextView) convertView.findViewById(R.id.firstLine);
-        textView.setText(s.getStringUuid());
+        textView.setText(s.getUuid());
         TextView textView2 = (TextView) convertView.findViewById(R.id.secondLine);
-        textView2.setText(s.getType().getName());
+        textView2.setText(Integer.toString(s.getType()));
 
         return convertView;
     }

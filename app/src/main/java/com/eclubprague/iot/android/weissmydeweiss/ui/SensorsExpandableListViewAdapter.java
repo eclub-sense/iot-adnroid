@@ -56,11 +56,11 @@ public class SensorsExpandableListViewAdapter extends BaseExpandableListAdapter 
         Sensor s = (Sensor)getChild(groupPosition, childPosition);
 
         TextView txtListChild = (TextView) convertView.findViewById(R.id.firstLine);
-        txtListChild.setText(String.valueOf(s.getStringUuid()));
+        txtListChild.setText(s.getUuid());
         //txtListChild.setText("TEXT");
 
         TextView textView2 = (TextView) convertView.findViewById(R.id.secondLine);
-        textView2.setText(s.getType().getName());
+        textView2.setText(Integer.toString(s.getType()));
 
         return convertView;
     }

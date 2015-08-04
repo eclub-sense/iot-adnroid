@@ -10,27 +10,34 @@ import com.google.gson.annotations.SerializedName;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
-public abstract class Sensor implements Identificable {
+public class Sensor implements Identificable {
 	
 	@Expose @SerializedName("@type") private String jsonType = "sensor";
-	@Expose protected int uuid;
-	@Expose protected SensorType type = SensorType.THERMOMETER;
+	@Expose protected String uuid;
+	@Expose protected int type;
 	@Expose (serialize = false) protected String secret;
 	protected int incr;
 	@Expose (deserialize = false) protected int battery;
-	@Expose (deserialize = false) protected int hubID;
+	@Expose (deserialize = false) protected String hubID;
 	protected Hub hub;
 	protected byte reserved[] = new byte[3];
 
-	public abstract void readPayload(byte[] data);
+	public void readPayload(byte[] data) {
+
+	}
 
 	protected Sensor() {
 
 	}
 
-	protected Sensor(int uuid, SensorType type, String secret) {
+	protected Sensor(String uuid, int type, String secret) {
 		this.uuid = uuid;
 		this.type = type;
+		this.secret = secret;
+	}
+	protected Sensor(String uuid, SensorType type, String secret) {
+		this.uuid = uuid;
+		this.type = type.getCode();
 		this.secret = secret;
 	}
 
@@ -55,15 +62,11 @@ public abstract class Sensor implements Identificable {
 	}
 	
 	@Override
-	public int getIntUuid() {
+	public String getUuid() {
 		return uuid;
 	}
-
-	public String getStringUuid() {
-		return String.format("%08d", uuid);
-	}
 	
-	public SensorType getType() {
+	public int getType() {
 		return type;
 	}
 
@@ -84,11 +87,11 @@ public abstract class Sensor implements Identificable {
 	}
 
 	public void setHub(Hub hub) {
-		this.hubID = hub.getIntUuid();
+		this.hubID = hub.getUuid();
 		this.hub = hub;
 	}
 
-	public void setUuid(int uuid) {
+	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
 
