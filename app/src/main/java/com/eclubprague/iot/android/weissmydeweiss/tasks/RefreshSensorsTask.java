@@ -9,6 +9,7 @@ import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorPaginatedCollection;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;
 
+import org.restlet.data.ChallengeScheme;
 import org.restlet.engine.Engine;
 import org.restlet.ext.gson.GsonConverter;
 import org.restlet.resource.ClientResource;
@@ -21,8 +22,13 @@ import java.lang.ref.WeakReference;
 public class RefreshSensorsTask extends AsyncTask<String, Void, SensorPaginatedCollection> {
     private final WeakReference<RefreshSensorsCallbacks> callbacks;
 
-    public RefreshSensorsTask(RefreshSensorsCallbacks callbacks) {
+    private String USERNAME;
+    private String PASSWORD;
+
+    public RefreshSensorsTask(RefreshSensorsCallbacks callbacks, String username, String password) {
         this.callbacks = new WeakReference<RefreshSensorsCallbacks>(callbacks);
+        this.USERNAME = username;
+        this.PASSWORD = password;
     }
 
     public interface RefreshSensorsCallbacks {
@@ -40,6 +46,7 @@ public class RefreshSensorsTask extends AsyncTask<String, Void, SensorPaginatedC
         try {
             // try connection
             ClientResource cr = new ClientResource("http://192.168.201.222:8080/registered_sensors");
+            cr.setChallengeResponse(ChallengeScheme.HTTP_BASIC, USERNAME, PASSWORD);
             RegisteredSensors rs = cr.wrap(RegisteredSensors.class);
 
             return rs.retrieve();

@@ -253,6 +253,11 @@ public class NavigationDrawerFragment extends Fragment {
             return true;
         }
 
+        if(item.getItemId() == R.id.action_account) {
+            ((MainActivity) getActivity()).accountLogin();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

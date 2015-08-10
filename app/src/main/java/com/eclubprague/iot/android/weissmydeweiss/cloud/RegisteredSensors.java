@@ -2,6 +2,7 @@ package com.eclubprague.iot.android.weissmydeweiss.cloud;
 
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorPaginatedCollection;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.RegisteredSensorsMessage;
 
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
@@ -13,6 +14,9 @@ import org.restlet.resource.Post;
 public interface RegisteredSensors {
     @Get("json")
     public SensorPaginatedCollection retrieve();
+
+    @Get("json")
+    public RegisteredSensorsMessage retrieve_2();
 
     @Get("json")
     public Sensor get(String uuid);

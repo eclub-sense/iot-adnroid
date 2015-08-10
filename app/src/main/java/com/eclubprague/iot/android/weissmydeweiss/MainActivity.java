@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,23 +28,30 @@ import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorPaginatedC
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorInstanceCreator;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.VirtualSensorCreator;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.RegisteredSensorsMessage;
+import com.eclubprague.iot.android.weissmydeweiss.tasks.GetSensorsDataTask;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.RefreshSensorsTask;
+import com.eclubprague.iot.android.weissmydeweiss.ui.AccountDialog;
 import com.eclubprague.iot.android.weissmydeweiss.ui.BuiltInSensorInfoDialog;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorListViewAdapter;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorsExpandableListViewAdapter;
 
+import org.restlet.data.ChallengeScheme;
 import org.restlet.engine.Engine;
 import org.restlet.ext.gson.GsonConverter;
 import org.restlet.resource.ClientResource;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        RefreshSensorsTask.RefreshSensorsCallbacks {
+        RefreshSensorsTask.RefreshSensorsCallbacks, GetSensorsDataTask.TaskDelegate {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -135,14 +144,37 @@ public class MainActivity extends ActionBarActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+
+
+
+    public class Account {
+        public String USERNAME = "User";
+        public String PASSWORD = "123";
+
+        public void setAccount(String username, String password) {
+            this.USERNAME = username;
+            this.PASSWORD = password;
+        }
+
+        public Account() {
+        }
+    }
+
+    private WeakReference<Account> accountRef = new WeakReference<>(new Account());
+
+    public void accountLogin() {
+        new AccountDialog(this, accountRef);
+    }
+
     public void refreshSensorsList(View view) {
-        RefreshSensorsTask task = new RefreshSensorsTask(this);
+        RefreshSensorsTask task = new RefreshSensorsTask(this, accountRef.get().USERNAME, accountRef.get().PASSWORD);
         task.execute("hub1");
     }
 
@@ -175,6 +207,8 @@ public class MainActivity extends ActionBarActivity
 
                                 // try connection
                                 ClientResource cr = new ClientResource("http://192.168.201.222:8080/sensor_registration");
+                                cr.setChallengeResponse(ChallengeScheme.HTTP_BASIC,
+                                        accountRef.get().USERNAME, accountRef.get().PASSWORD);
                                 SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
 
                                 Sensor sensor = VirtualSensorCreator.createSensorInstance(sensorId, sensorType, sensorSecret);
@@ -216,5 +250,70 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void handleSensorsRefreshFailed(String hubId) {
         Toast.makeText(this, "Refresh FAILED :-(", Toast.LENGTH_SHORT).show();
+    }
+
+
+    //----------------------------------------------------------------
+    // TIMER TASK
+    // DO SOME WORKS PERIODICALLY
+    //----------------------------------------------------------------
+
+    private Timer timer;
+    private TimerTask timerTask;
+    final Handler handler = new Handler();
+
+
+    public void startTimer() {
+        if(timer != null) return;
+        //set a new Timer
+        timer = new Timer();
+        //initialize the TimerTask's job
+        initializeTimerTask();
+        //schedule the timer, after the first 5000ms the TimerTask will run every 10000ms
+        timer.schedule(timerTask, 3000, 10000); //
+    }
+
+    public void stopTimerTask() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+    }
+
+    public void initializeTimerTask() {
+        timerTask = new TimerTask() {
+            public void run() {
+                //use a handler to do repeatedly send updated data to cloud
+                handler.post(new Runnable() {
+                    public void run() {
+                        //update UI, will be removed in the end
+                        new GetSensorsDataTask(MainActivity.this).execute(accountRef.get());
+                    }
+                });
+            }
+        };
+    }
+
+    @Override
+    public void onGetSensorsDataTaskCompleted(RegisteredSensorsMessage message) {
+
+        ExpandableListView sensorsList = (ExpandableListView) findViewById(R.id.sensors_expList);
+
+        Hub hub1 = new Hub("my");
+        Hub hub2 = new Hub("borrowed");
+        List<Hub> hubs = new ArrayList<>();
+        hubs.add(hub1);
+        hubs.add(hub2);
+
+
+        HashMap<Hub, List<Sensor>> hubSensors = new LinkedHashMap<>();
+
+        hubSensors.put(hub1, message.getMySensors());
+        hubSensors.put(hub2, message.getBorrowedSensors());
+
+        SensorsExpandableListViewAdapter adapter = new SensorsExpandableListViewAdapter(
+                this, hubs, hubSensors);
+
+        sensorsList.setAdapter(adapter);
     }
 }
