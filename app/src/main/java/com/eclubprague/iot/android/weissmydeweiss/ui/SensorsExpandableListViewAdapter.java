@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.eclubprague.iot.android.weissmydeweiss.R;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -56,11 +57,11 @@ public class SensorsExpandableListViewAdapter extends BaseExpandableListAdapter 
         Sensor s = (Sensor)getChild(groupPosition, childPosition);
 
         TextView txtListChild = (TextView) convertView.findViewById(R.id.firstLine);
-        txtListChild.setText(s.getUuid());
+        txtListChild.setText(SensorType.getStringSensorType(s.getType()));
         //txtListChild.setText("TEXT");
 
         TextView textView2 = (TextView) convertView.findViewById(R.id.secondLine);
-        textView2.setText(Integer.toString(s.getType()));
+        textView2.setText("uuid: " + s.getUuid());
 
         return convertView;
     }

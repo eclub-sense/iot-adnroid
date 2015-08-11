@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
+import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.Registe
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.GetSensorsDataTask;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -32,10 +34,19 @@ public class SensorDataDialog extends AlertDialog.Builder {
     private Sensor sensor;
     private LinearLayout layout;
 
-    public SensorDataDialog(Context context, Sensor sensor) {
+    private WeakReference<ExpandableListView> parentRef;
+    int groupPos;
+    int childPos;
+
+    public SensorDataDialog(Context context, ExpandableListView parent,
+                            int groupPosition, int childPosition) {
         super(context);
         this.context = context;
-        this.sensor = sensor;
+        this.sensor =  (Sensor) parent.getExpandableListAdapter().
+                getChild(groupPosition, childPosition);
+        parentRef = new WeakReference<>(parent);
+        groupPos = groupPosition;
+        childPos = childPosition;
 
 
         layout = new LinearLayout(this.context);
@@ -101,6 +112,9 @@ public class SensorDataDialog extends AlertDialog.Builder {
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
+
+                                SensorDataDialog.this.sensor =  (Sensor) parentRef.get().getExpandableListAdapter().
+                                getChild(groupPos, childPos);
 
                         layout = new LinearLayout(SensorDataDialog.this.context);
                         layout.setOrientation(LinearLayout.VERTICAL);
