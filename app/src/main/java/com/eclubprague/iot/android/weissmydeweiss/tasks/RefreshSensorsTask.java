@@ -41,7 +41,7 @@ public class RefreshSensorsTask extends AsyncTask<String, Void, SensorPaginatedC
 
         try {
             // try connection
-            ClientResource cr = new ClientResource("http://192.168.201.222:8080/registered_sensors");
+            ClientResource cr = new ClientResource("http://147.32.107.139:8080/registered_sensors");
             cr.setChallengeResponse(ChallengeScheme.HTTP_BASIC, USERNAME, PASSWORD);
             RegisteredSensors rs = cr.wrap(RegisteredSensors.class);
 

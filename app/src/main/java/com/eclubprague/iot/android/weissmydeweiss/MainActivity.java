@@ -197,7 +197,7 @@ public class MainActivity extends ActionBarActivity
                                 Engine.getInstance().getRegisteredConverters().add(new GsonConverter());
 
                                 // try connection
-                                ClientResource cr = new ClientResource("http://192.168.201.222:8080/sensor_registration");
+                                ClientResource cr = new ClientResource("http://147.32.107.139:8080/sensor_registration");
                                 cr.setChallengeResponse(ChallengeScheme.HTTP_BASIC,
                                         accountRef.get().USERNAME, accountRef.get().PASSWORD);
                                 SensorRegistrator sr = cr.wrap(SensorRegistrator.class);

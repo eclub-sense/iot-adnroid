@@ -32,7 +32,7 @@ public class GetSensorsDataTask extends AsyncTask<MainActivity.Account, Void, Re
 
         if(accounts.length == 0) return null;
         try {
-            ClientResource cr = new ClientResource("http://192.168.201.222:8080/registered_sensors");
+            ClientResource cr = new ClientResource("http://147.32.107.139:8080/registered_sensors");
             cr.setChallengeResponse(ChallengeScheme.HTTP_BASIC,
                     accounts[0].USERNAME, accounts[0].PASSWORD);
             RegisteredSensors sr = cr.wrap(RegisteredSensors.class);
