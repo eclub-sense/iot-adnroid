@@ -1,5 +1,6 @@
 package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors;
 
+
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.NameValuePair;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
@@ -8,18 +9,18 @@ import com.google.gson.Gson;
 import java.util.List;
 
 /**
- * Created by Dat on 28.7.2015.
+ * Created by Dat on 6.8.2015.
  */
-public class GPS  extends Sensor {
+public class HumiditySensor extends Sensor {
 
-    protected double latitude = -1;
-    protected double longitude = -1;
+    protected String unit = "%";
+    protected float humidity = 0;
 
-    public GPS() {
+    public HumiditySensor() {
         super();
     }
-    public GPS(String uuid, String secret, Hub hub) {
-        super(uuid, SensorType.GPS, secret, hub);
+    public HumiditySensor(String uuid, String secret, Hub hub) {
+        super(uuid, SensorType.HUMIDITY, secret, hub);
     }
 
     @Override
@@ -29,20 +30,15 @@ public class GPS  extends Sensor {
 
     @Override
     public String printData() {
-        return ("longitude = " + longitude + ", latitude = " + latitude);
+        return ("humidity = " + humidity + " %");
     }
 
-    public double getLatitude() {
-        return latitude;
+    public float getHumidity() {
+        return humidity;
     }
 
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setCoordinates(double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
+    public String getUnit() {
+        return unit;
     }
 
     @Override
@@ -53,12 +49,13 @@ public class GPS  extends Sensor {
     @Override
     public List<NameValuePair> getDataList() {
         measured.clear();
-        measured.add(new NameValuePair("latitude", Double.toString(latitude)));
-        measured.add(new NameValuePair("longitude", Double.toString(longitude)));
+        measured.add(new NameValuePair("humidity", Float.toString(humidity)));
+        measured.add(new NameValuePair("unit", unit));
         return measured;
     }
 
     @Override
     public void setData(float[] values) {
+        humidity = values[0];
     }
 }

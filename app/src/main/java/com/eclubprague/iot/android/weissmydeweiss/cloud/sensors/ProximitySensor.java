@@ -10,16 +10,16 @@ import java.util.List;
 /**
  * Created by Dat on 28.7.2015.
  */
-public class GPS  extends Sensor {
+public class ProximitySensor extends Sensor {
 
-    protected double latitude = -1;
-    protected double longitude = -1;
+    protected String unit = "cm";
+    protected float proximity = 0;
 
-    public GPS() {
+    public ProximitySensor() {
         super();
     }
-    public GPS(String uuid, String secret, Hub hub) {
-        super(uuid, SensorType.GPS, secret, hub);
+    public ProximitySensor(String uuid, String secret, Hub hub) {
+        super(uuid, SensorType.PROXIMITY, secret, hub);
     }
 
     @Override
@@ -29,21 +29,17 @@ public class GPS  extends Sensor {
 
     @Override
     public String printData() {
-        return ("longitude = " + longitude + ", latitude = " + latitude);
+        return ("proximity = " + proximity + " cm");
     }
 
-    public double getLatitude() {
-        return latitude;
+    public float getProximity() {
+        return proximity;
     }
 
-    public double getLongitude() {
-        return longitude;
+    public String getUnit() {
+        return unit;
     }
 
-    public void setCoordinates(double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
 
     @Override
     public String toString() {
@@ -53,12 +49,13 @@ public class GPS  extends Sensor {
     @Override
     public List<NameValuePair> getDataList() {
         measured.clear();
-        measured.add(new NameValuePair("latitude", Double.toString(latitude)));
-        measured.add(new NameValuePair("longitude", Double.toString(longitude)));
+        measured.add(new NameValuePair("proximity", Float.toString(proximity)));
+        measured.add(new NameValuePair("unit", unit));
         return measured;
     }
 
     @Override
     public void setData(float[] values) {
+        proximity = values[0];
     }
 }

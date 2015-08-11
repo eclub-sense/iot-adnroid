@@ -2,16 +2,12 @@ package com.eclubprague.iot.android.weissmydeweiss.tasks;
 
 import android.os.AsyncTask;
 
-import com.eclubprague.iot.android.weissmydeweiss.cloud.PaginatedCollection;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.RegisteredSensors;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.gsonmods.GsonCustomConverter;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorPaginatedCollection;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorPaginatedCollection;
 
 import org.restlet.data.ChallengeScheme;
 import org.restlet.engine.Engine;
-import org.restlet.ext.gson.GsonConverter;
 import org.restlet.resource.ClientResource;
 
 import java.lang.ref.WeakReference;

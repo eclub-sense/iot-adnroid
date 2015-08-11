@@ -7,6 +7,7 @@ import com.eclubprague.iot.android.weissmydeweiss.MainActivity;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.RegisteredSensors;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.RegisteredSensorsMessage;
 
+import org.restlet.data.ChallengeScheme;
 import org.restlet.resource.ClientResource;
 
 import java.lang.ref.WeakReference;
@@ -32,6 +33,8 @@ public class GetSensorsDataTask extends AsyncTask<MainActivity.Account, Void, Re
         if(accounts.length == 0) return null;
         try {
             ClientResource cr = new ClientResource("http://192.168.201.222:8080/registered_sensors");
+            cr.setChallengeResponse(ChallengeScheme.HTTP_BASIC,
+                    accounts[0].USERNAME, accounts[0].PASSWORD);
             RegisteredSensors sr = cr.wrap(RegisteredSensors.class);
             return sr.retrieve_2();
         } catch (Exception e) {

@@ -6,17 +6,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.VirtualSensorCreator;
+import com.eclubprague.iot.android.weissmydeweiss.ui.SensorDataDialog;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorInfoDialog;
-import com.eclubprague.iot.android.weissmydeweiss.ui.SensorListViewAdapter;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorsExpandableListViewAdapter;
 
 import java.util.ArrayList;
@@ -62,7 +59,7 @@ public class SensorsListFragment extends Fragment {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                new SensorInfoDialog(rootView.getContext(),
+                new SensorDataDialog(rootView.getContext(),
                         (Sensor) parent.getExpandableListAdapter().
                                 getChild(groupPosition, childPosition));
                 return false;
@@ -82,7 +79,7 @@ public class SensorsListFragment extends Fragment {
         groupItems = new ArrayList<Hub>();
         childItems = new HashMap<Hub, List<Sensor>>();
 
-        groupItems.add(new Hub("1"));
+        /*groupItems.add(new Hub("1"));
         groupItems.add(new Hub("2"));
         groupItems.add(new Hub("3"));
 
@@ -101,7 +98,7 @@ public class SensorsListFragment extends Fragment {
 
         childItems.put(groupItems.get(0), livingRoom);
         childItems.put(groupItems.get(1), kitchen);
-        childItems.put(groupItems.get(2), bathroom);
+        childItems.put(groupItems.get(2), bathroom);*/
     }
 
 }

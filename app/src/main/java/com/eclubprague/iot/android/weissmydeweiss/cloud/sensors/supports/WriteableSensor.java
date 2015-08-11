@@ -1,4 +1,4 @@
-package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors;
+package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports;
 
 public interface WriteableSensor {
 

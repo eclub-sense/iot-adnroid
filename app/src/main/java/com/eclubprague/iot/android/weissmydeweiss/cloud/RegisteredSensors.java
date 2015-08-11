@@ -1,7 +1,7 @@
 package com.eclubprague.iot.android.weissmydeweiss.cloud;
 
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorPaginatedCollection;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorPaginatedCollection;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.RegisteredSensorsMessage;
 
 import org.restlet.resource.Delete;

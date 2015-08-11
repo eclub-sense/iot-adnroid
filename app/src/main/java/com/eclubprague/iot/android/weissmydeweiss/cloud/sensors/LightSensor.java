@@ -10,16 +10,16 @@ import java.util.List;
 /**
  * Created by Dat on 28.7.2015.
  */
-public class GPS  extends Sensor {
+public class LightSensor extends Sensor {
 
-    protected double latitude = -1;
-    protected double longitude = -1;
+    protected String unit = "lx";
+    protected float illumination = 0;
 
-    public GPS() {
+    public LightSensor() {
         super();
     }
-    public GPS(String uuid, String secret, Hub hub) {
-        super(uuid, SensorType.GPS, secret, hub);
+    public LightSensor(String uuid, String secret, Hub hub) {
+        super(uuid, SensorType.LIGHT, secret, hub);
     }
 
     @Override
@@ -29,20 +29,15 @@ public class GPS  extends Sensor {
 
     @Override
     public String printData() {
-        return ("longitude = " + longitude + ", latitude = " + latitude);
+        return ("illumination = " + illumination + " lx");
     }
 
-    public double getLatitude() {
-        return latitude;
+    public float getIllumination() {
+        return illumination;
     }
 
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setCoordinates(double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
+    public String getUnit() {
+        return unit;
     }
 
     @Override
@@ -53,12 +48,13 @@ public class GPS  extends Sensor {
     @Override
     public List<NameValuePair> getDataList() {
         measured.clear();
-        measured.add(new NameValuePair("latitude", Double.toString(latitude)));
-        measured.add(new NameValuePair("longitude", Double.toString(longitude)));
+        measured.add(new NameValuePair("illumination", Float.toString(illumination)));
+        measured.add(new NameValuePair("unit", unit));
         return measured;
     }
 
     @Override
     public void setData(float[] values) {
+        illumination = values[0];
     }
 }

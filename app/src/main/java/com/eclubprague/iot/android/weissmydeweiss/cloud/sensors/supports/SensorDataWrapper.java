@@ -1,5 +1,6 @@
 package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,6 +18,7 @@ public class SensorDataWrapper {
     }
 
     public List<NameValuePair> getMeasured() {
+        if(measured == null) measured = new ArrayList<>();
         return measured;
     }
 

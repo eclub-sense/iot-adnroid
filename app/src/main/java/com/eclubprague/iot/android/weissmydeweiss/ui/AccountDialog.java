@@ -48,6 +48,7 @@ public class AccountDialog extends AlertDialog.Builder {
         edit_username = (EditText) view.findViewById(R.id.edit_username);
         edit_password = (EditText) view.findViewById(R.id.edit_password);
 
+        this.setView(view);
 
         this.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 

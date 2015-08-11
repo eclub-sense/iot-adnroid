@@ -1,6 +1,8 @@
 package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports;
 
+import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.VirtualSensorCreator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,28 +12,40 @@ import java.util.List;
  */
 public class RegisteredSensorsMessage {
 
-    private List<SensorDataWrapper> my;
-    private List<SensorDataWrapper> borrowed;
+    private List<SensorDataWrapper> _my;
+    private List<SensorDataWrapper> _public;
 
     public List<SensorDataWrapper> getMy() {
-        return my;
+        return _my;
     }
 
     public List<SensorDataWrapper> getBorrowed() {
-        return borrowed;
+        return _public;
     }
 
     public List<Sensor> getMySensors() {
-//        List<Sensor> mySensors = new ArrayList<>();
-//        for(int i = 0; i < my.size(); i++) {
-//            mySensors.add(new Sensor(my.get(i).getUuid(), my.get(i).getType(), "secret"));
-//        }
-        //TODO return list of Sensors
-        return null;
+        List<Sensor> mySensors = new ArrayList<>();
+        if(_my != null) {
+            for (int i = 0; i < _my.size(); i++) {
+                Sensor sensor = VirtualSensorCreator.
+                        createSensorInstance(_my.get(i).getUuid(), _my.get(i).getType(), "secret", new Hub("my"));
+                sensor.setMeasured(_my.get(i).getMeasured());
+                mySensors.add(sensor);
+            }
+        }
+        return mySensors;
     }
 
     public List<Sensor> getBorrowedSensors() {
-        //TODO return list of Sensors
-        return null;
+        List<Sensor> borrowedSensors = new ArrayList<>();
+        if(_public != null) {
+            for (int i = 0; i < _public.size(); i++) {
+                Sensor sensor = VirtualSensorCreator.
+                        createSensorInstance(_public.get(i).getUuid(), _public.get(i).getType(), "secret", new Hub("borrowed"));
+                sensor.setMeasured(_public.get(i).getMeasured());
+                borrowedSensors.add(sensor);
+            }
+        }
+        return borrowedSensors;
     }
 }

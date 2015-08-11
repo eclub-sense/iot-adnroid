@@ -8,18 +8,18 @@ import com.google.gson.Gson;
 import java.util.List;
 
 /**
- * Created by Dat on 28.7.2015.
+ * Created by Dat on 6.8.2015.
  */
-public class GPS  extends Sensor {
+public class Barometer extends Sensor {
 
-    protected double latitude = -1;
-    protected double longitude = -1;
+    protected String unit = "hPa";
+    protected float pressure = 0;
 
-    public GPS() {
+    public Barometer() {
         super();
     }
-    public GPS(String uuid, String secret, Hub hub) {
-        super(uuid, SensorType.GPS, secret, hub);
+    public Barometer(String uuid, String secret, Hub hub) {
+        super(uuid, SensorType.PRESSURE, secret, hub);
     }
 
     @Override
@@ -29,20 +29,15 @@ public class GPS  extends Sensor {
 
     @Override
     public String printData() {
-        return ("longitude = " + longitude + ", latitude = " + latitude);
+        return ("pressure = " + pressure + " hPa");
     }
 
-    public double getLatitude() {
-        return latitude;
+    public float getPressure() {
+        return pressure;
     }
 
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setCoordinates(double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
+    public String getUnit() {
+        return unit;
     }
 
     @Override
@@ -53,12 +48,13 @@ public class GPS  extends Sensor {
     @Override
     public List<NameValuePair> getDataList() {
         measured.clear();
-        measured.add(new NameValuePair("latitude", Double.toString(latitude)));
-        measured.add(new NameValuePair("longitude", Double.toString(longitude)));
+        measured.add(new NameValuePair("pressure", Float.toString(pressure)));
+        measured.add(new NameValuePair("unit", unit));
         return measured;
     }
 
     @Override
     public void setData(float[] values) {
+        pressure = values[0];
     }
 }

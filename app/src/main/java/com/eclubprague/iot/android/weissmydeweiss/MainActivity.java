@@ -1,39 +1,29 @@
 package com.eclubprague.iot.android.weissmydeweiss;
 
 import android.content.Intent;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.eclubprague.iot.android.weissmydeweiss.cloud.PaginatedCollection;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.SensorRegistrator;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorPaginatedCollection;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorInstanceCreator;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.SensorType;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorDataWrapper;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorPaginatedCollection;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.VirtualSensorCreator;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.RegisteredSensorsMessage;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.GetSensorsDataTask;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.RefreshSensorsTask;
 import com.eclubprague.iot.android.weissmydeweiss.ui.AccountDialog;
-import com.eclubprague.iot.android.weissmydeweiss.ui.BuiltInSensorInfoDialog;
-import com.eclubprague.iot.android.weissmydeweiss.ui.SensorListViewAdapter;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorsExpandableListViewAdapter;
 
 import org.restlet.data.ChallengeScheme;
@@ -159,6 +149,7 @@ public class MainActivity extends ActionBarActivity
         public String PASSWORD = "123";
 
         public void setAccount(String username, String password) {
+            Toast.makeText(MainActivity.this, username + ":" + password, Toast.LENGTH_SHORT).show();
             this.USERNAME = username;
             this.PASSWORD = password;
         }
@@ -211,7 +202,8 @@ public class MainActivity extends ActionBarActivity
                                         accountRef.get().USERNAME, accountRef.get().PASSWORD);
                                 SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
 
-                                Sensor sensor = VirtualSensorCreator.createSensorInstance(sensorId, sensorType, sensorSecret);
+                                Sensor sensor = VirtualSensorCreator.
+                                        createSensorInstance(sensorId, sensorType, sensorSecret, new Hub("TMP"));
                                 sr.store(sensor);
 
                             }catch(Throwable e) {
@@ -264,6 +256,7 @@ public class MainActivity extends ActionBarActivity
 
 
     public void startTimer() {
+        Toast.makeText(this, "Start Timer", Toast.LENGTH_SHORT).show();
         if(timer != null) return;
         //set a new Timer
         timer = new Timer();
@@ -283,10 +276,8 @@ public class MainActivity extends ActionBarActivity
     public void initializeTimerTask() {
         timerTask = new TimerTask() {
             public void run() {
-                //use a handler to do repeatedly send updated data to cloud
                 handler.post(new Runnable() {
                     public void run() {
-                        //update UI, will be removed in the end
                         new GetSensorsDataTask(MainActivity.this).execute(accountRef.get());
                     }
                 });
@@ -294,8 +285,14 @@ public class MainActivity extends ActionBarActivity
         };
     }
 
+//    List<SensorDataWrapper> my;
+//    List<SensorDataWrapper> borrowed;
+
     @Override
     public void onGetSensorsDataTaskCompleted(RegisteredSensorsMessage message) {
+
+//        my = message.getMy();
+//        borrowed = message.getBorrowed();
 
         ExpandableListView sensorsList = (ExpandableListView) findViewById(R.id.sensors_expList);
 
