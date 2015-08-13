@@ -2,7 +2,6 @@ package com.eclubprague.iot.android.weissmydeweiss;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -16,15 +15,12 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.eclubprague.iot.android.weissmydeweiss.cloud.SensorRegistrator;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.User;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorDataWrapper;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorPaginatedCollection;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.VirtualSensorCreator;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.RegisteredSensorsMessage;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.GetSensorsDataTask;
-import com.eclubprague.iot.android.weissmydeweiss.tasks.RefreshSensorsTask;
-import com.eclubprague.iot.android.weissmydeweiss.ui.AccountDialog;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorsExpandableListViewAdapter;
 
 import org.restlet.data.ChallengeScheme;
@@ -32,17 +28,14 @@ import org.restlet.engine.Engine;
 import org.restlet.ext.gson.GsonConverter;
 import org.restlet.resource.ClientResource;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        RefreshSensorsTask.RefreshSensorsCallbacks, GetSensorsDataTask.TaskDelegate {
+        /*RefreshSensorsTask.RefreshSensorsCallbacks,*/ GetSensorsDataTask.TaskDelegate {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -53,6 +46,12 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+
+
+
+    private ArrayList<User> userRef = new ArrayList<>();
+    private ArrayList<MainActivity> activityRef = new ArrayList<>();
+    private ArrayList<GetSensorsDataTask.TaskDelegate> delegateRef = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +68,11 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+
+        userRef.add(new User(getIntent().getStringExtra("username"), getIntent().getStringExtra("password")));
+        activityRef.add(this);
+        delegateRef.add(this);
     }
 
     @Override
@@ -79,7 +83,7 @@ public class MainActivity extends ActionBarActivity
             default:
             case 0:
                 fragment = SensorsListFragment.newInstance();
-                ((SensorsListFragment)(fragment)).setAccountRef(this.accountRef);
+                ((SensorsListFragment)(fragment)).setUserRef(this.userRef);
                 break;
             case 1:
                 fragment = HubsListFragment.newInstance();
@@ -145,33 +149,14 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
+//    public void accountLogin() {
+//        new AccountDialog(activityRef, accountRef);
+//    }
 
-
-
-    public class Account {
-        public String USERNAME = "User";
-        public String PASSWORD = "123";
-
-        public void setAccount(String username, String password) {
-            Toast.makeText(MainActivity.this, username + ":" + password, Toast.LENGTH_SHORT).show();
-            this.USERNAME = username;
-            this.PASSWORD = password;
-        }
-
-        public Account() {
-        }
-    }
-
-    private WeakReference<Account> accountRef = new WeakReference<>(new Account());
-
-    public void accountLogin() {
-        new AccountDialog(this, accountRef);
-    }
-
-    public void refreshSensorsList(View view) {
-        RefreshSensorsTask task = new RefreshSensorsTask(this, accountRef.get().USERNAME, accountRef.get().PASSWORD);
-        task.execute("hub1");
-    }
+//    public void refreshSensorsList(View view) {
+//        RefreshSensorsTask task = new RefreshSensorsTask(this, accountRef.get(0).USERNAME, accountRef.get(0).PASSWORD);
+//        task.execute("hub1");
+//    }
 
     /**
      * Launch a QR code scanner.
@@ -203,7 +188,7 @@ public class MainActivity extends ActionBarActivity
                                 // try connection
                                 ClientResource cr = new ClientResource("http://147.32.107.139:8080/sensor_registration");
                                 cr.setChallengeResponse(ChallengeScheme.HTTP_BASIC,
-                                        accountRef.get().USERNAME, accountRef.get().PASSWORD);
+                                        userRef.get(0).getUsername(), userRef.get(0).getPassword());
                                 SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
 
                                 Sensor sensor = VirtualSensorCreator.
@@ -219,7 +204,7 @@ public class MainActivity extends ActionBarActivity
                     });
                     thr.start();
                 }
-                catch(NumberFormatException e) {
+                catch(Exception e) {
                     Toast t2 = Toast.makeText(this, "Exception: NaN", Toast.LENGTH_SHORT);
                     t2.show();
                 }
@@ -227,26 +212,26 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-    @Override
-    public void handleSensorsRefreshed(String hubId, SensorPaginatedCollection sensorsCollection) {
-        Toast.makeText(this, "Refresh done", Toast.LENGTH_SHORT).show();
-
-        ExpandableListView sensorsList = (ExpandableListView) findViewById(R.id.sensors_expList);
-        Hub hub1 = new Hub("12456");
-        List<Hub> hubs = new ArrayList<>();
-        hubs.add(hub1);
-        HashMap<Hub, List<Sensor>> hubSensors = new LinkedHashMap<>();
-        hubSensors.put(hub1, sensorsCollection.getItems());
-        SensorsExpandableListViewAdapter adapter = new SensorsExpandableListViewAdapter(
-                this, hubs, hubSensors);
-
-        sensorsList.setAdapter(adapter);
-    }
-
-    @Override
-    public void handleSensorsRefreshFailed(String hubId) {
-        Toast.makeText(this, "Refresh FAILED :-(", Toast.LENGTH_SHORT).show();
-    }
+//    @Override
+//    public void handleSensorsRefreshed(String hubId, SensorPaginatedCollection sensorsCollection) {
+//        Toast.makeText(this, "Refresh done", Toast.LENGTH_SHORT).show();
+//
+//        ExpandableListView sensorsList = (ExpandableListView) findViewById(R.id.sensors_expList);
+//        Hub hub1 = new Hub("12456");
+//        List<Hub> hubs = new ArrayList<>();
+//        hubs.add(hub1);
+//        HashMap<Hub, List<Sensor>> hubSensors = new LinkedHashMap<>();
+//        hubSensors.put(hub1, sensorsCollection.getItems());
+//        SensorsExpandableListViewAdapter adapter = new SensorsExpandableListViewAdapter(
+//                this, hubs, hubSensors);
+//
+//        sensorsList.setAdapter(adapter);
+//    }
+//
+//    @Override
+//    public void handleSensorsRefreshFailed(String hubId) {
+//        Toast.makeText(this, "Refresh FAILED :-(", Toast.LENGTH_SHORT).show();
+//    }
 
 
     //----------------------------------------------------------------
@@ -292,12 +277,12 @@ public class MainActivity extends ActionBarActivity
 //    List<SensorDataWrapper> my;
 //    List<SensorDataWrapper> borrowed;
 
-    public void getSensorsData(Account account) {
-        new GetSensorsDataTask(this).execute(account);
+    public void getSensorsData() {
+        new GetSensorsDataTask(delegateRef, userRef).execute();
     }
 
-    public WeakReference<Account> getAccountRef() {
-        return accountRef;
+    public ArrayList<User> getUserRef() {
+        return userRef;
     }
 
     @Override

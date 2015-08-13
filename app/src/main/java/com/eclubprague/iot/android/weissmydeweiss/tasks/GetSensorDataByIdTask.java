@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.eclubprague.iot.android.weissmydeweiss.MainActivity;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.RegisteredSensors;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.User;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.NameValuePair;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.RegisteredSensorsMessage;
@@ -13,6 +14,7 @@ import org.restlet.data.ChallengeScheme;
 import org.restlet.resource.ClientResource;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,12 +26,12 @@ public class GetSensorDataByIdTask extends AsyncTask<Sensor, Void, RegisteredSen
         public void onGetSensorDataById(List<NameValuePair> measured);
     }
 
-    private WeakReference<TaskDelegate> delegateRef;
-    private WeakReference<MainActivity.Account> accountRef;
+    private ArrayList<TaskDelegate> delegateRef;
+    private ArrayList<User> userRef;
 
-    public GetSensorDataByIdTask(TaskDelegate delegate, WeakReference<MainActivity.Account> accountRef) {
-        delegateRef = new WeakReference<>(delegate);
-        this.accountRef = new WeakReference<>(accountRef.get());
+    public GetSensorDataByIdTask(ArrayList<TaskDelegate> delegateRef, ArrayList<User> userRef) {
+        this.delegateRef = delegateRef;
+        this.userRef = userRef;
     }
 
     private String s_uuid;
@@ -44,8 +46,8 @@ public class GetSensorDataByIdTask extends AsyncTask<Sensor, Void, RegisteredSen
             ClientResource cr = new ClientResource("http://147.32.107.139:8080/registered_sensors");
             Log.e("SensorUUID", sensors[0].getUuid());
             cr.setChallengeResponse(ChallengeScheme.HTTP_BASIC,
-                    accountRef.get().USERNAME, accountRef.get().PASSWORD);
-            Log.e("Account", accountRef.get().USERNAME + ":" + accountRef.get().PASSWORD);
+                    userRef.get(0).getUsername(), userRef.get(0).getPassword());
+            Log.e("Account", userRef.get(0).getUsername() + ":" + userRef.get(0).getPassword());
             RegisteredSensors sr = cr.wrap(RegisteredSensors.class);
             return sr.retrieve_2();
             //return sr.get(sensors[0].getUuid());
@@ -58,6 +60,6 @@ public class GetSensorDataByIdTask extends AsyncTask<Sensor, Void, RegisteredSen
     @Override
     protected void onPostExecute(RegisteredSensorsMessage message) {
 
-        delegateRef.get().onGetSensorDataById(message.getSensorData(s_uuid));
+        delegateRef.get(0).onGetSensorDataById(message.getSensorData(s_uuid));
     }
 }

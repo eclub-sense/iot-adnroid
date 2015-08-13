@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import com.eclubprague.iot.android.weissmydeweiss.cloud.User;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
@@ -31,7 +32,7 @@ public class SensorsListFragment extends Fragment {
     List<Hub> groupItems;
     HashMap<Hub, List<Sensor>> childItems;
     View rootView;
-    WeakReference<MainActivity.Account> accountRef;
+    ArrayList<User> userRef;
 
     public static SensorsListFragment newInstance() {
         SensorsListFragment fragment = new SensorsListFragment();
@@ -39,8 +40,8 @@ public class SensorsListFragment extends Fragment {
         return fragment;
     }
 
-    public void setAccountRef(WeakReference<MainActivity.Account> accountRef) {
-        this.accountRef = new WeakReference<>(accountRef.get());
+    public void setUserRef(ArrayList<User> userRef) {
+        this.userRef = userRef;
     }
 
     @Override
@@ -67,7 +68,7 @@ public class SensorsListFragment extends Fragment {
                                         int groupPosition, int childPosition, long id) {
                 new SensorDataDialog(rootView.getContext(),
                         (Sensor) parent.getExpandableListAdapter().
-                                getChild(groupPosition, childPosition), accountRef);
+                                getChild(groupPosition, childPosition), userRef);
                 return false;
             }
         });

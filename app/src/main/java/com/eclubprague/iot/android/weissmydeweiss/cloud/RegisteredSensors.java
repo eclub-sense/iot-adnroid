@@ -29,4 +29,7 @@ public interface RegisteredSensors {
 
     @Delete
     public void remove();
+
+    @Get
+    public String getStringData();
 }

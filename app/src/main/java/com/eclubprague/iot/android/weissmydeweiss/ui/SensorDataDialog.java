@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.eclubprague.iot.android.weissmydeweiss.MainActivity;
 import com.eclubprague.iot.android.weissmydeweiss.R;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.User;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.NameValuePair;
@@ -38,13 +39,15 @@ public class SensorDataDialog extends AlertDialog.Builder implements GetSensorDa
     private Sensor sensor;
     private LinearLayout layout;
 
-    private WeakReference<MainActivity.Account> accountRef;
+    private ArrayList<User> userRef;
+    private ArrayList<GetSensorDataByIdTask.TaskDelegate> taskDelegate = new ArrayList<>();
 
-    public SensorDataDialog(Context context, Sensor sensor, WeakReference<MainActivity.Account> accountRef) {
+    public SensorDataDialog(Context context, Sensor sensor, ArrayList<User> userRef) {
         super(context);
         this.context = context;
         this.sensor =  sensor;
-        this.accountRef = new WeakReference<>(accountRef.get());
+        this.userRef = userRef;
+        this.taskDelegate.add(this);
 
 
         layout = new LinearLayout(this.context);
@@ -94,8 +97,8 @@ public class SensorDataDialog extends AlertDialog.Builder implements GetSensorDa
         timer = new Timer();
         //initialize the TimerTask's job
         initializeTimerTask();
-        //schedule the timer, after the first 3000ms the TimerTask will run every 5000ms
-        timer.schedule(timerTask, 3000, 5000); //
+        //schedule the timer, after the first 3000ms the TimerTask will run every 2000ms
+        timer.schedule(timerTask, 3000, 2000); //
     }
 
     public void stopTimerTask() {
@@ -111,7 +114,7 @@ public class SensorDataDialog extends AlertDialog.Builder implements GetSensorDa
                 handler.post(new Runnable() {
                     public void run() {
 
-                        new GetSensorDataByIdTask(SensorDataDialog.this, SensorDataDialog.this.accountRef)
+                        new GetSensorDataByIdTask(SensorDataDialog.this.taskDelegate, SensorDataDialog.this.userRef)
                                 .execute(SensorDataDialog.this.sensor);
 
                         //TODO this goes to TaskDelegate

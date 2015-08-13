@@ -249,14 +249,21 @@ public class NavigationDrawerFragment extends Fragment {
 
         if (item.getItemId() == R.id.action_refresh) {
             Toast.makeText(getActivity(), "Refreshing", Toast.LENGTH_SHORT).show();
-            //((MainActivity) getActivity()).refreshSensorsList(getView());
+            ((MainActivity) getActivity()).getSensorsData();
             return true;
         }
 
-        if(item.getItemId() == R.id.action_account) {
-            ((MainActivity) getActivity()).accountLogin();
+        if (item.getItemId() == R.id.action_exit) {
+            getActivity().finish();
             return true;
         }
+
+//        if(item.getItemId() == R.id.action_account) {
+//            ((MainActivity) getActivity()).accountLogin();
+//            return true;
+//        }
+
+
 
         return super.onOptionsItemSelected(item);
     }
