@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Weiss My Deweiss</string>
+    <string name="app_name">IoT Control</string>
 
     <string name="title_section1">Sensors</string>
     <string name="title_section2">Hubs</string>
