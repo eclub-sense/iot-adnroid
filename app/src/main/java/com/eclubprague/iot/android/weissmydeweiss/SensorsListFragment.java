@@ -16,6 +16,7 @@ import com.eclubprague.iot.android.weissmydeweiss.ui.SensorDataDialog;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorInfoDialog;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorsExpandableListViewAdapter;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,11 +31,16 @@ public class SensorsListFragment extends Fragment {
     List<Hub> groupItems;
     HashMap<Hub, List<Sensor>> childItems;
     View rootView;
+    WeakReference<MainActivity.Account> accountRef;
 
     public static SensorsListFragment newInstance() {
         SensorsListFragment fragment = new SensorsListFragment();
 
         return fragment;
+    }
+
+    public void setAccountRef(WeakReference<MainActivity.Account> accountRef) {
+        this.accountRef = new WeakReference<>(accountRef.get());
     }
 
     @Override
@@ -59,8 +65,9 @@ public class SensorsListFragment extends Fragment {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                new SensorDataDialog(rootView.getContext(), parent,
-                groupPosition, childPosition);
+                new SensorDataDialog(rootView.getContext(),
+                        (Sensor) parent.getExpandableListAdapter().
+                                getChild(groupPosition, childPosition), accountRef);
                 return false;
             }
         });

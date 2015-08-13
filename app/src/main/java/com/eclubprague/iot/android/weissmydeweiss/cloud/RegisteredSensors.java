@@ -21,6 +21,9 @@ public interface RegisteredSensors {
     @Get("json")
     public Sensor get(String uuid);
 
+    @Get("json")
+    public Sensor get();
+
     @Post("json")
     public void store(SensorPaginatedCollection collection);
 

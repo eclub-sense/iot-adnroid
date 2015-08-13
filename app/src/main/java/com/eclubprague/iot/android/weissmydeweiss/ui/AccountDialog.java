@@ -29,7 +29,6 @@ public class AccountDialog extends AlertDialog.Builder {
     public AccountDialog(MainActivity activity, WeakReference<MainActivity.Account> accountRef) {
         super(activity);
         activityRef = new WeakReference<>(activity);
-        activityRef.get().stopTimerTask();
         this.accountRef = accountRef;
 
 
@@ -63,7 +62,8 @@ public class AccountDialog extends AlertDialog.Builder {
                 AccountDialog.this.
                         accountRef.get().
                         setAccount(edit_username.getText().toString(), edit_password.getText().toString());
-                AccountDialog.this.activityRef.get().startTimer();
+                AccountDialog.this.activityRef.get().getSensorsData(
+                        AccountDialog.this.accountRef.get());
                 dialog.dismiss();
             }
         });

@@ -48,4 +48,18 @@ public class RegisteredSensorsMessage {
         }
         return borrowedSensors;
     }
+
+    public List<NameValuePair> getSensorData(String uuid) {
+        if(_my != null) {
+            for (int i = 0; i < _my.size(); i++) {
+                if(_my.get(i).getUuid().equals(uuid)) return _my.get(i).getMeasured();
+            }
+        }
+        if(_public != null) {
+            for (int i = 0; i < _public.size(); i++) {
+                if(_public.get(i).getUuid().equals(uuid)) return _public.get(i).getMeasured();
+            }
+        }
+        return null;
+    }
 }

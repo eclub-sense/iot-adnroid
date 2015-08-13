@@ -1,6 +1,7 @@
 package com.eclubprague.iot.android.weissmydeweiss;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -58,6 +59,8 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -76,6 +79,7 @@ public class MainActivity extends ActionBarActivity
             default:
             case 0:
                 fragment = SensorsListFragment.newInstance();
+                ((SensorsListFragment)(fragment)).setAccountRef(this.accountRef);
                 break;
             case 1:
                 fragment = HubsListFragment.newInstance();
@@ -250,43 +254,51 @@ public class MainActivity extends ActionBarActivity
     // DO SOME WORKS PERIODICALLY
     //----------------------------------------------------------------
 
-    private Timer timer;
-    private TimerTask timerTask;
-    final Handler handler = new Handler();
-
-
-    public void startTimer() {
-        Toast.makeText(this, "Start Timer", Toast.LENGTH_SHORT).show();
-        if(timer != null) return;
-        //set a new Timer
-        timer = new Timer();
-        //initialize the TimerTask's job
-        initializeTimerTask();
-        //schedule the timer, after the first 5000ms the TimerTask will run every 10000ms
-        timer.schedule(timerTask, 3000, 10000); //
-    }
-
-    public void stopTimerTask() {
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
-    }
-
-    public void initializeTimerTask() {
-        timerTask = new TimerTask() {
-            public void run() {
-                handler.post(new Runnable() {
-                    public void run() {
-                        new GetSensorsDataTask(MainActivity.this).execute(accountRef.get());
-                    }
-                });
-            }
-        };
-    }
+//    private Timer timer;
+//    private TimerTask timerTask;
+//    final Handler handler = new Handler();
+//
+//
+//    public void startTimer() {
+//        Toast.makeText(this, "Start Timer", Toast.LENGTH_SHORT).show();
+//        if(timer != null) return;
+//        //set a new Timer
+//        timer = new Timer();
+//        //initialize the TimerTask's job
+//        initializeTimerTask();
+//        //schedule the timer, after the first 5000ms the TimerTask will run every 10000ms
+//        timer.schedule(timerTask, 3000, 10000); //
+//    }
+//
+//    public void stopTimerTask() {
+//        if (timer != null) {
+//            timer.cancel();
+//            timer = null;
+//        }
+//    }
+//
+//    public void initializeTimerTask() {
+//        timerTask = new TimerTask() {
+//            public void run() {
+//                handler.post(new Runnable() {
+//                    public void run() {
+//                        new GetSensorsDataTask(MainActivity.this).execute(accountRef.get());
+//                    }
+//                });
+//            }
+//        };
+//    }
 
 //    List<SensorDataWrapper> my;
 //    List<SensorDataWrapper> borrowed;
+
+    public void getSensorsData(Account account) {
+        new GetSensorsDataTask(this).execute(account);
+    }
+
+    public WeakReference<Account> getAccountRef() {
+        return accountRef;
+    }
 
     @Override
     public void onGetSensorsDataTaskCompleted(RegisteredSensorsMessage message) {
@@ -297,7 +309,7 @@ public class MainActivity extends ActionBarActivity
         ExpandableListView sensorsList = (ExpandableListView) findViewById(R.id.sensors_expList);
 
         Hub hub1 = new Hub("my");
-        Hub hub2 = new Hub("borrowed");
+        Hub hub2 = new Hub("public");
         List<Hub> hubs = new ArrayList<>();
         hubs.add(hub1);
         hubs.add(hub2);

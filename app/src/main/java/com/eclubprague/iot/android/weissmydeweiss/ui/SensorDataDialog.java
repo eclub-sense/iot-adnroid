@@ -4,17 +4,21 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.eclubprague.iot.android.weissmydeweiss.MainActivity;
 import com.eclubprague.iot.android.weissmydeweiss.R;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.NameValuePair;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.RegisteredSensorsMessage;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
+import com.eclubprague.iot.android.weissmydeweiss.tasks.GetSensorDataByIdTask;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.GetSensorsDataTask;
 
 import java.lang.ref.WeakReference;
@@ -28,25 +32,19 @@ import java.util.TimerTask;
 /**
  * Created by Dat on 11.8.2015.
  */
-public class SensorDataDialog extends AlertDialog.Builder {
+public class SensorDataDialog extends AlertDialog.Builder implements GetSensorDataByIdTask.TaskDelegate {
 
     private Context context;
     private Sensor sensor;
     private LinearLayout layout;
 
-    private WeakReference<ExpandableListView> parentRef;
-    int groupPos;
-    int childPos;
+    private WeakReference<MainActivity.Account> accountRef;
 
-    public SensorDataDialog(Context context, ExpandableListView parent,
-                            int groupPosition, int childPosition) {
+    public SensorDataDialog(Context context, Sensor sensor, WeakReference<MainActivity.Account> accountRef) {
         super(context);
         this.context = context;
-        this.sensor =  (Sensor) parent.getExpandableListAdapter().
-                getChild(groupPosition, childPosition);
-        parentRef = new WeakReference<>(parent);
-        groupPos = groupPosition;
-        childPos = childPosition;
+        this.sensor =  sensor;
+        this.accountRef = new WeakReference<>(accountRef.get());
 
 
         layout = new LinearLayout(this.context);
@@ -96,8 +94,8 @@ public class SensorDataDialog extends AlertDialog.Builder {
         timer = new Timer();
         //initialize the TimerTask's job
         initializeTimerTask();
-        //schedule the timer, after the first 5000ms the TimerTask will run every 10000ms
-        timer.schedule(timerTask, 3000, 10000); //
+        //schedule the timer, after the first 3000ms the TimerTask will run every 5000ms
+        timer.schedule(timerTask, 3000, 5000); //
     }
 
     public void stopTimerTask() {
@@ -113,24 +111,42 @@ public class SensorDataDialog extends AlertDialog.Builder {
                 handler.post(new Runnable() {
                     public void run() {
 
-                                SensorDataDialog.this.sensor =  (Sensor) parentRef.get().getExpandableListAdapter().
-                                getChild(groupPos, childPos);
+                        new GetSensorDataByIdTask(SensorDataDialog.this, SensorDataDialog.this.accountRef)
+                                .execute(SensorDataDialog.this.sensor);
 
-                        layout = new LinearLayout(SensorDataDialog.this.context);
-                        layout.setOrientation(LinearLayout.VERTICAL);
-
-                        for(int i = 0; i < sensor.getMeasured().size(); i++) {
-                            TextView tv = new TextView(SensorDataDialog.this.context);
-                            tv.setText(sensor.getMeasured().get(i).getName() + " : " + sensor.getMeasured().get(i).getValue());
-                            tv.setPadding(5, 5, 5, 5);
-                            layout.addView(tv);
-                        }
-
-                        SensorDataDialog.this.setView(layout);
-                        layout.invalidate();
+                        //TODO this goes to TaskDelegate
+//                        layout = new LinearLayout(SensorDataDialog.this.context);
+//                        layout.setOrientation(LinearLayout.VERTICAL);
+//
+//                        for(int i = 0; i < sensor.getMeasured().size(); i++) {
+//                            TextView tv = new TextView(SensorDataDialog.this.context);
+//                            tv.setText(sensor.getMeasured().get(i).getName() + " : " + sensor.getMeasured().get(i).getValue());
+//                            tv.setPadding(5, 5, 5, 5);
+//                            layout.addView(tv);
+//                        }
+//
+//                        SensorDataDialog.this.setView(layout);
+//                        layout.invalidate();
                     }
                 });
             }
         };
+    }
+
+    @Override
+    public void onGetSensorDataById(List<NameValuePair> measured) {
+        if(measured == null) {
+            Log.e("SENSORDATA", "NULL");
+            return;
+        }
+
+        Log.d("SENSORDATA", "OK");
+
+        for (int i = 0; i < measured.size(); i++) {
+            ((TextView)(layout.getChildAt(i)))
+                    .setText(measured.get(i).getName() + " : " + measured.get(i).getValue());
+        }
+
+        layout.invalidate();
     }
 }
