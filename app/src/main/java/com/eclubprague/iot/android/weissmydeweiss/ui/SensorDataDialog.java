@@ -67,8 +67,15 @@ public class SensorDataDialog extends AlertDialog.Builder implements GetSensorDa
 
         this.setNegativeButton("Close", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                stopTimerTask();
+                //stopTimerTask();
                 dialog.dismiss();
+            }
+        });
+
+        this.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                stopTimerTask();
             }
         });
 
@@ -76,6 +83,7 @@ public class SensorDataDialog extends AlertDialog.Builder implements GetSensorDa
         this.create();
         this.show();
     }
+
 
 
 
