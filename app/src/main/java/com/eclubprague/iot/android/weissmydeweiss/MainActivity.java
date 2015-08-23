@@ -193,7 +193,7 @@ public class MainActivity extends ActionBarActivity
                                 SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
 
                                 Sensor sensor = VirtualSensorCreator.
-                                        createSensorInstance(sensorId, sensorType, sensorSecret, new Hub("TMP"));
+                                        createSensorInstance(sensorId, sensorType, sensorSecret, new Hub("1"));
                                 sr.store(sensor);
 
                             }catch(Throwable e) {

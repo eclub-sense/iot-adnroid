@@ -37,6 +37,7 @@
             android:theme="@style/FullscreenTheme"
             android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".ui.SensorChartActivity"></activity>
     </application>
 
 </manifest>

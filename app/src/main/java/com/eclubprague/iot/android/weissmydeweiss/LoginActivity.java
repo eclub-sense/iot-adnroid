@@ -51,7 +51,8 @@ public class LoginActivity extends Activity implements LoginTask.TaskDelegate {
                     return;
                 }
 
-                new LoginTask(LoginActivity.this).execute(new User(username, password));
+                //new LoginTask(LoginActivity.this).execute(new User(username, password));
+                startApp();
             }
         });
 
@@ -79,6 +80,10 @@ public class LoginActivity extends Activity implements LoginTask.TaskDelegate {
             Toast.makeText(this, "No such account", Toast.LENGTH_SHORT).show();
             return;
         }
+        startApp();
+    }
+
+    private void startApp() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.putExtra("username", username);
         intent.putExtra("password", password);

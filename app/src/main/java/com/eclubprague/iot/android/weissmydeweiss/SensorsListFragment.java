@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.github.mikephil.charting.charts.LineChart;
+
 /**
  * Created by Dat on 14.7.2015.
  */
@@ -69,6 +71,8 @@ public class SensorsListFragment extends Fragment {
                 new SensorDataDialog(rootView.getContext(),
                         (Sensor) parent.getExpandableListAdapter().
                                 getChild(groupPosition, childPosition), userRef);
+                SensorsListFragment.this.getActivity()
+                        .overridePendingTransition(R.anim.move_right_in_activity, R.anim.move_left_out_activity);
                 return false;
             }
         });

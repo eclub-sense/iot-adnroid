@@ -27,6 +27,7 @@ android {
 repositories {
     mavenCentral() /* The standard Java Maven repository. */
     maven { url "http://maven.restlet.org" }
+    maven { url "https://jitpack.io" }
 }
 
 ext.restletVersion = "2.2.3"
@@ -44,5 +45,7 @@ dependencies {
     compile "commons-codec:commons-codec:1.10"
 
     compile 'com.google.android.gms:play-services:7.5.0'
+
+    compile 'com.github.PhilJay:MPAndroidChart:v2.1.3'
 }
 
