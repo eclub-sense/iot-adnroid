@@ -22,6 +22,7 @@ import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.VirtualSensorCreator;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.RegisteredSensorsMessage;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.GetSensorsDataTask;
+import com.eclubprague.iot.android.weissmydeweiss.tasks.TestingTask;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorsExpandableListViewAdapter;
 
 import org.restlet.data.ChallengeScheme;
@@ -36,7 +37,8 @@ import java.util.List;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        /*RefreshSensorsTask.RefreshSensorsCallbacks,*/ GetSensorsDataTask.TaskDelegate {
+        /*RefreshSensorsTask.RefreshSensorsCallbacks,*/ GetSensorsDataTask.TaskDelegate,
+        TestingTask.TaskDelegate {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -47,6 +49,8 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+
+    private String token = "";
 
 
 
@@ -64,6 +68,8 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
+
+        token = getIntent().getStringExtra("token");
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -282,6 +288,10 @@ public class MainActivity extends ActionBarActivity
         new GetSensorsDataTask(delegateRef, userRef).execute();
     }
 
+    public void testing() {
+        new TestingTask(this).execute(token);
+    }
+
     public ArrayList<User> getUserRef() {
         return userRef;
     }
@@ -322,5 +332,10 @@ public class MainActivity extends ActionBarActivity
         setIntent.addCategory(Intent.CATEGORY_HOME);
         setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(setIntent);
+    }
+
+    @Override
+    public void onTestingTaskCompleted(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }

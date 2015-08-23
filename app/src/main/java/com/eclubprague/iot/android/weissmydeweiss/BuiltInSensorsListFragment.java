@@ -2,6 +2,7 @@ package com.eclubprague.iot.android.weissmydeweiss;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -18,6 +19,8 @@ import android.widget.ListView;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.GetSensorTask;
 import com.eclubprague.iot.android.weissmydeweiss.ui.BuiltInSensorInfoDialog;
 import com.eclubprague.iot.android.weissmydeweiss.ui.BuiltInSensorsListViewAdapter;
+import com.eclubprague.iot.android.weissmydeweiss.ui.SensorChartActivity;
+import com.eclubprague.iot.android.weissmydeweiss.ui.charts.AccelerometerChartActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +75,21 @@ public class BuiltInSensorsListFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                new BuiltInSensorInfoDialog(rootView.getContext(), (Sensor) parent.getAdapter().getItem(position));
+                //new BuiltInSensorInfoDialog(rootView.getContext(), (Sensor) parent.getAdapter().getItem(position));
+                Sensor sensor = (Sensor) parent.getAdapter().getItem(position);
+                Intent intent;
+                switch (sensor.getType()) {
+                    case Sensor.TYPE_ACCELEROMETER:
+                        intent = new Intent(BuiltInSensorsListFragment.this.getActivity(), AccelerometerChartActivity.class);
+                        break;
+                    default:
+                        intent = new Intent(BuiltInSensorsListFragment.this.getActivity(), SensorChartActivity.class);
+                }
+                intent.putExtra("sensorName", ((Sensor) parent.getAdapter().getItem(position)).getName());
+                startActivity(intent);
+
+                BuiltInSensorsListFragment.this.getActivity()
+                        .overridePendingTransition(R.anim.move_right_in_activity, R.anim.move_left_out_activity);
             }
         });
 

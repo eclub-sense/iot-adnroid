@@ -14,12 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/qr_scan_button">
+        android:layout_alignParentTop="true">
     </ListView>
-
-    <Button android:id="@+id/qr_scan_button" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:text="@string/qr_scan_button" android:onClick="launchQRScanner"
-        android:layout_alignParentBottom="true" android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>

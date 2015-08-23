@@ -258,6 +258,12 @@ public class NavigationDrawerFragment extends Fragment {
             return true;
         }
 
+        if (item.getItemId() == R.id.action_pop) {
+            //getActivity().finish();
+            ((MainActivity) getActivity()).testing();
+            return true;
+        }
+
 //        if(item.getItemId() == R.id.action_account) {
 //            ((MainActivity) getActivity()).accountLogin();
 //            return true;

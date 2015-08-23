@@ -19,6 +19,9 @@ public interface RegisteredSensors {
     public RegisteredSensorsMessage retrieve_2();
 
     @Get("json")
+    public String retrieve_test();
+
+    @Get("json")
     public Sensor get(String uuid);
 
     @Get("json")

@@ -20,4 +20,8 @@
     <string name="txt_username_label">Username</string>
     <string name="txt_password_label">Password</string>
     <string name="action_exit">Exit</string>
+    <string name="sign_in_label">Sign In</string>
+    <string name="action_pop">pop</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_continue">continue</string>
 </resources>
