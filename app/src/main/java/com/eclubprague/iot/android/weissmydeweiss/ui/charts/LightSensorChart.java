@@ -9,13 +9,11 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.eclubprague.iot.android.weissmydeweiss.R;
@@ -37,7 +35,7 @@ import java.util.List;
 /**
  * Created by Dat on 24.8.2015.
  */
-public class AccelerometerChartActivity extends ActionBarActivity implements SensorEventListener,
+public class LightSensorChart extends ActionBarActivity implements SensorEventListener,
         OnChartValueSelectedListener {
 
     private LineChart mChart;
@@ -51,14 +49,14 @@ public class AccelerometerChartActivity extends ActionBarActivity implements Sen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-         //       WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //       WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_realtime_linechart);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("Accelerometer");
+        actionBar.setTitle("Light Sensor");
 
         sensorName = getIntent().getStringExtra("sensorName");
 
@@ -66,8 +64,8 @@ public class AccelerometerChartActivity extends ActionBarActivity implements Sen
 
         List<Sensor> deviceSensors = senSensorManager.getSensorList(android.hardware.Sensor.TYPE_ALL);
 
-        for(int i = 0; i < deviceSensors.size(); i++) {
-            if(deviceSensors.get(i).getName().equals(sensorName)) {
+        for (int i = 0; i < deviceSensors.size(); i++) {
+            if (deviceSensors.get(i).getName().equals(sensorName)) {
                 sensor = deviceSensors.get(i);
                 break;
             }
@@ -127,8 +125,8 @@ public class AccelerometerChartActivity extends ActionBarActivity implements Sen
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTypeface(tf);
         leftAxis.setTextColor(Color.BLACK);
-        leftAxis.setAxisMaxValue(/*100f*/15f);
-        leftAxis.setAxisMinValue(/*0f*/-15f);
+        leftAxis.setAxisMaxValue(/*100f*/500f);
+        leftAxis.setAxisMinValue(/*0f*/-500f);
         leftAxis.setStartAtZero(false);
         leftAxis.setDrawGridLines(true);
 
@@ -160,7 +158,7 @@ public class AccelerometerChartActivity extends ActionBarActivity implements Sen
     }
 
     //------------------------------------------------------------------
-    private void addEntry(float x_val, float y_val, float z_val) {
+    private void addEntry(float val) {
 
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -170,33 +168,18 @@ public class AccelerometerChartActivity extends ActionBarActivity implements Sen
 
         if (data != null) {
 
-            LineDataSet x_set = data.getDataSetByIndex(0);
-            LineDataSet y_set = data.getDataSetByIndex(1);
-            LineDataSet z_set = data.getDataSetByIndex(2);
+            LineDataSet set = data.getDataSetByIndex(0);
             // set.addEntry(...); // can be called as well
 
-            if (x_set == null) {
-                x_set = createSet("x");
-                data.addDataSet(x_set);
+            if (set == null) {
+                set = createSet();
+                data.addDataSet(set);
             }
-
-            if (y_set == null) {
-                y_set = createSet("y");
-                data.addDataSet(y_set);
-            }
-
-            if (z_set == null) {
-                z_set = createSet("z");
-                data.addDataSet(z_set);
-            }
-
-            String time = sdf.format(cal.getTime());
 
             // add a new x-value first
+            String time = sdf.format(cal.getTime());
             data.addXValue(time);
-            data.addEntry(new Entry(x_val, x_set.getEntryCount(), time), 0);
-            data.addEntry(new Entry(y_val, y_set.getEntryCount(), time), 1);
-            data.addEntry(new Entry(z_val, z_set.getEntryCount(), time), 2);
+            data.addEntry(new Entry(val, set.getEntryCount(), time), 0);
 
             // let the chart know it's data has changed
             mChart.notifyDataSetChanged();
@@ -214,26 +197,11 @@ public class AccelerometerChartActivity extends ActionBarActivity implements Sen
         }
     }
 
-    private LineDataSet createSet(String axis) {
+    private LineDataSet createSet() {
 
-        LineDataSet set = new LineDataSet(null, "Dynamic Data");
+        LineDataSet set = new LineDataSet(null, "Illumination (lux)");
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
-        switch(axis) {
-            case "x":
-                set.setColor(ColorTemplate.getHoloBlue());
-                set.setFillColor(ColorTemplate.getHoloBlue());
-                set.setLabel("x axis");
-                break;
-            case "y":
-                set.setColor(Color.GREEN);
-                set.setFillColor(Color.GREEN);
-                set.setLabel("y axis");
-                break;
-            case "z":
-                set.setColor(Color.BLACK);
-                set.setFillColor(Color.BLACK);
-                set.setLabel("z axis");
-        }
+        set.setColor(ColorTemplate.getHoloBlue());
         set.setCircleColor(Color.RED);
         set.setLineWidth(2f);
         set.setCircleSize(2f);
@@ -248,7 +216,7 @@ public class AccelerometerChartActivity extends ActionBarActivity implements Sen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        addEntry(event.values[0], event.values[1], event.values[2]);
+        addEntry(event.values[0]);
     }
 
     @Override
@@ -276,7 +244,7 @@ public class AccelerometerChartActivity extends ActionBarActivity implements Sen
                 break;
             case R.id.action_continue:
                 try {
-                senSensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+                    senSensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
                 } catch (Exception e) {
                     Log.e("REG", e.toString());
                 }

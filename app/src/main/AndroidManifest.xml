@@ -73,6 +73,11 @@
 
         <activity android:name=".ui.SensorChartActivity"/>
         <activity android:name=".ui.charts.AccelerometerChartActivity"/>
+        <activity android:name=".ui.charts.MagneticFieldChart"/>
+        <activity android:name=".ui.charts.ProximityChart"/>
+        <activity android:name=".ui.charts.LightSensorChart"/>
+        <activity android:name=".ui.charts.GyroscopeChart"/>
+
 
     </application>
 

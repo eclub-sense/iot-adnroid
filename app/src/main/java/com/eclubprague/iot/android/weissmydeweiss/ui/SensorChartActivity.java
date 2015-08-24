@@ -14,6 +14,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -58,7 +59,13 @@ public class SensorChartActivity extends ActionBarActivity implements SensorEven
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_realtime_linechart);
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
+
         sensorName = getIntent().getStringExtra("sensorName");
+
+        actionBar.setTitle(sensorName);
 
         senSensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
 
@@ -110,7 +117,7 @@ public class SensorChartActivity extends ActionBarActivity implements SensorEven
 
         // modify the legend ...
         legend.setPosition(Legend.LegendPosition.BELOW_CHART_LEFT);
-        legend.setForm(Legend.LegendForm.LINE);
+        legend.setForm(Legend.LegendForm.SQUARE);
         legend.setTypeface(tf);
         legend.setTextColor(Color.BLACK);
 
@@ -148,7 +155,8 @@ public class SensorChartActivity extends ActionBarActivity implements SensorEven
 
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-        Toast.makeText(this, "value : " + Float.toString(e.getVal()), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "value : " + Float.toString(e.getVal()) + ", time : " +
+                e.getData().toString(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -176,8 +184,9 @@ public class SensorChartActivity extends ActionBarActivity implements SensorEven
             }
 
             // add a new x-value first
-            data.addXValue(sdf.format(cal.getTime()));
-            data.addEntry(new Entry(val, set.getEntryCount()), 0);
+            String time = sdf.format(cal.getTime());
+            data.addXValue(time);
+            data.addEntry(new Entry(val, set.getEntryCount(), time), 0);
 
             // let the chart know it's data has changed
             mChart.notifyDataSetChanged();

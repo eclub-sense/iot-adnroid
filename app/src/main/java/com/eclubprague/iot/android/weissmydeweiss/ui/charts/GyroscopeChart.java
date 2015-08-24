@@ -9,13 +9,11 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.eclubprague.iot.android.weissmydeweiss.R;
@@ -37,7 +35,7 @@ import java.util.List;
 /**
  * Created by Dat on 24.8.2015.
  */
-public class AccelerometerChartActivity extends ActionBarActivity implements SensorEventListener,
+public class GyroscopeChart extends ActionBarActivity implements SensorEventListener,
         OnChartValueSelectedListener {
 
     private LineChart mChart;
@@ -51,16 +49,17 @@ public class AccelerometerChartActivity extends ActionBarActivity implements Sen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-         //       WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //       WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_realtime_linechart);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("Accelerometer");
 
         sensorName = getIntent().getStringExtra("sensorName");
+
+        actionBar.setTitle(sensorName);
 
         senSensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
 
@@ -127,8 +126,8 @@ public class AccelerometerChartActivity extends ActionBarActivity implements Sen
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTypeface(tf);
         leftAxis.setTextColor(Color.BLACK);
-        leftAxis.setAxisMaxValue(/*100f*/15f);
-        leftAxis.setAxisMinValue(/*0f*/-15f);
+        leftAxis.setAxisMaxValue(/*100f*/sensor.getMaximumRange());
+        leftAxis.setAxisMinValue(/*0f*/-1*sensor.getMaximumRange());
         leftAxis.setStartAtZero(false);
         leftAxis.setDrawGridLines(true);
 
@@ -276,7 +275,7 @@ public class AccelerometerChartActivity extends ActionBarActivity implements Sen
                 break;
             case R.id.action_continue:
                 try {
-                senSensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+                    senSensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
                 } catch (Exception e) {
                     Log.e("REG", e.toString());
                 }

@@ -21,6 +21,10 @@ import com.eclubprague.iot.android.weissmydeweiss.ui.BuiltInSensorInfoDialog;
 import com.eclubprague.iot.android.weissmydeweiss.ui.BuiltInSensorsListViewAdapter;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorChartActivity;
 import com.eclubprague.iot.android.weissmydeweiss.ui.charts.AccelerometerChartActivity;
+import com.eclubprague.iot.android.weissmydeweiss.ui.charts.GyroscopeChart;
+import com.eclubprague.iot.android.weissmydeweiss.ui.charts.LightSensorChart;
+import com.eclubprague.iot.android.weissmydeweiss.ui.charts.MagneticFieldChart;
+import com.eclubprague.iot.android.weissmydeweiss.ui.charts.ProximityChart;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +85,39 @@ public class BuiltInSensorsListFragment extends Fragment {
                 switch (sensor.getType()) {
                     case Sensor.TYPE_ACCELEROMETER:
                         intent = new Intent(BuiltInSensorsListFragment.this.getActivity(), AccelerometerChartActivity.class);
+                        break;
+                    case Sensor.TYPE_LINEAR_ACCELERATION:
+                        intent = new Intent(BuiltInSensorsListFragment.this.getActivity(), AccelerometerChartActivity.class);
+                        break;
+                    case Sensor.TYPE_MAGNETIC_FIELD:
+                        intent = new Intent(BuiltInSensorsListFragment.this.getActivity(), MagneticFieldChart.class);
+                        break;
+                    case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
+                        intent = new Intent(BuiltInSensorsListFragment.this.getActivity(), MagneticFieldChart.class);
+                        break;
+                    case Sensor.TYPE_PROXIMITY:
+                        intent = new Intent(BuiltInSensorsListFragment.this.getActivity(), ProximityChart.class);
+                        break;
+                    case Sensor.TYPE_LIGHT:
+                        intent = new Intent(BuiltInSensorsListFragment.this.getActivity(), LightSensorChart.class);
+                        break;
+                    case Sensor.TYPE_GYROSCOPE:
+                        intent = new Intent(BuiltInSensorsListFragment.this.getActivity(), GyroscopeChart.class);
+                        break;
+                    case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
+                        intent = new Intent(BuiltInSensorsListFragment.this.getActivity(), GyroscopeChart.class);
+                        break;
+                    case Sensor.TYPE_ROTATION_VECTOR:
+                        intent = new Intent(BuiltInSensorsListFragment.this.getActivity(), GyroscopeChart.class);
+                        break;
+                    case Sensor.TYPE_ORIENTATION:
+                        intent = new Intent(BuiltInSensorsListFragment.this.getActivity(), GyroscopeChart.class);
+                        break;
+                    case Sensor.TYPE_GRAVITY:
+                        intent = new Intent(BuiltInSensorsListFragment.this.getActivity(), GyroscopeChart.class);
+                        break;
+                    case Sensor.TYPE_GAME_ROTATION_VECTOR:
+                        intent = new Intent(BuiltInSensorsListFragment.this.getActivity(), GyroscopeChart.class);
                         break;
                     default:
                         intent = new Intent(BuiltInSensorsListFragment.this.getActivity(), SensorChartActivity.class);
