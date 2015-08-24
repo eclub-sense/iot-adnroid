@@ -1,6 +1,7 @@
 package com.eclubprague.iot.android.weissmydeweiss;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.VirtualSensorCre
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorDataDialog;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorInfoDialog;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorsExpandableListViewAdapter;
+import com.eclubprague.iot.android.weissmydeweiss.ui.charts.MagneticFieldChart;
+import com.eclubprague.iot.android.weissmydeweiss.ui.charts.OneValueChartActivity;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -32,7 +35,7 @@ public class SensorsListFragment extends Fragment {
     List<Hub> groupItems;
     HashMap<Hub, List<Sensor>> childItems;
     View rootView;
-    ArrayList<User> userRef;
+    ArrayList<MainActivity> activityRef;
 
     public static SensorsListFragment newInstance() {
         SensorsListFragment fragment = new SensorsListFragment();
@@ -40,8 +43,8 @@ public class SensorsListFragment extends Fragment {
         return fragment;
     }
 
-    public void setUserRef(ArrayList<User> userRef) {
-        this.userRef = userRef;
+    public void setMainActivityRef(ArrayList<MainActivity> activityRef) {
+        this.activityRef = activityRef;
     }
 
     @Override
@@ -66,9 +69,18 @@ public class SensorsListFragment extends Fragment {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                new SensorDataDialog(rootView.getContext(),
-                        (Sensor) parent.getExpandableListAdapter().
-                                getChild(groupPosition, childPosition), userRef);
+
+                Sensor sensor = (Sensor) parent.getExpandableListAdapter().
+                                getChild(groupPosition, childPosition);
+                String token = ((MainActivity)SensorsListFragment.this.getActivity()).getToken();
+
+                Intent intent = new Intent(SensorsListFragment.this.getActivity(), OneValueChartActivity.class);
+                intent.putExtra("token", token);
+                intent.putExtra("uuid", sensor.getUuid());
+                intent.putExtra("title", SensorType.getStringSensorType(sensor.getType()));
+                intent.putExtra("datasetDesc", "todo");
+                startActivity(intent);
+
                 return false;
             }
         });
@@ -85,27 +97,6 @@ public class SensorsListFragment extends Fragment {
     private void prepareListData() {
         groupItems = new ArrayList<Hub>();
         childItems = new HashMap<Hub, List<Sensor>>();
-
-        /*groupItems.add(new Hub("1"));
-        groupItems.add(new Hub("2"));
-        groupItems.add(new Hub("3"));
-
-        List<Sensor> livingRoom = new ArrayList<>();
-        livingRoom.add(VirtualSensorCreator.createSensorInstance("123", SensorType.THERMOMETER, "12345"));
-        livingRoom.add(VirtualSensorCreator.createSensorInstance("34345", SensorType.LED, "8878"));
-        livingRoom.add(VirtualSensorCreator.createSensorInstance("3677", SensorType.THERMOMETER, "33442"));
-
-        List<Sensor> kitchen = new ArrayList<>();
-        kitchen.add(VirtualSensorCreator.createSensorInstance("7888", SensorType.THERMOMETER, "8888"));
-        kitchen.add(VirtualSensorCreator.createSensorInstance("2015", SensorType.LED, "70021"));
-
-        List<Sensor> bathroom = new ArrayList<>();
-        bathroom.add(VirtualSensorCreator.createSensorInstance("7001", SensorType.THERMOMETER, "0124"));
-        bathroom.add(VirtualSensorCreator.createSensorInstance("1991", SensorType.LED, "12345"));
-
-        childItems.put(groupItems.get(0), livingRoom);
-        childItems.put(groupItems.get(1), kitchen);
-        childItems.put(groupItems.get(2), bathroom);*/
     }
 
 }

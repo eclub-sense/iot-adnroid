@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.eclubprague.iot.android.weissmydeweiss.R;
+import com.eclubprague.iot.android.weissmydeweiss.ui.charts.components.CustomMarkerView;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -79,6 +80,9 @@ public class LightSensorChart extends ActionBarActivity implements SensorEventLi
         // no description text
         mChart.setDescription("");
         mChart.setNoDataTextDescription("No data available yet.");
+
+        CustomMarkerView mv = new CustomMarkerView (this, R.layout.tv_content_layout);
+        mChart.setMarkerView(mv);
 
         // enable value highlighting
         mChart.setHighlightEnabled(true);

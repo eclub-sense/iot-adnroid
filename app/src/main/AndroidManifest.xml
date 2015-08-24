@@ -63,7 +63,7 @@
             android:value="true" />
         <meta-data
             android:name="identitytoolkit.api_key"
-            android:value="AIzaSyA-9RrPXULoa-qLON2utpFCw8kmdRAMBMY" />
+            android:value="AIzaSyDihnqr7LBS061fbvtZeHsVxD2yoEtw-zE" />
         <meta-data
             android:name="identitytoolkit.server_client_id"
             android:value="443649814858-lvc1abj9ccnudm6l199f23ddqapgo1u3.apps.googleusercontent.com" />
@@ -77,6 +77,7 @@
         <activity android:name=".ui.charts.ProximityChart"/>
         <activity android:name=".ui.charts.LightSensorChart"/>
         <activity android:name=".ui.charts.GyroscopeChart"/>
+        <activity android:name=".ui.charts.OneValueChartActivity"/>
 
 
     </application>

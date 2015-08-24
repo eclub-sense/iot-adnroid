@@ -21,6 +21,7 @@ import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.VirtualSensorCreator;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.RegisteredSensorsMessage;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.AllSensors;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.GetSensorsDataTask;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.TestingTask;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorsExpandableListViewAdapter;
@@ -54,7 +55,7 @@ public class MainActivity extends ActionBarActivity
 
 
 
-    private ArrayList<User> userRef = new ArrayList<>();
+    //private ArrayList<User> userRef = new ArrayList<>();
     private ArrayList<MainActivity> activityRef = new ArrayList<>();
     private ArrayList<GetSensorsDataTask.TaskDelegate> delegateRef = new ArrayList<>();
 
@@ -77,7 +78,7 @@ public class MainActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
 
-        userRef.add(new User(getIntent().getStringExtra("username"), getIntent().getStringExtra("password")));
+        //userRef.add(new User(getIntent().getStringExtra("username"), getIntent().getStringExtra("password")));
         activityRef.add(this);
         delegateRef.add(this);
     }
@@ -90,7 +91,7 @@ public class MainActivity extends ActionBarActivity
             default:
             case 0:
                 fragment = SensorsListFragment.newInstance();
-                ((SensorsListFragment)(fragment)).setUserRef(this.userRef);
+                ((SensorsListFragment)(fragment)).setMainActivityRef(activityRef);
                 break;
             case 1:
                 fragment = HubsListFragment.newInstance();
@@ -194,8 +195,7 @@ public class MainActivity extends ActionBarActivity
 
                                 // try connection
                                 ClientResource cr = new ClientResource("http://147.32.107.139:8080/sensor_registration");
-                                cr.setChallengeResponse(ChallengeScheme.HTTP_BASIC,
-                                        userRef.get(0).getUsername(), userRef.get(0).getPassword());
+                                cr.setQueryValue("id_token", token);
                                 SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
 
                                 Sensor sensor = VirtualSensorCreator.
@@ -285,19 +285,19 @@ public class MainActivity extends ActionBarActivity
 //    List<SensorDataWrapper> borrowed;
 
     public void getSensorsData() {
-        new GetSensorsDataTask(delegateRef, userRef).execute();
+        new GetSensorsDataTask(delegateRef, token).execute();
+    }
+
+    public String getToken() {
+        return token;
     }
 
     public void testing() {
         new TestingTask(this).execute(token);
     }
 
-    public ArrayList<User> getUserRef() {
-        return userRef;
-    }
-
     @Override
-    public void onGetSensorsDataTaskCompleted(RegisteredSensorsMessage message) {
+    public void onGetSensorsDataTaskCompleted(AllSensors message) {
 
 //        my = message.getMy();
 //        borrowed = message.getBorrowed();
@@ -306,15 +306,19 @@ public class MainActivity extends ActionBarActivity
 
         Hub hub1 = new Hub("my");
         Hub hub2 = new Hub("public");
+        Hub hub3 = new Hub("borrowed");
         List<Hub> hubs = new ArrayList<>();
         hubs.add(hub1);
         hubs.add(hub2);
+        hubs.add(hub3);
 
 
         HashMap<Hub, List<Sensor>> hubSensors = new LinkedHashMap<>();
 
+        //TODO turn SensorEntity instances to Sensor instances
         hubSensors.put(hub1, message.getMySensors());
-        hubSensors.put(hub2, message.getBorrowedSensors());
+        hubSensors.put(hub2, message.getPublicSensors());
+        hubSensors.put(hub3, message.getBorrowedSensors());
 
         SensorsExpandableListViewAdapter adapter = new SensorsExpandableListViewAdapter(
                 this, hubs, hubSensors);

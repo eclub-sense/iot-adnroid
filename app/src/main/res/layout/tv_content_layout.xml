@@ -16,6 +16,7 @@
         android:textColor="@android:color/white"
         android:ellipsize="end"
         android:singleLine="true"
+        android:background="@android:color/holo_red_light"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>

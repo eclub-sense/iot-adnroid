@@ -22,18 +22,12 @@ import com.google.identitytoolkit.IdToken;
 /**
  * Created by Dat on 13.8.2015.
  */
-public class LoginActivity extends Activity /*implements LoginTask.TaskDelegate*/ {
-
-    private EditText un,pw;
-    private Button b_login;
-    private Button b_register;
-
-    private String username = "DAT";
-    private String password = "567";
+public class LoginActivity extends Activity implements LoginTask.TaskDelegate {
 
     private GitkitClient client;
 
     private String token = "";
+    private String email = "";
 
     //-------------------------------------------------------------------------
 
@@ -44,51 +38,15 @@ public class LoginActivity extends Activity /*implements LoginTask.TaskDelegate*
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_login);
 
-        /*un=(EditText)findViewById(R.id.et_un);
-        pw=(EditText)findViewById(R.id.et_pw);
-        b_login =(Button)findViewById(R.id.btn_login);
-        b_register =(Button)findViewById(R.id.btn_register);
-
-        b_login.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                username = un.getText().toString();
-                password = pw.getText().toString();
-
-                if(username.length() < 3 || password.length() < 3) {
-                    Toast.makeText(LoginActivity.this, "Credentials min. lenght: 3", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                new LoginTask(LoginActivity.this).execute(new User(username, password));
-            }
-        });
-
-        b_register.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "Not yet supported", Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
         client = GitkitClient.newBuilder(this, new GitkitClient.SignInCallbacks() {
-            // Implement the onSignIn method of GitkitClient.SignInCallbacks interface.
-            // This method is called when the sign-in process succeeds. A Gitkit IdToken and the signed
-            // in account information are passed to the callback.
             @Override
             public void onSignIn(IdToken idToken, GitkitUser user) {
                 Log.i("LoginActivity", "Logged in as " + user.getDisplayName());
                 token = idToken.getTokenString();
-                Log.i("LoginActivity", "Token=" + idToken.getTokenString());
-
-                //showProfilePage(idToken, user);
-                // Now use the idToken to create a session for your user.
-                // To do so, you should exchange the idToken for either a Session Token or Cookie
-                // from your server.
-                // Finally, save the Session Token or Cookie to maintain your user's session.
-                startApplication();
+                Log.i("LoginActivity", "Token=" + token);
+                email = idToken.getEmail();
+                Log.i("LoginActivity", "Email=" + email);
+                new LoginTask(LoginActivity.this).execute(email);
             }
 
             // Implement the onSignInFailed method of GitkitClient.SignInCallbacks interface.
@@ -140,20 +98,17 @@ public class LoginActivity extends Activity /*implements LoginTask.TaskDelegate*
     //Task Delegates Overrides
     //-------------------------------------------------------------------
 
-    /*@Override
-    public void onLoginCompleted(boolean success) {
-        if(!success) {
-            Toast.makeText(this, "No such account", Toast.LENGTH_SHORT).show();
-            return;
-        }
+    @Override
+    public void onLoginCompleted(String token) {
+        this.token = token;
+        Log.e("NEWTOKEN", token);
         startApplication();
-    }*/
+    }
 
 
     public void startApplication() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        intent.putExtra("username", username);
-        intent.putExtra("password", password);
+        intent.putExtra("email", email);
         intent.putExtra("token", token);
         startActivity(intent);
         this.finish();

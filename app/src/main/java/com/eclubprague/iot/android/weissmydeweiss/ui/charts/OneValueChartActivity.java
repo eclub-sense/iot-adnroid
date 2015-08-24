@@ -9,6 +9,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -17,6 +18,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.eclubprague.iot.android.weissmydeweiss.R;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.SensorAndData;
+import com.eclubprague.iot.android.weissmydeweiss.tasks.GetSensorDataByIdTask;
 import com.eclubprague.iot.android.weissmydeweiss.ui.charts.components.CustomMarkerView;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -30,49 +33,47 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Dat on 24.8.2015.
  */
-public class ProximityChart extends ActionBarActivity implements SensorEventListener,
-        OnChartValueSelectedListener {
+public class OneValueChartActivity extends ActionBarActivity implements
+        OnChartValueSelectedListener, GetSensorDataByIdTask.TaskDelegate {
 
     private LineChart mChart;
 
-    private SensorManager senSensorManager;
-    private String sensorName;
-    private Sensor sensor;
+    private String title;
+
+    private String datasetDesc;
+
+    private String token;
+
+    private String uuid;
 
     //Activity ovveride
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-        //       WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_realtime_linechart);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("Proximity");
 
-        sensorName = getIntent().getStringExtra("sensorName");
+        token = getIntent().getStringExtra("token");
+        uuid = getIntent().getStringExtra("uuid");
 
-        senSensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
+        title = getIntent().getStringExtra("title");
 
-        List<Sensor> deviceSensors = senSensorManager.getSensorList(android.hardware.Sensor.TYPE_ALL);
+        actionBar.setTitle(title);
 
-        for (int i = 0; i < deviceSensors.size(); i++) {
-            if (deviceSensors.get(i).getName().equals(sensorName)) {
-                sensor = deviceSensors.get(i);
-                break;
-            }
-        }
-
-        senSensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        datasetDesc = getIntent().getStringExtra("datasetDesc");
 
         mChart = (LineChart) findViewById(R.id.chart1);
         mChart.setOnChartValueSelectedListener(this);
@@ -129,13 +130,18 @@ public class ProximityChart extends ActionBarActivity implements SensorEventList
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTypeface(tf);
         leftAxis.setTextColor(Color.BLACK);
-        leftAxis.setAxisMaxValue(/*100f*/sensor.getMaximumRange() + 1);
-        leftAxis.setAxisMinValue(/*0f*/-1 * sensor.getMaximumRange() - 1);
+        leftAxis.setAxisMaxValue(/*100f*/getIntent().getFloatExtra("upperBound", 100));
+        leftAxis.setAxisMinValue(/*0f*/-1 * getIntent().getFloatExtra("upperBound", 100));
         leftAxis.setStartAtZero(false);
         leftAxis.setDrawGridLines(true);
 
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setEnabled(false);
+
+        delegateRef.add(this);
+
+        //todo start timer task
+        startTimer();
 
     }
 
@@ -144,7 +150,8 @@ public class ProximityChart extends ActionBarActivity implements SensorEventList
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        senSensorManager.unregisterListener(this);
+        //TODO stop timer task
+        stopTimerTask();
         overridePendingTransition(R.anim.move_left_in_activity, R.anim.move_right_out_activity);
     }
 
@@ -203,7 +210,7 @@ public class ProximityChart extends ActionBarActivity implements SensorEventList
 
     private LineDataSet createSet() {
 
-        LineDataSet set = new LineDataSet(null, "Proximity (cm)");
+        LineDataSet set = new LineDataSet(null, datasetDesc);
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
         set.setColor(ColorTemplate.getHoloBlue());
         set.setCircleColor(Color.RED);
@@ -215,17 +222,6 @@ public class ProximityChart extends ActionBarActivity implements SensorEventList
         set.setValueTextSize(9f);
         set.setDrawValues(false);
         return set;
-    }
-
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        addEntry(event.values[0]);
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
 
     @Override
@@ -241,18 +237,71 @@ public class ProximityChart extends ActionBarActivity implements SensorEventList
         switch (item.getItemId()) {
             case R.id.action_pause:
                 try {
-                    senSensorManager.unregisterListener(this);
+                    //TODO stop timer task
                 } catch (Exception e) {
                     Log.e("UNREG", e.toString());
                 }
                 break;
             case R.id.action_continue:
                 try {
-                    senSensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+                    //TODO start timer task
                 } catch (Exception e) {
                     Log.e("REG", e.toString());
                 }
         }
         return true;
+    }
+
+
+    @Override
+    public void onGetSensorDataByIdTaskCompleted(SensorAndData sData) {
+        try {
+            float val = Float.parseFloat(sData.getMeasured().get(0).getValue());
+            addEntry(val);
+        } catch (Exception e) {
+            Log.e("onTaskCompleted", e.toString());
+        }
+    }
+
+    //----------------------------------------------------------------
+    // TIMER TASK
+    // DO SOME WORKS PERIODICALLY
+    //----------------------------------------------------------------
+
+    private Timer timer;
+    private TimerTask timerTask;
+    final Handler handler = new Handler();
+
+
+    public void startTimer() {
+        if(timer != null) return;
+        //set a new Timer
+        timer = new Timer();
+        //initialize the TimerTask's job
+        initializeTimerTask();
+        //schedule the timer, after the first 3000ms the TimerTask will run every 2000ms
+        timer.schedule(timerTask, 3000, 2000); //
+    }
+
+    public void stopTimerTask() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+    }
+
+    private ArrayList<GetSensorDataByIdTask.TaskDelegate> delegateRef = new ArrayList<>();
+
+    public void initializeTimerTask() {
+        timerTask = new TimerTask() {
+            public void run() {
+                handler.post(new Runnable() {
+                    public void run() {
+
+                        new GetSensorDataByIdTask(delegateRef, token, uuid).execute();
+                    }
+                });
+            }
+        };
     }
 }
