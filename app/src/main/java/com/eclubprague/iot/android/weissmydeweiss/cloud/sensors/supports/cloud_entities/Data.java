@@ -3,35 +3,27 @@ package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 
-import java.util.Date;
-
 /**
  * Created by Dat on 24.8.2015.
  */
 public class Data {
-    @Expose
-    private String name;
     @Expose private String value;
-    @Expose private Date time;
+    @Expose private String time;
 
     public Data() {
-        super();
     }
 
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
+    public Data(String value, String time) {
+        this.value = value;
         this.time = time;
     }
 
-    public String getName() {
-        return name;
+    public String getTime() {
+        return time;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getValue() {

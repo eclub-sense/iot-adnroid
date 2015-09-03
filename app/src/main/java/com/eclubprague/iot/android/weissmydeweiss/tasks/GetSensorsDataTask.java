@@ -31,8 +31,8 @@ public class GetSensorsDataTask extends AsyncTask<Void, Void, AllSensors> {
     protected AllSensors doInBackground(Void... params) {
 
         try {
-            ClientResource resource = new ClientResource("http://147.32.107.139:8080/registered_sensors");
-            resource.setQueryValue("id_token", token);
+            ClientResource resource = new ClientResource("http://mlha-139.sin.cvut.cz:8080/registered_sensors");
+            resource.setQueryValue("access_token", token);
 
             RegisteredSensors sr = resource.wrap(RegisteredSensors.class);
             return sr.retrieve_AllSensors();
@@ -48,6 +48,7 @@ public class GetSensorsDataTask extends AsyncTask<Void, Void, AllSensors> {
             Log.e("MESSAGE","NULL");
             return;
         }
+        Log.e("allsensors", message.toString());
         delegateRef.get(0).onGetSensorsDataTaskCompleted(message);
     }
 }

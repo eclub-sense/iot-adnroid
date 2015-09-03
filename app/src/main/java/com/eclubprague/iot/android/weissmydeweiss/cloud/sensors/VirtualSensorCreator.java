@@ -38,7 +38,7 @@ public class VirtualSensorCreator {
 			case 2:
 				return new Accelerometer(uuid, secret, hub);
 			default:
-				return null;
+				return new PublicSensor(uuid, secret, hub, type);
 		}
 	}
 }

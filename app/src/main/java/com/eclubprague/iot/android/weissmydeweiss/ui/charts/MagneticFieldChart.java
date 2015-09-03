@@ -260,7 +260,7 @@ public class MagneticFieldChart extends ActionBarActivity implements SensorEvent
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.accelerometer_chart, menu);
+        getMenuInflater().inflate(R.menu.chart_menu, menu);
         return true;
     }
 

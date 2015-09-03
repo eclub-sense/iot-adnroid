@@ -13,7 +13,9 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.eclubprague.iot.android.weissmydeweiss.R;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.Data;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.SensorAndData;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.SetOfData;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.GetSensorDataByIdTask;
 import com.eclubprague.iot.android.weissmydeweiss.ui.charts.components.CustomMarkerView;
 import com.github.mikephil.charting.charts.LineChart;
@@ -27,23 +29,26 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by Dat on 24.8.2015.
+ * Created by Dat on 26.8.2015.
  */
-public class OneValueChartActivity extends ActionBarActivity implements
+public class SensorDataChartActivity extends ActionBarActivity implements
         OnChartValueSelectedListener, GetSensorDataByIdTask.TaskDelegate {
 
     private LineChart mChart;
 
     private String title;
 
-    private String datasetDesc;
+    //private String[] datasetDesc;
 
     private String token;
 
@@ -66,8 +71,6 @@ public class OneValueChartActivity extends ActionBarActivity implements
         title = getIntent().getStringExtra("title");
 
         actionBar.setTitle(title);
-
-        datasetDesc = getIntent().getStringExtra("datasetDesc");
 
         mChart = (LineChart) findViewById(R.id.chart1);
         mChart.setOnChartValueSelectedListener(this);
@@ -132,6 +135,8 @@ public class OneValueChartActivity extends ActionBarActivity implements
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setEnabled(false);
 
+        //dataSets = createSetList();
+
         delegateRef.add(this);
 
         //todo start timer task
@@ -159,63 +164,53 @@ public class OneValueChartActivity extends ActionBarActivity implements
 
     @Override
     public void onNothingSelected() {
-
     }
 
     //------------------------------------------------------------------
-    private void addEntry(float val) {
+    private void addEntry(float val, String timeStamp, int dataSetIndex, String dataSetName) {
 
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         //System.out.println( sdf.format(cal.getTime()) );
 
         LineData data = mChart.getData();
 
         if (data != null) {
 
-            LineDataSet set = data.getDataSetByIndex(0);
-            // set.addEntry(...); // can be called as well
-
+            LineDataSet set = data.getDataSetByIndex(dataSetIndex);
             if (set == null) {
-                set = createSet();
+                set = createSet(dataSetIndex, dataSetName);
                 data.addDataSet(set);
             }
 
-            // add a new x-value first
-            String time = sdf.format(cal.getTime());
-            data.addXValue(time);
-            data.addEntry(new Entry(val, set.getEntryCount(), time), 0);
+            data.addXValue(timeStamp);
+            data.addEntry(new Entry(val, set.getEntryCount(), timeStamp), dataSetIndex);
 
-            // let the chart know it's data has changed
             mChart.notifyDataSetChanged();
-
-            // limit the number of visible entries
             mChart.setVisibleXRangeMaximum(10);
-            // mChart.setVisibleYRange(30, AxisDependency.LEFT);
-
-            // move to the latest entry
+            if(!history)
             mChart.moveViewToX(data.getXValCount() - 11);
-
-            // this automatically refreshes the chart (calls invalidate())
-            // mChart.moveViewTo(data.getXValCount()-7, 55f,
-            // AxisDependency.LEFT);
+            //mChart.invalidate();
         }
     }
 
-    private LineDataSet createSet() {
+    int[] colors = {
+            ColorTemplate.getHoloBlue(), Color.GREEN,
+            Color.BLACK, Color.RED, Color.YELLOW,
+            Color.GRAY, Color.CYAN
+    };
 
-        LineDataSet set = new LineDataSet(null, datasetDesc);
-        set.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set.setColor(ColorTemplate.getHoloBlue());
-        set.setCircleColor(Color.RED);
-        set.setLineWidth(2f);
-        set.setCircleSize(2f);
-        set.setFillAlpha(65);
-        set.setHighLightColor(Color.rgb(244, 117, 117));
-        set.setValueTextColor(Color.BLACK);
-        set.setValueTextSize(9f);
-        set.setDrawValues(false);
-        return set;
+    private LineDataSet createSet(int dataSetIndex, String dataSetName) {
+        LineDataSet dataSet = new LineDataSet(null, dataSetName);
+        dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        dataSet.setColor(colors[dataSetIndex]);
+        dataSet.setCircleColor(Color.RED);
+        dataSet.setLineWidth(2f);
+        dataSet.setCircleSize(2f);
+        dataSet.setFillAlpha(65);
+        dataSet.setHighLightColor(Color.rgb(244, 117, 117));
+        dataSet.setValueTextColor(Color.BLACK);
+        dataSet.setValueTextSize(9f);
+        dataSet.setDrawValues(false);
+        return dataSet;
     }
 
     @Override
@@ -224,6 +219,14 @@ public class OneValueChartActivity extends ActionBarActivity implements
         return true;
     }
 
+
+    private boolean history = false;
+
+    private void clearChart() {
+        Log.e("Cleaning", "");
+        mChart.getData().clearValues();
+        mChart.invalidate();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -238,12 +241,24 @@ public class OneValueChartActivity extends ActionBarActivity implements
                 }
                 break;
             case R.id.action_continue:
+                    history = false;
+                    clearChart();
                 try {
                     //TODO start timer task
                     startTimer();
                 } catch (Exception e) {
                     Log.e("REG", e.toString());
                 }
+                break;
+            case R.id.action_history:
+                history = true;
+                try {
+                    stopTimerTask();
+                    new GetSensorDataByIdTask(delegateRef, token, uuid).execute();
+                } catch (Exception e) {
+                    Log.e("History", e.toString());
+                }
+
         }
         return true;
     }
@@ -251,14 +266,65 @@ public class OneValueChartActivity extends ActionBarActivity implements
 
     @Override
     public void onGetSensorDataByIdTaskCompleted(SensorAndData sData) {
-        try {
-//            float val = Float.parseFloat(sData.getMeasured().get(
-//                    sData.getMeasured().size() - 1
-//            ).getValue());
-//            addEntry(val);
-        } catch (Exception e) {
-            Log.e("onTaskCompleted", e.toString());
+
+        List<SetOfData> measured;
+
+        measured = sData.getMeasured();
+        if(measured.size() == 0) {
+            Log.e("measured", "nothing in here");
+            return;
         }
+
+        //History requested
+        if(history == true) {
+            //stopTimerTask();
+            clearChart();
+
+
+            for(int i = 0; i < measured.size(); i++) {
+                Log.e("Index", Integer.toString(i) + " : " + measured.get(i).getName() + ", size : " + measured.get(i).getItems().size());
+
+                int increment = measured.get(i).getItems().size() / 100;
+                if(increment == 0) increment = 1;
+
+                for(int j = 0; j < measured.get(i).getItems().size(); j+=increment) {
+                    addEntry(
+                            Float.parseFloat(measured.get(i).getItems().get(j).getValue()),
+                            measured.get(i).getItems().get(j).getTime(),
+                            i, measured.get(i).getName());
+                }
+            }
+            mChart.invalidate();
+
+            Log.e("FillHist", "HIST");
+            return;
+
+        }
+
+        //Realtime run
+        for(int i = 0; i < measured.size(); i++) {
+            int lastIndex = measured.get(i).getItems().size() - 1;
+            if(lastIndex < 0) continue;
+            Data lastData = measured.get(i).getItems().get(lastIndex);
+
+            DateFormat format = new SimpleDateFormat("MMM d, yyyy HH:mm:ss aaa");
+            try {
+
+                Date now = new Date();
+                Date date = format.parse(lastData.getTime());
+
+                if(now.getTime() > date.getTime() + 10000) continue;
+
+            } catch (ParseException e) {
+                Log.e("DATE", e.toString());
+            }
+
+            addEntry(
+                    Float.parseFloat(lastData.getValue()),
+                    lastData.getTime(),
+                    i, measured.get(i).getName());
+        }
+
     }
 
     //----------------------------------------------------------------
@@ -302,4 +368,5 @@ public class OneValueChartActivity extends ActionBarActivity implements
             }
         };
     }
+
 }

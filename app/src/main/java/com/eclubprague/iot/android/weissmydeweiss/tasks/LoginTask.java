@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.eclubprague.iot.android.weissmydeweiss.LoginActivity;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.RegisteredSensors;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.SensorRegistrator;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.User;
 import com.google.android.gms.auth.GoogleAuthUtil;
 
@@ -35,6 +36,11 @@ public class LoginTask extends AsyncTask<String, Void, String> {
 
         try {
             return GoogleAuthUtil.getToken((LoginActivity) delegate, emails[0], "audience:server:client_id:443649814858-lvc1abj9ccnudm6l199f23ddqapgo1u3.apps.googleusercontent.com");
+            //ClientResource resource = new ClientResource("POST https://www.googleapis.com/identitytoolkit/v1/relyingparty/verifyAssertion");
+
+
+            //SensorRegistrator sr = resource.wrap(SensorRegistrator.class);
+            //return sr.postik("{\"returnOauthToken\": true}");
         } catch (Exception e) {
             Log.e("RegedSensorsTask", e.toString());
         }

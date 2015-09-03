@@ -32,8 +32,8 @@ public class GetSensorDataByIdTask extends AsyncTask<Void, Void, SensorAndData> 
     @Override
     protected SensorAndData doInBackground(Void ... params) {
         try {
-            ClientResource resource = new ClientResource("http://147.32.107.139:8080/registered_sensors/" + uuid);
-            resource.setQueryValue("id_token", token);
+            ClientResource resource = new ClientResource("http://mlha-139.sin.cvut.cz:8080/registered_sensors/" + uuid);
+            resource.setQueryValue("access_token", token);
 
             RegisteredSensors sr = resource.wrap(RegisteredSensors.class);
             return sr.retrieve_SensorAndData();

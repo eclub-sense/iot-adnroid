@@ -50,7 +50,7 @@ public class AddSensorTask extends AsyncTask<Sensor, Void, AddSensorTask.AddSens
 
         try {
             // try connection
-            ClientResource cr = new ClientResource("http://147.32.107.139:8080/sensors_registrator");
+            ClientResource cr = new ClientResource("http://mlha-139.sin.cvut.cz:8080/sensors_registrator");
             SensorRegistrator rs = cr.wrap(SensorRegistrator.class);
 
             rs.store(sensors[0]);

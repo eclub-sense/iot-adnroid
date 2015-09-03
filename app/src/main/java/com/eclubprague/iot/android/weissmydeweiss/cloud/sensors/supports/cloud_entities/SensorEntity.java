@@ -2,9 +2,6 @@ package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import java.util.Objects;
 
 /**
  * Created by Dat on 24.8.2015.
@@ -15,7 +12,7 @@ public class SensorEntity {
     @Expose private String access;
     @Expose private Integer type;
     private HubEntity hub;
-    @Expose @SerializedName("owner") private UserEntity user;
+    @Expose private UserEntity owner;
 
     public SensorEntity() {
         super();
@@ -49,12 +46,12 @@ public class SensorEntity {
         return type;
     }
 
-    public UserEntity getUser() {
-        return user;
+    public UserEntity getOwner() {
+        return owner;
     }
 
     public void setUser(UserEntity user) {
-        this.user = user;
+        this.owner = user;
     }
 
     public void setType(Integer type) {

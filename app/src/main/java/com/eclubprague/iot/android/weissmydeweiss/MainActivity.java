@@ -16,6 +16,7 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.eclubprague.iot.android.weissmydeweiss.cloud.SensorRegistrator;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.TokenWrapper;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.User;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
@@ -51,7 +52,7 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
-    private String token = "";
+    private TokenWrapper token;
 
 
 
@@ -70,7 +71,11 @@ public class MainActivity extends ActionBarActivity
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
-        token = getIntent().getStringExtra("token");
+        String tokenWrapperString = getIntent().getStringExtra("token");
+
+        token = TokenWrapper.getTokenWrapperInstance(tokenWrapperString);
+        Log.e("PSTOKEN", token.getAccess_token());
+
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -194,12 +199,12 @@ public class MainActivity extends ActionBarActivity
                                 Engine.getInstance().getRegisteredConverters().add(new GsonConverter());
 
                                 // try connection
-                                ClientResource cr = new ClientResource("http://147.32.107.139:8080/sensor_registration");
-                                cr.setQueryValue("id_token", token);
+                                ClientResource cr = new ClientResource("http://mlha-139.sin.cvut.cz:8080/sensor_registration");
+                                cr.setQueryValue("access_token", token.getAccess_token());
                                 SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
 
                                 Sensor sensor = VirtualSensorCreator.
-                                        createSensorInstance(sensorId, sensorType, sensorSecret, new Hub("TMP"));
+                                        createSensorInstance(sensorId, sensorType, sensorSecret, new Hub("1"));
                                 sr.store(sensor);
 
                             }catch(Throwable e) {
@@ -285,15 +290,15 @@ public class MainActivity extends ActionBarActivity
 //    List<SensorDataWrapper> borrowed;
 
     public void getSensorsData() {
-        new GetSensorsDataTask(delegateRef, token).execute();
+        new GetSensorsDataTask(delegateRef, token.getAccess_token()).execute();
     }
 
-    public String getToken() {
+    public TokenWrapper getToken() {
         return token;
     }
 
     public void testing() {
-        new TestingTask(this).execute(token);
+        new TestingTask(this).execute(token.getAccess_token());
     }
 
     @Override

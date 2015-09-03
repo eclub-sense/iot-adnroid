@@ -23,5 +23,7 @@
     <string name="sign_in_label">Sign In</string>
     <string name="action_pop">pop</string>
     <string name="action_pause">Pause</string>
-    <string name="action_continue">continue</string>
+    <string name="action_continue">Realtime</string>
+    <string name="action_history">History</string>
+    <string name="register_label">Register</string>
 </resources>

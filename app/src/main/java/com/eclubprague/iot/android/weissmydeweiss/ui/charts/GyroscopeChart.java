@@ -261,7 +261,7 @@ public class GyroscopeChart extends ActionBarActivity implements SensorEventList
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.accelerometer_chart, menu);
+        getMenuInflater().inflate(R.menu.chart_menu, menu);
         return true;
     }
 

@@ -3,7 +3,7 @@ package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports;
 
 public class SensorType {
 	public static final int GPS = 8;
-	public static final int THERMOMETER = 1;
+	public static final int THERMOMETER = 0x80;
 	public static final int LED = 3;
 	public static final int ACCELEROMETER = 7;
 	public static final int BUILTIN = 0;
@@ -50,7 +50,7 @@ public class SensorType {
 			case AMBIENT_THERMOMETER:
 				return "Ambient thermometer";
 			default:
-				return "A sensor";
+				return "Public sensor";
 		}
 	}
 }

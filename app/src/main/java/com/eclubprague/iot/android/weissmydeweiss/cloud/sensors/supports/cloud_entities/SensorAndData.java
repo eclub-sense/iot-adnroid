@@ -2,6 +2,7 @@ package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_
 
 import com.google.gson.annotations.Expose;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
 public class SensorAndData {
     @Expose
     private SensorEntity sensor;
-    @Expose private List<Data> measured;
+    @Expose private List<SetOfData> measured;
 
     public SensorEntity getSensor() {
         return sensor;
@@ -18,10 +19,16 @@ public class SensorAndData {
     public void setSensor(SensorEntity sensor) {
         this.sensor = sensor;
     }
-    public List<Data> getMeasured() {
+    public List<SetOfData> getMeasured() {
+        if(measured == null) {
+            return new ArrayList<>();
+        }
         return measured;
     }
-    public void setMeasured(List<Data> measured) {
+
+
+
+    public void setMeasured(List<SetOfData> measured) {
         this.measured = measured;
     }
 }

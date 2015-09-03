@@ -16,6 +16,9 @@ public interface SensorRegistrator {
     @Post("json")
     public void store(Sensor sensor);
 
+    @Post
+    public String postik(String message);
+
     @Delete
     public void remove();
 }

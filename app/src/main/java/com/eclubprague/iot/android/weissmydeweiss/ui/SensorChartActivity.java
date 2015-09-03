@@ -13,13 +13,11 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.eclubprague.iot.android.weissmydeweiss.R;
@@ -237,7 +235,7 @@ public class SensorChartActivity extends ActionBarActivity implements SensorEven
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.accelerometer_chart, menu);
+        getMenuInflater().inflate(R.menu.chart_menu, menu);
         return true;
     }
 

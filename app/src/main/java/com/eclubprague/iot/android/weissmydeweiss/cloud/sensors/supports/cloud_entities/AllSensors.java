@@ -3,6 +3,7 @@ package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.VirtualSensorCreator;
+import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class AllSensors {
         for(int i = 0; i < _my.size(); i++) {
             SensorEntity entity = _my.get(i);
             sensors.add(VirtualSensorCreator.createSensorInstance(entity.getUuid(), entity.getType(),
-                    "some_secret", new Hub(entity.getHub().getUuid())));
+                    "some_secret", new Hub("my")));
         }
 
         return sensors;
@@ -50,7 +51,7 @@ public class AllSensors {
         for(int i = 0; i < _borrowed.size(); i++) {
             SensorEntity entity = _borrowed.get(i).getSensor();
             sensors.add(VirtualSensorCreator.createSensorInstance(entity.getUuid(), entity.getType(),
-                    "some_secret", new Hub(entity.getHub().getUuid())));
+                    "some_secret", new Hub("borrowed")));
         }
 
         return sensors;
@@ -64,9 +65,14 @@ public class AllSensors {
         for(int i = 0; i < _public.size(); i++) {
             SensorEntity entity = _public.get(i);
             sensors.add(VirtualSensorCreator.createSensorInstance(entity.getUuid(), entity.getType(),
-                    "some_secret", new Hub(entity.getHub().getUuid())));
+                    "some_secret", /*new Hub(entity.getHub().getUuid())*/ new Hub("public")));
         }
 
         return sensors;
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }

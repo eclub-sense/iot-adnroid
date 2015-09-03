@@ -18,7 +18,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".LoginActivity"
+            android:name=".LoginActivityTest"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,7 +54,7 @@
 
         <!--<meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />-->
+            android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="identitytoolkit.show_providers"
             android:value="Google" />
@@ -69,7 +69,7 @@
             android:value="443649814858-lvc1abj9ccnudm6l199f23ddqapgo1u3.apps.googleusercontent.com" />
         <meta-data
             android:name="identitytoolkit.server_widget_url"
-            android:value="http://mlha-139.sin.cvut.cz:8080/callback" />
+            android:value="http://mlha-139.sin.cvut.cz:8080/callback" />-->
 
         <activity android:name=".ui.SensorChartActivity"/>
         <activity android:name=".ui.charts.AccelerometerChartActivity"/>
@@ -78,6 +78,8 @@
         <activity android:name=".ui.charts.LightSensorChart"/>
         <activity android:name=".ui.charts.GyroscopeChart"/>
         <activity android:name=".ui.charts.OneValueChartActivity"/>
+        <activity android:name=".ui.charts.SensorDataChartActivity"/>
+        <activity android:name=".ui.charts.ThermometerChartActivity"/>
 
 
     </application>

@@ -230,7 +230,7 @@ public class LightSensorChart extends ActionBarActivity implements SensorEventLi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.accelerometer_chart, menu);
+        getMenuInflater().inflate(R.menu.chart_menu, menu);
         return true;
     }
 

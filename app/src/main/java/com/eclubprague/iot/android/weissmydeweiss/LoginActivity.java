@@ -60,11 +60,17 @@ public class LoginActivity extends Activity implements LoginTask.TaskDelegate {
     }
 
 
-    public void signInWithGit(View view) {
+    public void signIn(View view) {
         if (view.getId() == R.id.sign_in) {
             client.startSignIn();
         }
     }
+
+//    public void register(View view) {
+//        if (view.getId() == R.id.register) {
+//            //client.startSignIn();
+//        }
+//    }
 
     // Step 3: Override the onActivityResult method.
     // When a result is returned to this activity, it is maybe intended for GitkitClient. Call

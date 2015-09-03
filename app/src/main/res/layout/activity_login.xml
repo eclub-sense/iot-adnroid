@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin">
 
     <Button
         android:id="@+id/sign_in"
@@ -8,8 +13,26 @@
         android:layout_height="wrap_content"
         android:text="@string/sign_in_label"
         android:textColor="@android:color/white"
-        android:layout_gravity="center"
-        android:background="@android:color/holo_red_light"
-        android:onClick="signInWithGit" />
 
-</LinearLayout>
+        android:layout_above="@+id/register"
+        android:layout_centerHorizontal="true"
+
+        android:background="@android:color/holo_red_light"
+        android:onClick="signIn" />
+
+    <Button
+        android:id="@+id/register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/register_label"
+        android:textColor="@android:color/white"
+
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+
+        android:layout_marginTop="16dp"
+
+        android:background="@android:color/holo_red_light"
+        android:onClick="register" />
+
+</RelativeLayout>

@@ -14,6 +14,8 @@ import org.restlet.resource.Post;
  * Created by paulos on 14. 7. 2015.
  */
 public interface RegisteredSensors {
+
+
     @Get("json")
     public SensorPaginatedCollection retrieve();
 
