@@ -15,10 +15,8 @@ public class SetOfData {
     }
 
     public ArrayList<Data> getItems() {
-        if(items == null || items.size() == 0) {
-            ArrayList<Data> res = new ArrayList<>();
-            res.add(new Data("-1000", "Sep 1, 2000 1:00:00 PM"));
-            return res;
+        if(items == null) {
+            return new ArrayList<>();
         }
         return items;
     }

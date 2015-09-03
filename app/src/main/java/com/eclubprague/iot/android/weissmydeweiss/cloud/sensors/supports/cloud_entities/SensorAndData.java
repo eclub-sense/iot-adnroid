@@ -19,6 +19,7 @@ public class SensorAndData {
     public void setSensor(SensorEntity sensor) {
         this.sensor = sensor;
     }
+
     public List<SetOfData> getMeasured() {
         if(measured == null) {
             return new ArrayList<>();

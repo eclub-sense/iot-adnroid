@@ -28,17 +28,20 @@ import java.util.ArrayList;
 /**
  * Created by Dat on 2.9.2015.
  */
-public class LineChartItem extends ChartItem implements OnChartValueSelectedListener {
+public class LineChartItem extends ChartItem {
 
     private Typeface mTf;
     private ArrayList<ThermometerChartActivity> activityRef = new ArrayList<>();
     private float upperBound;
+    private String description = "zero";
 
-    public LineChartItem(Context c, ArrayList<ThermometerChartActivity> activityRef, float upperBound) {
+    public LineChartItem(Context c, ArrayList<ThermometerChartActivity> activityRef,
+                         String description, float upperBound) {
         super();
 
         mTf = Typeface.createFromAsset(c.getAssets(), "OpenSans-Regular.ttf");
         this.activityRef = activityRef;
+        this.description = description;
         this.upperBound = upperBound;
     }
 
@@ -60,6 +63,7 @@ public class LineChartItem extends ChartItem implements OnChartValueSelectedList
 
             convertView = LayoutInflater.from(c).inflate(
                     R.layout.list_item_linechart, null);
+            Log.e("INITCHART", description);
             chart = (LineChart) convertView.findViewById(R.id.chart);
 
             convertView.setTag(chart);
@@ -69,10 +73,10 @@ public class LineChartItem extends ChartItem implements OnChartValueSelectedList
         }
 
 
-        chart.setOnChartValueSelectedListener(this);
+        //chart.setOnChartValueSelectedListener(this);
 
         // no description text
-        chart.setDescription("");
+        chart.setDescription(description);
         chart.setNoDataTextDescription("No data available yet.");
 
         CustomMarkerView mv = new CustomMarkerView (activityRef.get(0), R.layout.tv_content_layout);
@@ -134,30 +138,21 @@ public class LineChartItem extends ChartItem implements OnChartValueSelectedList
         return convertView;
     }
 
-    @Override
-    public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-    }
-
-    @Override
-    public void onNothingSelected() {
-
-    }
-
 //    private static class ViewHolder {
 //        LineChart chart;
 //    }
 
-    public void addEntry(float val, String timeStamp, int dataSetIndex, String dataSetName, boolean history) {
+    public void addEntry(float val, String timeStamp, int dataSetIndex, String dataSetName, int colorIndex, boolean history) {
 
         //System.out.println( sdf.format(cal.getTime()) );
-
+        Log.e("FAILED", description);
         LineData data = chart.getData();
 
         if (data != null) {
 
             LineDataSet set = data.getDataSetByIndex(dataSetIndex);
             if (set == null) {
-                set = createSet(dataSetIndex, dataSetName);
+                set = createSet(dataSetName, colorIndex);
                 data.addDataSet(set);
             }
 
@@ -178,10 +173,10 @@ public class LineChartItem extends ChartItem implements OnChartValueSelectedList
             Color.GRAY, Color.CYAN
     };
 
-    private LineDataSet createSet(int dataSetIndex, String dataSetName) {
+    private LineDataSet createSet(String dataSetName, int colorIndex) {
         LineDataSet dataSet = new LineDataSet(null, dataSetName);
         dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        dataSet.setColor(colors[dataSetIndex]);
+        dataSet.setColor(colors[colorIndex]);
         dataSet.setCircleColor(Color.RED);
         dataSet.setLineWidth(2f);
         dataSet.setCircleSize(2f);
@@ -196,8 +191,10 @@ public class LineChartItem extends ChartItem implements OnChartValueSelectedList
 
     public void clearChart() {
         Log.e("Cleaning", "");
-        chart.getData().clearValues();
-        chart.invalidate();
+        if(chart != null && chart.getData() != null) {
+            chart.getData().clearValues();
+            chart.invalidate();
+        }
     }
 
     public void invalidate() {

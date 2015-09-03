@@ -71,9 +71,12 @@ public class ThermometerChartActivity extends ActionBarActivity implements GetSe
 
         float[] upperBounds = { 45, 110000, 100};
 
+        String[] descriptions = {"Temperature", "Pressure", "Humidity"};
+
         // 30 items
         for (int i = 0; i < 3; i++) {
-                chartItemsList.add(new LineChartItem(getApplicationContext(), activityRef, upperBounds[i]));
+                chartItemsList.add(new LineChartItem(getApplicationContext(), activityRef,
+                        descriptions[i], upperBounds[i]));
         }
 
         ChartDataAdapter cda = new ChartDataAdapter(getApplicationContext(), chartItemsList);
@@ -156,44 +159,51 @@ public class ThermometerChartActivity extends ActionBarActivity implements GetSe
 
         //History requested
         if(history == true) {
-            //stopTimerTask();
+
             clearAllCharts();
 
-
-            int index = 0;
-
             for(int i = 0; i < measured.size(); i++) {
-                //Log.e("Index", Integer.toString(i) + " : " + measured.get(i).getName() + ", size : " + measured.get(i).getItems().size());
 
-                if(measured.get(i).getName().contains("temperature") || measured.get(i).getName().equals("humudity")
-                        || measured.get(i).getName().equals("pressure")) {
+                if(measured.get(i).getItems().size() <= 0) {
+                    continue;
+                }
 
-                    if(measured.get(i).getItems().size() <= 0) {
-//                        ((LineChartItem) lv.getAdapter().getItem(index)).addEntry(
-//                                -1000,
-//                                "Sep 1, 2014 1:44:52 PM",
-//                                index, measured.get(i).getName(), true
-//                        );
-//                        index++;
-                        continue;
-                    }
+                int increment = measured.get(i).getItems().size() / 100;
+                if(increment == 0) increment = 1;
 
-                    int increment = measured.get(i).getItems().size() / 100;
-                    if(increment == 0) increment = 1;
+                if(measured.get(i).getName().contains("temperature")) {
 
                     for(int j = 0; j < measured.get(i).getItems().size(); j+=increment) {
-                        ((LineChartItem) lv.getAdapter().getItem(index)).addEntry(
+                        ((LineChartItem) lv.getAdapter().getItem(0)).addEntry(
                                 Float.parseFloat(measured.get(i).getItems().get(j).getValue()),
                                 measured.get(i).getItems().get(j).getTime(),
-                                index, measured.get(i).getName(), true
+                                0, measured.get(i).getName(), 0, true
+                        );
+                    }
+                    //((LineChartItem) lv.getAdapter().getItem(0)).invalidate();
+
+                } else if(measured.get(i).getName().contains("pressure")) {
+
+                    for(int j = 0; j < measured.get(i).getItems().size(); j+=increment) {
+                        ((LineChartItem) lv.getAdapter().getItem(1)).addEntry(
+                                Float.parseFloat(measured.get(i).getItems().get(j).getValue()),
+                                measured.get(i).getItems().get(j).getTime(),
+                                0, measured.get(i).getName(), 1, true
                         );
                     }
 
-                    index++;
+                } else if(measured.get(i).getName().contains("humudity")) {
+
+                    for(int j = 0; j < measured.get(i).getItems().size(); j+=increment) {
+                        ((LineChartItem) lv.getAdapter().getItem(2)).addEntry(
+                                Float.parseFloat(measured.get(i).getItems().get(j).getValue()),
+                                measured.get(i).getItems().get(j).getTime(),
+                                0, measured.get(i).getName(), 2, true
+                        );
+                    }
+
                 }
             }
-
-            //((LineChartItem) lv.getAdapter().getItem(index)).invalidate();
 
             Log.e("FillHist", "HIST");
             return;
@@ -202,27 +212,16 @@ public class ThermometerChartActivity extends ActionBarActivity implements GetSe
 
         //Realtime run
 
-        int index = 0;
+        //int listViewIndex = 0;
 
         for(int i = 0; i < measured.size(); i++) {
 
-            if(measured.get(i).getName().contains("temperature") || measured.get(i).getName().equals("humudity")
-                    || measured.get(i).getName().equals("pressure")) {
-
-                int lastIndex = measured.get(i).getItems().size() - 1;
-                if(lastIndex < 0) continue;
-
-                //Data lastData = measured.get(i).getItems().get(lastIndex);
-
-            }
-
             int lastIndex = measured.get(i).getItems().size() - 1;
-            Data lastData;
-            if(lastIndex < 0) {
-                lastData = new Data("-1000", "Sep 1, 2014 1:44:52 PM");
-            } else {
-                lastData = measured.get(i).getItems().get(lastIndex);
+            if (lastIndex < 0) {
+                continue;
             }
+
+            Data lastData = measured.get(i).getItems().get(lastIndex);
 
             DateFormat format = new SimpleDateFormat("MMM d, yyyy HH:mm:ss aaa");
             try {
@@ -230,18 +229,34 @@ public class ThermometerChartActivity extends ActionBarActivity implements GetSe
                 Date now = new Date();
                 Date date = format.parse(lastData.getTime());
 
-                if(now.getTime() > date.getTime() + 10000) continue;
+                if (now.getTime() > date.getTime() + 30000) continue;
 
             } catch (ParseException e) {
                 Log.e("DATE", e.toString());
             }
 
-            ((LineChartItem) lv.getAdapter().getItem(index)).addEntry(
-                    Float.parseFloat(lastData.getValue()),
-                    lastData.getTime(),
-                    index, measured.get(i).getName(), false);
+            if (measured.get(i).getName().contains("temperature")) {
 
-            index++;
+                ((LineChartItem) lv.getAdapter().getItem(0)).addEntry(
+                        Float.parseFloat(lastData.getValue()),
+                        lastData.getTime(),
+                        0, measured.get(i).getName(), 0, false);
+
+            } else if (measured.get(i).getName().contains("pressure")) {
+
+                ((LineChartItem) lv.getAdapter().getItem(1)).addEntry(
+                        Float.parseFloat(lastData.getValue()),
+                        lastData.getTime(),
+                        0, measured.get(i).getName(), 1, false);
+
+            } else if (measured.get(i).getName().contains("humudity")) {
+
+                ((LineChartItem) lv.getAdapter().getItem(2)).addEntry(
+                        Float.parseFloat(lastData.getValue()),
+                        lastData.getTime(),
+                        0, measured.get(i).getName(), 2, false);
+
+            }
         }
 
 
