@@ -94,9 +94,8 @@ UserRegistrationDialog.TaskDelegate, UserRegistrationTask.TaskDelegate {
             String scopes = "oauth2:server:client_id:443649814858-lvc1abj9ccnudm6l199f23ddqapgo1u3.apps.googleusercontent.com:api_scope:email";
 
             try {
-                String code = GoogleAuthUtil.getToken(getApplicationContext(), accountName, scopes);
+                return GoogleAuthUtil.getToken(getApplicationContext(), accountName, scopes);
                 //GoogleAuthUtil.clearToken(getApplicationContext(), code);
-                return code;
             } catch (IOException e) {
                 Log.e("TAGI", e.getMessage());
             } catch (UserRecoverableAuthException e) {
@@ -112,24 +111,12 @@ UserRegistrationDialog.TaskDelegate, UserRegistrationTask.TaskDelegate {
             if(code != null) {
                 Log.e("CODE", code);
                 onCodeRetrieved(code);
-//                if(!register) {
-//                    onCodeRetrieved(code);
-//                } else {
-//                    onCodeRetrievedByRegistration(code);
-//                }
             }
 
         }
     }
 
     private class ClearTokenTask extends AsyncTask<String, Void, Integer> {
-
-//        TokenWrapper tokenWrapper;
-//
-//        public ClearTokenTask(TokenWrapper tokenWrapper) {
-//            this.tokenWrapper = tokenWrapper;
-//        }
-
         @Override
         protected Integer doInBackground(String... params) {
             try {
@@ -156,15 +143,7 @@ UserRegistrationDialog.TaskDelegate, UserRegistrationTask.TaskDelegate {
         } else {
             new UserRegistrationTask(this).execute(code, password);
         }
-        //startApplication();
     }
-
-//    public void onCodeRetrievedByRegistration(String code) {
-//        Log.e("CODERETREG", code);
-//        new ClearTokenTask().execute(code);
-//
-//        new RetrieveTokenTask(this).execute(code);
-//    }
 
     @Override
     public void onUserRetrieveTokenTaskCompleted(TokenWrapper tokenWrapper) {

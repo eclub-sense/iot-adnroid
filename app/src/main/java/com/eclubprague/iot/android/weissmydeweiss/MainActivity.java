@@ -191,6 +191,7 @@ public class MainActivity extends ActionBarActivity
                     final String sensorId = qrCodeSplit[0].trim();
                     final int sensorType = Integer.parseInt(qrCodeSplit[1], 16);
                     final String sensorSecret = qrCodeSplit[2];
+                    Log.e("QRCODE", sensorId + ", " + Integer.toString(sensorType) + ", " + sensorSecret);
 
                     Thread thr = new Thread(new Runnable() {
                         @Override
@@ -199,12 +200,14 @@ public class MainActivity extends ActionBarActivity
                                 Engine.getInstance().getRegisteredConverters().add(new GsonConverter());
 
                                 // try connection
+
                                 ClientResource cr = new ClientResource("http://mlha-139.sin.cvut.cz:8080/sensor_registration");
+                                //ClientResource cr = new ClientResource("http://192.168.201.240:8080/sensor_registration");
                                 cr.setQueryValue("access_token", token.getAccess_token());
                                 SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
 
                                 Sensor sensor = VirtualSensorCreator.
-                                        createSensorInstance(sensorId, sensorType, sensorSecret, new Hub("1"));
+                                        createSensorInstance(sensorId, sensorType, sensorSecret, new Hub("00000001"));
                                 sr.store(sensor);
 
                             }catch(Throwable e) {

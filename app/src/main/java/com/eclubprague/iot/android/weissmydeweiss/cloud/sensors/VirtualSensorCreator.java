@@ -37,6 +37,8 @@ public class VirtualSensorCreator {
 				return new AmbientThermometer(uuid, secret, hub);
 			case 2:
 				return new Accelerometer(uuid, secret, hub);
+			case SensorType.PIR:
+				return new PirSensor(uuid, secret, hub);
 			default:
 				return new PublicSensor(uuid, secret, hub, type);
 		}

@@ -17,6 +17,7 @@ public class SensorType {
 	public static final int ROTATION = 16;
 	public static final int HUMIDITY = 17;
 	public static final int AMBIENT_THERMOMETER = 18;
+	public static final int PIR = 129;
 
 
 	public static final String getStringSensorType(int type) {
@@ -49,6 +50,8 @@ public class SensorType {
 				return "Humidity sensor";
 			case AMBIENT_THERMOMETER:
 				return "Ambient thermometer";
+			case PIR:
+				return "Pir sensor";
 			default:
 				return "Public sensor";
 		}

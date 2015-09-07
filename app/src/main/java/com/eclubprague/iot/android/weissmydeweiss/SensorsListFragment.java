@@ -87,6 +87,7 @@ public class SensorsListFragment extends Fragment {
                         String[] datasetDesc1 = {"longitude", "latitude"};
                         intent.putExtra("datasetDesc", datasetDesc1);
                         intent.putExtra("upperBound", 180f);
+                        startActivity(intent);
                         break;
                     case SensorType.THERMOMETER:
                         Intent intent2 = new Intent(SensorsListFragment.this.getActivity(), ThermometerChartActivity.class);
@@ -101,58 +102,74 @@ public class SensorsListFragment extends Fragment {
                         String[] datasetDesc3 = {"x", "y", "z"};
                         intent.putExtra("datasetDesc", datasetDesc3);
                         intent.putExtra("upperBound", 15f);
+                        startActivity(intent);
                         break;
                     case SensorType.LIGHT:
                         String[] datasetDesc4 = {"illumination"};
                         intent.putExtra("datasetDesc", datasetDesc4);
                         intent.putExtra("upperBound", 400f);
+                        startActivity(intent);
                         break;
                     case SensorType.PROXIMITY:
                         String[] datasetDesc5 = {"proximity"};
                         intent.putExtra("datasetDesc", datasetDesc5);
                         intent.putExtra("upperBound", 10f);
+                        startActivity(intent);
                         break;
                     case SensorType.MAGNETOMETER:
                         String[] datasetDesc6 = {"x", "y", "z"};
                         intent.putExtra("datasetDesc", datasetDesc6);
                         intent.putExtra("upperBound", 300f);
+                        startActivity(intent);
                         break;
                     case SensorType.GYROSCOPE:
                         String[] datasetDesc7 = {"x", "y", "z"};
                         intent.putExtra("datasetDesc", datasetDesc7);
                         intent.putExtra("upperBound", 10f);
+                        startActivity(intent);
                         break;
                     case SensorType.PRESSURE:
                         String[] datasetDesc8 = {"pressure"};
                         intent.putExtra("datasetDesc", datasetDesc8);
                         intent.putExtra("upperBound", 1100f);
+                        startActivity(intent);
                         break;
                     case SensorType.GRAVITY:
                         String[] datasetDesc9 = {"x", "y", "z"};
                         intent.putExtra("datasetDesc", datasetDesc9);
                         intent.putExtra("upperBound", 300f);
+                        startActivity(intent);
                         break;
                     case SensorType.LINEAR_ACCELEROMETER:
                         String[] datasetDesc10 = {"x", "y", "z"};
                         intent.putExtra("datasetDesc", datasetDesc10);
                         intent.putExtra("upperBound", 15f);
+                        startActivity(intent);
                         break;
                     case SensorType.ROTATION:
                         String[] datasetDesc11 = {"x", "y", "z"};
                         intent.putExtra("datasetDesc", datasetDesc11);
                         intent.putExtra("upperBound", 15f);
+                        startActivity(intent);
                         break;
                     case SensorType.HUMIDITY:
                         String[] datasetDesc12 = {"humidity"};
                         intent.putExtra("datasetDesc", datasetDesc12);
                         intent.putExtra("upperBound", 110f);
+                        startActivity(intent);
                         break;
                     case SensorType.AMBIENT_THERMOMETER:
                         String[] datasetDesc13 = {"temperature"};
                         intent.putExtra("datasetDesc", datasetDesc13);
                         intent.putExtra("upperBound", 45f);
+                        startActivity(intent);
                         break;
-
+                    case SensorType.PIR:
+                        String[] datasetDesc14 = {"pir","vbat","rssi"};
+                        intent.putExtra("datasetDesc", datasetDesc14);
+                        intent.putExtra("upperBound", 500f);
+                        startActivity(intent);
+                        break;
                 }
 
                 //startActivity(intent);

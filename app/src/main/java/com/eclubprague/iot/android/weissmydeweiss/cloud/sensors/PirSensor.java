@@ -8,18 +8,20 @@ import com.google.gson.Gson;
 import java.util.List;
 
 /**
- * Created by Dat on 28.7.2015.
+ * Created by Dat on 7.9.2015.
  */
-public class ProximitySensor extends Sensor {
+public class PirSensor extends Sensor {
 
-        protected String unit = "cm";
-        protected float proximity = 0;
+    protected int pir = 0;
+    protected int vbat = 0;
+    protected int rssi = 0;
 
-    public ProximitySensor() {
+    public PirSensor() {
         super();
     }
-    public ProximitySensor(String uuid, String secret, Hub hub) {
-        super(uuid, SensorType.PROXIMITY, secret, hub);
+
+    public PirSensor(String uuid, String secret, Hub hub) {
+        super(uuid, SensorType.PIR, secret, hub);
     }
 
     @Override
@@ -29,15 +31,7 @@ public class ProximitySensor extends Sensor {
 
     @Override
     public String printData() {
-        return ("proximity = " + proximity + " cm");
-    }
-
-    public float getProximity() {
-        return proximity;
-    }
-
-    public String getUnit() {
-        return unit;
+        return ("pir = " + pir + ", vbat = " + vbat + ", rssi = " + rssi);
     }
 
 
@@ -49,13 +43,27 @@ public class ProximitySensor extends Sensor {
     @Override
     public List<NameValuePair> getDataList() {
         measured.clear();
-        measured.add(new NameValuePair("proximity", Float.toString(proximity)));
-        measured.add(new NameValuePair("unit", unit));
+        measured.add(new NameValuePair("pir", Integer.toString(pir)));
+        measured.add(new NameValuePair("vbat", Integer.toString(vbat)));
+        measured.add(new NameValuePair("rssi", Integer.toString(rssi)));
         return measured;
     }
 
     @Override
     public void setData(float[] values) {
-        proximity = values[0];
+
+    }
+
+    public int getPir() {
+        return pir;
+    }
+
+    public int getVbat() {
+        return vbat;
+    }
+
+    public int getRssi() {
+        return rssi;
     }
 }
+
