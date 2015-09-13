@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:id="@+id/sensor_menu_layout">
+
+    <Button
+        android:id="@+id/btn_chart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/show_chart_label"
+        android:textColor="@android:color/white"
+        android:layout_above="@+id/btn_share"
+        android:layout_centerHorizontal="true"
+
+        android:background="@android:color/holo_red_light"
+        android:onClick="showChart" />
+
+    <Button
+        android:id="@+id/btn_share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/share_label"
+        android:textColor="@android:color/white"
+
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+
+        android:layout_marginTop="16dp"
+
+        android:background="@android:color/holo_red_light"
+        android:onClick="shareSensor" />
+
+    <Button
+        android:id="@+id/btn_unregister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/unregister_label"
+        android:textColor="@android:color/white"
+
+        android:layout_below="@+id/btn_share"
+        android:layout_centerHorizontal="true"
+
+        android:layout_marginTop="16dp"
+
+        android:background="@android:color/holo_red_light"
+        android:onClick="unregisterSensor" />
+
+</RelativeLayout>

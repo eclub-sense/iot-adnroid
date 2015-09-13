@@ -312,9 +312,9 @@ public class MainActivity extends ActionBarActivity
 
         ExpandableListView sensorsList = (ExpandableListView) findViewById(R.id.sensors_expList);
 
-        Hub hub1 = new Hub("my");
-        Hub hub2 = new Hub("public");
-        Hub hub3 = new Hub("borrowed");
+        Hub hub1 = new Hub("My Sensors");
+        Hub hub2 = new Hub("Public Sensors");
+        Hub hub3 = new Hub("Shared with me");
         List<Hub> hubs = new ArrayList<>();
         hubs.add(hub1);
         hubs.add(hub2);

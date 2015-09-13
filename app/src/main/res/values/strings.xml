@@ -26,4 +26,7 @@
     <string name="action_continue">Realtime</string>
     <string name="action_history">History</string>
     <string name="register_label">Register</string>
+    <string name="show_chart_label">Show chart</string>
+    <string name="share_label">Share</string>
+    <string name="unregister_label">Unregister</string>
 </resources>

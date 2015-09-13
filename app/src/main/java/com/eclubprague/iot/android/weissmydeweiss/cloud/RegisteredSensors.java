@@ -5,6 +5,7 @@ import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorP
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.RegisteredSensorsMessage;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.AllSensors;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.SensorAndData;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.ShareSensorEntity;
 
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
@@ -39,6 +40,9 @@ public interface RegisteredSensors {
 
     @Post("json")
     public void store(SensorPaginatedCollection collection);
+
+    @Post("json")
+    public void shareSensor(ShareSensorEntity message);
 
     @Delete
     public void remove();

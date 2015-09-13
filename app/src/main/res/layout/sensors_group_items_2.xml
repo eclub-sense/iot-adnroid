@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/sensors_group_item_2_id">
+
+    <ImageView
+        android:id="@+id/iv_sensor_group_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="30dp"
+
+
+        android:src="@drawable/ic_sensor_green" />
+
+    <TextView
+        android:id="@+id/sensors_group_item_label_2"
+        android:layout_width="fill_parent"
+        android:layout_height="65dp"
+
+        android:layout_marginLeft="15dp"
+
+        android:layout_toRightOf="@+id/iv_sensor_group_icon"
+
+        android:gravity="center_vertical"
+
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:text="My Sensors"/>
+
+</RelativeLayout>

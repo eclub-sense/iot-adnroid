@@ -37,7 +37,7 @@ public class AllSensors {
         for(int i = 0; i < _my.size(); i++) {
             SensorEntity entity = _my.get(i);
             sensors.add(VirtualSensorCreator.createSensorInstance(entity.getUuid(), entity.getType(),
-                    "some_secret", new Hub("my")));
+                    "some_secret", new Hub("My Sensors")));
         }
 
         return sensors;
@@ -51,7 +51,7 @@ public class AllSensors {
         for(int i = 0; i < _borrowed.size(); i++) {
             SensorEntity entity = _borrowed.get(i).getSensor();
             sensors.add(VirtualSensorCreator.createSensorInstance(entity.getUuid(), entity.getType(),
-                    "some_secret", new Hub("borrowed")));
+                    "some_secret", new Hub("Shared with me")));
         }
 
         return sensors;
@@ -65,7 +65,7 @@ public class AllSensors {
         for(int i = 0; i < _public.size(); i++) {
             SensorEntity entity = _public.get(i);
             sensors.add(VirtualSensorCreator.createSensorInstance(entity.getUuid(), entity.getType(),
-                    "some_secret", /*new Hub(entity.getHub().getUuid())*/ new Hub("public")));
+                    "some_secret", /*new Hub(entity.getHub().getUuid())*/ new Hub("Public Sensors")));
         }
 
         return sensors;

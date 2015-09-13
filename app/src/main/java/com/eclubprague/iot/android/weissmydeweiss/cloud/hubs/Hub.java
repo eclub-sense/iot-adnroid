@@ -33,6 +33,6 @@ public class Hub implements Identificable {
 
 	@Override
 	public String toString() {
-		return "[" + uuid + "]";
+		return uuid;
 	}
 }
