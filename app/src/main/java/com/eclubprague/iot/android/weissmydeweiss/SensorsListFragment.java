@@ -115,6 +115,9 @@ SensorShareDialog.DialogDelegate{
                 Intent intent2 = new Intent(SensorsListFragment.this.getActivity(), ThermChartActivity.class);
                 intent2.putExtra("token", token);
                 intent2.putExtra("uuid", sensor.getUuid());
+                intent2.putExtra("owner", sensor.getOwner());
+                intent2.putExtra("description", sensor.getDescription());
+                intent2.putExtra("access", sensor.getAccess());
                 startActivity(intent2);
                 //String[] datasetDesc2 = {"increment", "pressure", "temperature", "vbat", "rssi"};
                 //intent.putExtra("datasetDesc", datasetDesc2);
@@ -190,6 +193,9 @@ SensorShareDialog.DialogDelegate{
                 Intent intent3 = new Intent(SensorsListFragment.this.getActivity(), PirChartActivity.class);
                 intent3.putExtra("token", token);
                 intent3.putExtra("uuid", sensor.getUuid());
+                intent3.putExtra("owner", sensor.getOwner());
+                intent3.putExtra("description", sensor.getDescription());
+                intent3.putExtra("access", sensor.getAccess());
                 startActivity(intent3);
                 break;
             default:

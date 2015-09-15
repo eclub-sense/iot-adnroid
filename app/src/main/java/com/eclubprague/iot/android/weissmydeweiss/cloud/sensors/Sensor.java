@@ -9,6 +9,7 @@ import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.registry.Identificable;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.NameValuePair;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.SensorEntity;
 import com.google.gson.Gson;
 
 import org.apache.commons.codec.DecoderException;
@@ -17,6 +18,7 @@ import org.apache.commons.codec.binary.Hex;
 public abstract class Sensor implements Identificable {
 
 	protected String uuid;
+	protected String description;
 	protected String hub_uuid;
 	protected String secret;
 	protected int type = SensorType.THERMOMETER;
@@ -26,6 +28,9 @@ public abstract class Sensor implements Identificable {
     @Expose (deserialize = false) protected String hubID;*/
 	protected transient WeakReference<Hub> hubRef;
 	protected transient byte reserved[] = new byte[3];
+
+	protected transient String owner;
+	protected transient String access;
 
 	protected transient List<NameValuePair> measured = new ArrayList<>();
 
@@ -37,13 +42,28 @@ public abstract class Sensor implements Identificable {
 	protected Sensor() {
 	}
 
-	protected Sensor(String uuid, int type, String secret, Hub hub) {
+	protected Sensor(SensorEntity entity) {
+		this.hubRef = new WeakReference<Hub>(new Hub(entity.getHub().getUuid()));
+		this.hub_uuid = hubRef.get().getUuid();
+		this.uuid = entity.getUuid();
+		this.type = entity.getType();
+		this.s_type = SensorType.getStringSensorType(type);
+		this.secret = "secret";
+		this.description = entity.getDescription();
+		this.access = entity.getAccess();
+		this.owner = entity.getOwnerEmail();
+	}
+
+	protected Sensor(String uuid, int type, String secret, Hub hub, String name) {
 		this.hubRef = new WeakReference<Hub>(hub);
 		this.hub_uuid = hubRef.get().getUuid();
 		this.uuid = uuid;
 		this.type = type;
 		this.s_type = SensorType.getStringSensorType(type);
 		this.secret = secret;
+		this.description = name;
+		this.access = "only me";
+		this.owner = "me";
 	}
 
 	public void readPacket(String p) throws DecoderException {
@@ -103,8 +123,20 @@ public abstract class Sensor implements Identificable {
 	public String toString() {
 		return new Gson().toJson(this);
 	}
-	
-//	@Expose @SerializedName("@type") private String jsonType = "sensor";
+
+	public String getDescription() {
+		return description;
+	}
+
+	public String getOwner() {
+		return owner;
+	}
+
+	public String getAccess() {
+		return access;
+	}
+
+	//	@Expose @SerializedName("@type") private String jsonType = "sensor";
 //	@Expose protected String uuid;
 //	@Expose protected int type;
 //	@Expose (serialize = false) protected String secret;

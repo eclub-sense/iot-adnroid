@@ -3,6 +3,7 @@ package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.NameValuePair;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.SensorEntity;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -15,8 +16,12 @@ public class AmbientThermometer extends Sensor {
     protected String unit = "\u00B0" + "C";
     protected float temperature = 0;
 
-    public AmbientThermometer(String uuid, String secret, Hub hub) {
-        super(uuid, SensorType.AMBIENT_THERMOMETER, secret, hub);
+    public AmbientThermometer(String uuid, String secret, Hub hub, String name) {
+        super(uuid, SensorType.AMBIENT_THERMOMETER, secret, hub, name);
+    }
+
+    public AmbientThermometer(SensorEntity entity) {
+        super(entity);
     }
 
     @Override

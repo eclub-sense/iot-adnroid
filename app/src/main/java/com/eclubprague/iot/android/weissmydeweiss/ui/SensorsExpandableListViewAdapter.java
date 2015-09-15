@@ -70,7 +70,8 @@ public class SensorsExpandableListViewAdapter extends BaseExpandableListAdapter 
         //txtListChild.setText("TEXT");
 
         TextView textView2 = (TextView) convertView.findViewById(R.id.tv_secondLine);
-        textView2.setText("uuid: " + s.getUuid());
+        //textView2.setText("uuid: " + s.getUuid());
+        textView2.setText("desc.: " + s.getDescription());
 
         return convertView;
     }

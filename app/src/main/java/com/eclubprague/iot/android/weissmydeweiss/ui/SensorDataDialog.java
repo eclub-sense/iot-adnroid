@@ -12,12 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eclubprague.iot.android.weissmydeweiss.MainActivity;
-import com.eclubprague.iot.android.weissmydeweiss.R;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.User;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.NameValuePair;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.RegisteredSensorsMessage;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.GetSensorDataByIdTask;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.GetSensorsDataTask;

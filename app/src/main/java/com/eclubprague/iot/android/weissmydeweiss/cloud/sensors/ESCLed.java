@@ -8,14 +8,19 @@ import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.NameVal
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.Switch;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.WriteableSensor;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.SensorEntity;
 import com.google.gson.annotations.Expose;
 
 public class ESCLed extends Sensor implements WriteableSensor {
 
 	@Expose (deserialize = false) protected Switch led;
 
-	public ESCLed(String uuid, String secret, Hub hub) {
-		super(uuid, SensorType.LED, secret, hub);
+	public ESCLed(String uuid, String secret, Hub hub, String name) {
+		super(uuid, SensorType.LED, secret, hub, name);
+	}
+
+	public ESCLed(SensorEntity entity) {
+		super(entity);
 	}
 
 	public void readPayload(byte[] data) {

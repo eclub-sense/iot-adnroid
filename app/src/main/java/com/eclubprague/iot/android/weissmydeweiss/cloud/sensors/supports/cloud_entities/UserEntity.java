@@ -13,10 +13,15 @@ import java.util.Objects;
 public class UserEntity {
 
     private String identifier;
+    private String email;
     @Expose
     private List<String> emails = new LinkedList<>();
 
     public UserEntity() {
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public String getIdentifier() {

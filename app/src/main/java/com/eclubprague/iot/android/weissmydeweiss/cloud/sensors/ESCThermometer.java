@@ -3,6 +3,7 @@ package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.NameValuePair;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.SensorEntity;
 import com.google.gson.annotations.Expose;
 
 import java.util.List;
@@ -12,11 +13,12 @@ public class ESCThermometer extends Sensor {
 	@Expose (deserialize = false) protected int temperature;
 	@Expose (deserialize = false) protected int pressure;
 	
-	public ESCThermometer() {
-		super();
+	public ESCThermometer(SensorEntity entity) {
+		super(entity);
 	}
-	public ESCThermometer(String uuid, String secret, Hub hub) {
-		super(uuid, SensorType.THERMOMETER, secret, hub);
+
+	public ESCThermometer(String uuid, String secret, Hub hub, String name) {
+		super(uuid, SensorType.THERMOMETER, secret, hub, name);
 	}
 	
 	@Override

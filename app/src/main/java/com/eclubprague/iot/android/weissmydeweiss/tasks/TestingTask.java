@@ -4,8 +4,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.eclubprague.iot.android.weissmydeweiss.cloud.RegisteredSensors;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.User;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.RegisteredSensorsMessage;
 
 import org.restlet.data.ChallengeScheme;
 import org.restlet.resource.ClientResource;

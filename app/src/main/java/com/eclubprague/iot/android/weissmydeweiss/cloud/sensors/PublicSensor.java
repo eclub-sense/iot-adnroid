@@ -3,6 +3,7 @@ package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.NameValuePair;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.SensorEntity;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -12,8 +13,12 @@ import java.util.List;
  */
 public class PublicSensor extends Sensor {
 
-    public PublicSensor(String uuid, String secret, Hub hub, int type) {
-        super(uuid, type, secret, hub);
+    public PublicSensor(String uuid, String secret, Hub hub, int type, String name) {
+        super(uuid, type, secret, hub, name);
+    }
+
+    public PublicSensor(SensorEntity entity) {
+        super(entity);
     }
 
     @Override

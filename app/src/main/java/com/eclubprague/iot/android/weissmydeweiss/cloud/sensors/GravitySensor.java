@@ -4,6 +4,7 @@ package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.NameValuePair;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.SensorEntity;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -18,11 +19,12 @@ public class GravitySensor extends Sensor {
     protected float y = 0;
     protected float z = 0;
 
-    public GravitySensor() {
-        super();
+    public GravitySensor(SensorEntity entity) {
+        super(entity);
     }
-    public GravitySensor(String uuid, String secret, Hub hub) {
-        super(uuid, SensorType.GRAVITY, secret, hub);
+
+    public GravitySensor(String uuid, String secret, Hub hub, String name) {
+        super(uuid, SensorType.GRAVITY, secret, hub, name);
     }
 
     @Override

@@ -15,22 +15,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
-import com.eclubprague.iot.android.weissmydeweiss.cloud.SensorRegistrator;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.TokenWrapper;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.User;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.VirtualSensorCreator;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.RegisteredSensorsMessage;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.AllSensors;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.GetSensorsDataTask;
+import com.eclubprague.iot.android.weissmydeweiss.tasks.RegisterSensorTask;
 import com.eclubprague.iot.android.weissmydeweiss.tasks.TestingTask;
+import com.eclubprague.iot.android.weissmydeweiss.ui.SensorRegisterDialog;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorsExpandableListViewAdapter;
-
-import org.restlet.data.ChallengeScheme;
-import org.restlet.engine.Engine;
-import org.restlet.ext.gson.GsonConverter;
-import org.restlet.resource.ClientResource;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +33,7 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
         /*RefreshSensorsTask.RefreshSensorsCallbacks,*/ GetSensorsDataTask.TaskDelegate,
-        TestingTask.TaskDelegate {
+        TestingTask.TaskDelegate, SensorRegisterDialog.DialogDelegate {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -193,104 +186,43 @@ public class MainActivity extends ActionBarActivity
                     final String sensorSecret = qrCodeSplit[2];
                     Log.e("QRCODE", sensorId + ", " + Integer.toString(sensorType) + ", " + sensorSecret);
 
-                    Thread thr = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Engine.getInstance().getRegisteredConverters().add(new GsonConverter());
+                    new SensorRegisterDialog(this, sensorId, sensorType, sensorSecret);
 
-                                // try connection
-
-                                ClientResource cr = new ClientResource("http://mlha-139.sin.cvut.cz:8080/sensor_registration");
-                                //ClientResource cr = new ClientResource("http://192.168.201.240:8080/sensor_registration");
-                                cr.setQueryValue("access_token", token.getAccess_token());
-                                SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
-
-                                Sensor sensor = VirtualSensorCreator.
-                                        createSensorInstance(sensorId, sensorType, sensorSecret, new Hub("00000001"));
-                                sr.store(sensor);
-
-                            }catch(Throwable e) {
-                                e.printStackTrace();
-                                Toast t2 = Toast.makeText(MainActivity.this, ":-( Exception: " + e.getMessage(), Toast.LENGTH_LONG);
-                                t2.show();
-                            }
-                        }
-                    });
-                    thr.start();
+//                    Thread thr = new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            try {
+//
+//                                Engine.getInstance().getRegisteredConverters().add(new GsonConverter());
+//
+//                                // try connection
+//
+//                                ClientResource cr = new ClientResource("http://mlha-139.sin.cvut.cz:8080/sensor_registration");
+//                                //ClientResource cr = new ClientResource("http://192.168.201.240:8080/sensor_registration");
+//                                cr.setQueryValue("access_token", token.getAccess_token());
+//                                SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
+//
+//                                Sensor sensor = VirtualSensorCreator.
+//                                        createSensorInstance(sensorId, sensorType, sensorSecret, new Hub("00000001"));
+//                                sr.store(sensor);
+//
+//                            }catch(Throwable e) {
+//                                e.printStackTrace();
+//                                Toast t2 = Toast.makeText(MainActivity.this, ":-( Exception: " + e.getMessage(), Toast.LENGTH_LONG);
+//                                t2.show();
+//                            }
+//                        }
+//                    });
+//                    thr.start();
                 }
                 catch(Exception e) {
                     Toast t2 = Toast.makeText(this, "Exception: NaN", Toast.LENGTH_SHORT);
                     t2.show();
+                    Log.e("REG", e.toString());
                 }
             }
         }
     }
-
-//    @Override
-//    public void handleSensorsRefreshed(String hubId, SensorPaginatedCollection sensorsCollection) {
-//        Toast.makeText(this, "Refresh done", Toast.LENGTH_SHORT).show();
-//
-//        ExpandableListView sensorsList = (ExpandableListView) findViewById(R.id.sensors_expList);
-//        Hub hub1 = new Hub("12456");
-//        List<Hub> hubs = new ArrayList<>();
-//        hubs.add(hub1);
-//        HashMap<Hub, List<Sensor>> hubSensors = new LinkedHashMap<>();
-//        hubSensors.put(hub1, sensorsCollection.getItems());
-//        SensorsExpandableListViewAdapter adapter = new SensorsExpandableListViewAdapter(
-//                this, hubs, hubSensors);
-//
-//        sensorsList.setAdapter(adapter);
-//    }
-//
-//    @Override
-//    public void handleSensorsRefreshFailed(String hubId) {
-//        Toast.makeText(this, "Refresh FAILED :-(", Toast.LENGTH_SHORT).show();
-//    }
-
-
-    //----------------------------------------------------------------
-    // TIMER TASK
-    // DO SOME WORKS PERIODICALLY
-    //----------------------------------------------------------------
-
-//    private Timer timer;
-//    private TimerTask timerTask;
-//    final Handler handler = new Handler();
-//
-//
-//    public void startTimer() {
-//        Toast.makeText(this, "Start Timer", Toast.LENGTH_SHORT).show();
-//        if(timer != null) return;
-//        //set a new Timer
-//        timer = new Timer();
-//        //initialize the TimerTask's job
-//        initializeTimerTask();
-//        //schedule the timer, after the first 5000ms the TimerTask will run every 10000ms
-//        timer.schedule(timerTask, 3000, 10000); //
-//    }
-//
-//    public void stopTimerTask() {
-//        if (timer != null) {
-//            timer.cancel();
-//            timer = null;
-//        }
-//    }
-//
-//    public void initializeTimerTask() {
-//        timerTask = new TimerTask() {
-//            public void run() {
-//                handler.post(new Runnable() {
-//                    public void run() {
-//                        new GetSensorsDataTask(MainActivity.this).execute(accountRef.get());
-//                    }
-//                });
-//            }
-//        };
-//    }
-
-//    List<SensorDataWrapper> my;
-//    List<SensorDataWrapper> borrowed;
 
     public void getSensorsData() {
         new GetSensorsDataTask(delegateRef, token.getAccess_token()).execute();
@@ -349,5 +281,10 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onTestingTaskCompleted(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onSensorRegisterDialogSubmitted(Sensor sensor) {
+        new RegisterSensorTask(sensor).execute(token.getAccess_token());
     }
 }

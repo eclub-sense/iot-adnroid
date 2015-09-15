@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.eclubprague.iot.android.weissmydeweiss.R;
@@ -50,6 +51,7 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
 
     private TextView tv_temperature;
     private TextView tv_time;
+    private SeekBar sb_visible_range;
 
     private ArrayList<GetSensorDataByIdTask.TaskDelegate> delegateRef = new ArrayList<>();
 
@@ -60,6 +62,24 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
         setContentView(R.layout.therm_chart);
         tv_temperature = (TextView)findViewById(R.id.tv_temperature);
         tv_time = (TextView)findViewById(R.id.tv_time);
+
+        sb_visible_range = (SeekBar) findViewById(R.id.sb_visible_range);
+        sb_visible_range.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(mChart == null) return;
+                mChart.setVisibleXRangeMaximum((float)progress);
+                mChart.invalidate();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -124,8 +144,8 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTypeface(tf);
         leftAxis.setTextColor(Color.BLACK);
-        leftAxis.setAxisMaxValue(10);
-        leftAxis.setAxisMinValue(0);
+        leftAxis.setAxisMaxValue(10f);
+        leftAxis.setAxisMinValue(0f);
         leftAxis.setStartAtZero(false);
         leftAxis.setDrawGridLines(true);
 
@@ -145,7 +165,7 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
         LineDataSet set = new LineDataSet(null, "vbat (V)");
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
         set.setColor(ColorTemplate.getHoloBlue());
-        set.setCircleColor(Color.RED);
+        set.setCircleColor(ColorTemplate.getHoloBlue());
         set.setLineWidth(4f);
         set.setCircleSize(4f);
         set.setFillAlpha(65);
@@ -159,31 +179,37 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
     private void addEntry(float val, String timeStamp) {
 
         LineData data = mChart.getData();
+        Log.e("NUM", "1");
 
         if (data != null) {
 
             LineDataSet set = data.getDataSetByIndex(0);
-
+            Log.e("NUM", "2");
             if (set == null) {
                 set = createSet();
                 data.addDataSet(set);
+                Log.e("NUM", "3");
             }
 
             // add a new x-value first
             data.addXValue(timeStamp);
-            set.addEntry(new Entry(val, set.getEntryCount(), timeStamp));
-            //data.addEntry(new Entry(val, set.getEntryCount(), timeStamp), 0);
+            Log.e("NUM", "4");
+            //set.addEntry(new Entry(val, set.getEntryCount(), timeStamp));
+            data.addEntry(new Entry(val, set.getEntryCount(), timeStamp), 0);
+            Log.e("NUM", "5");
 
             // let the chart know it's data has changed
             mChart.notifyDataSetChanged();
-
+            Log.e("NUM", "6");
             // limit the number of visible entries
             mChart.setVisibleXRangeMaximum(15);
+            Log.e("NUM", "7");
             // mChart.setVisibleYRange(30, AxisDependency.LEFT);
 
             // move to the latest entry
-            if(!history)
+            //if(!history)
                 mChart.moveViewToX(data.getXValCount() - 16);
+            Log.e("NUM", "8");
 
             // this automatically refreshes the chart (calls invalidate())
             // mChart.moveViewTo(data.getXValCount()-7, 55f,
@@ -205,7 +231,7 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
         return true;
     }
 
-    private boolean history = false;
+    //private boolean history = false;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -220,8 +246,8 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
                 }
                 break;
             case R.id.action_continue:
-                history = false;
-                mChart.clear();
+                //history = false;
+                //mChart.clear();
                 try {
                     //TODO start timer task
                     startTimer();
@@ -230,13 +256,13 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
                 }
                 break;
             case R.id.action_history:
-                history = true;
-                try {
-                    stopTimerTask();
-                    new GetSensorDataByIdTask(delegateRef, token, uuid).execute();
-                } catch (Exception e) {
-                    Log.e("History", e.toString());
-                }
+//                history = true;
+//                try {
+//                    stopTimerTask();
+//                    new GetSensorDataByIdTask(delegateRef, token, uuid).execute();
+//                } catch (Exception e) {
+//                    Log.e("History", e.toString());
+//                }
 
         }
         return true;
@@ -255,7 +281,7 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
         }
 
         //History requested
-        if (history == true) {
+        /*if (history == true) {
 
             mChart.clear();
 
@@ -278,55 +304,65 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
                     }
                     Log.e("FillHist", "HISTo");
                     return;
-                } //TODO draw temperature history
-
-//                Log.e("FillHist", "HIST");
-//                return;
+                }
+                *TODO draw temperature history
 
             }
 
-            //Realtime run
-
-            //int listViewIndex = 0;
-
-        } else {
+        } else {*/
             for (int i = 0; i < measured.size(); i++) {
 
                 if (!measured.get(i).getName().contains("temperature") && !measured.get(i).getName().contains("vbat"))
                     continue;
 
-                int lastIndex = measured.get(i).getItems().size() - 1;
-                if (lastIndex < 0) {
-                    continue;
-                }
-
-                Data lastData = measured.get(i).getItems().get(lastIndex);
-
-                DateFormat format = new SimpleDateFormat("MMM d, yyyy HH:mm:ss aaa");
-                try {
-
-                    Date now = new Date();
-                    Date date = format.parse(lastData.getTime());
-
-                    if (now.getTime() > date.getTime() + 120000) continue;
-
-                } catch (ParseException e) {
-                    Log.e("DATE", e.toString());
-                }
-
-                //TODO count people
                 if(measured.get(i).getName().contains("temperature")) {
+
+                    int lastIndex = measured.get(i).getItems().size() - 1;
+                    if (lastIndex < 0) {
+                        continue;
+                    }
+
+                    Data lastData = measured.get(i).getItems().get(lastIndex);
+
+//                    DateFormat format = new SimpleDateFormat("MMM d, yyyy HH:mm:ss aaa");
+//                    try {
+//
+//                        Date now = new Date();
+//                        Date date = format.parse(lastData.getTime());
+//
+//                        if (now.getTime() > date.getTime() + 120000) continue;
+//
+//                    } catch (ParseException e) {
+//                        Log.e("DATE", e.toString());
+//                    }
+
                     Log.e("TEMP", lastData.getValue());
-                    tv_temperature.setText(lastData.getValue());
+                    float val = Float.parseFloat(lastData.getValue());
+                    int i_val = (val - (int)val >= 0.5 ? (int)val + 1 : (int) val);
+                    //int val = ()
+                    tv_temperature.setText(Integer.toString(i_val) + " \u00B0" + "C");
                     tv_temperature.invalidate();
                     tv_time.setText(lastData.getTime());
                     tv_time.invalidate();
                 } else {
-                    Log.e("vbat", lastData.getValue());
-                    addEntry(Float.parseFloat(lastData.getValue()), lastData.getTime());
+
+                    mChart.clear();
+
+                    int increment = measured.get(i).getItems().size() / 100;
+                    if (increment == 0) increment = 1;
+
+                    for(int j = 0; j < measured.get(i).getItems().size(); j+=increment) {
+                        float val = Float.parseFloat(measured.get(i).getItems().get(j).getValue()) / 1000f;
+                        Log.e("VAL", Float.toString(val));
+                        addEntry(val,
+                                measured.get(i).getItems().get(j).getTime());
+                    }
+
+//                    Log.e("vbat", lastData.getValue());
+//                    addEntry(Float.parseFloat(lastData.getValue()), lastData.getTime());
                 }
             }
-        }
+        //}
     }
 
 
@@ -342,7 +378,7 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
         //initialize the TimerTask's job
         initializeTimerTask();
         //schedule the timer, after the first 3000ms the TimerTask will run every 10000ms
-        timer.schedule(timerTask, 3000, 10000); //
+        timer.schedule(timerTask, 1000, 10000); //
     }
 
     public void stopTimerTask() {

@@ -3,6 +3,7 @@ package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.NameValuePair;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.SensorEntity;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -18,8 +19,12 @@ public class GPS  extends Sensor {
     public GPS() {
         super();
     }
-    public GPS(String uuid, String secret, Hub hub) {
-        super(uuid, SensorType.GPS, secret, hub);
+    public GPS(String uuid, String secret, Hub hub, String name) {
+        super(uuid, SensorType.GPS, secret, hub, name);
+    }
+
+    public GPS(SensorEntity entity) {
+        super(entity);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.NameValuePair;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.SensorEntity;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -15,11 +16,12 @@ public class LightSensor extends Sensor {
     protected String unit = "lx";
     protected float illumination = 0;
 
-    public LightSensor() {
-        super();
+    public LightSensor(SensorEntity entity) {
+        super(entity);
     }
-    public LightSensor(String uuid, String secret, Hub hub) {
-        super(uuid, SensorType.LIGHT, secret, hub);
+
+    public LightSensor(String uuid, String secret, Hub hub, String name) {
+        super(uuid, SensorType.LIGHT, secret, hub, name);
     }
 
     @Override

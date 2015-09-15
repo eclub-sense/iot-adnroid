@@ -2,7 +2,6 @@ package com.eclubprague.iot.android.weissmydeweiss.cloud;
 
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorPaginatedCollection;
-import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.RegisteredSensorsMessage;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.AllSensors;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.SensorAndData;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.ShareSensorEntity;
@@ -19,9 +18,6 @@ public interface RegisteredSensors {
 
     @Get("json")
     public SensorPaginatedCollection retrieve();
-
-    @Get("json")
-    public RegisteredSensorsMessage retrieve_2();
 
     @Get("json")
     public AllSensors retrieve_AllSensors();

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/holo_red_light">
 
     <ImageView
         android:id="@+id/iv_thermometer"
@@ -22,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:textColor="@android:color/holo_red_light"
+        android:textColor="@android:color/white"
         android:textSize="70sp"
         android:text="24 °C"/>
 
@@ -34,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:textColor="@android:color/holo_red_light"
+        android:textColor="@android:color/white"
         android:textSize="15sp"
         android:text="13 Sep, 2015"/>
 
@@ -42,6 +43,31 @@
         android:id="@+id/therm_chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/iv_thermometer"/>
+        android:layout_below="@+id/iv_thermometer"
+        android:layout_above="@+id/sb_visible_range"
+        android:background="@android:color/white"/>
+
+    <SeekBar
+        android:id="@+id/sb_visible_range"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:layout_toLeftOf="@+id/tv_visible_range"
+        android:max="100"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="10dp"/>
+
+    <TextView
+        android:id="@+id/tv_visible_range"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/sb_visible_range"
+        android:background="@android:color/white"
+        android:layout_alignParentRight="true"
+        android:text="Range "
+        android:gravity="right"
+        android:layout_below="@+id/therm_chart"
+        android:paddingBottom="10dp"/>
+
 
 </RelativeLayout>

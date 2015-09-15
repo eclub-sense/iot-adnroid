@@ -3,6 +3,7 @@ package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.NameValuePair;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.SensorEntity;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -16,12 +17,12 @@ public class PirSensor extends Sensor {
     protected int vbat = 0;
     protected int rssi = 0;
 
-    public PirSensor() {
-        super();
+    public PirSensor(SensorEntity entity) {
+        super(entity);
     }
 
-    public PirSensor(String uuid, String secret, Hub hub) {
-        super(uuid, SensorType.PIR, secret, hub);
+    public PirSensor(String uuid, String secret, Hub hub, String name) {
+        super(uuid, SensorType.PIR, secret, hub, name);
     }
 
     @Override

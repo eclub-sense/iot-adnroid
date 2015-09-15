@@ -85,6 +85,13 @@ public class SensorMenuDialog extends AlertDialog.Builder {
 
         this.setView(view);
 
+        this.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
 //        btn_chart = (Button) view.findViewById(R.id.btn_chart);
 //        btn_chart.setOnClickListener(new View.OnClickListener() {
 //            @Override

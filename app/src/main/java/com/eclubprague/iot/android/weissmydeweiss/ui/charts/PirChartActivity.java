@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.eclubprague.iot.android.weissmydeweiss.R;
@@ -49,7 +50,12 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
     private String uuid;
 
     private TextView counter;
+    private SeekBar sb_visible_range;
     private int numOfPersons = 0;
+
+    private TextView tv_owner;
+    private TextView tv_desc;
+    private TextView tv_access;
 
     private ArrayList<GetSensorDataByIdTask.TaskDelegate> delegateRef = new ArrayList<>();
 
@@ -57,8 +63,35 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        setContentView(R.layout.pir_chart);
-        counter = (TextView)findViewById(R.id.txt_counter);
+        setContentView(R.layout.pir_chart_2);
+        counter = (TextView)findViewById(R.id.tv_counter);
+
+        tv_owner = (TextView) findViewById(R.id.tv_owner);
+        tv_owner.setText(getIntent().getStringExtra("owner"));
+
+        tv_desc = (TextView) findViewById(R.id.tv_description);
+        tv_desc.setText(getIntent().getStringExtra("description"));
+
+        tv_access = (TextView) findViewById(R.id.tv_access);
+        tv_access.setText(getIntent().getStringExtra("access"));
+
+        sb_visible_range = (SeekBar) findViewById(R.id.sb_visible_range);
+        sb_visible_range.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(mChart == null) return;
+                mChart.setVisibleXRangeMaximum((float)progress);
+                mChart.invalidate();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -123,8 +156,8 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTypeface(tf);
         leftAxis.setTextColor(Color.BLACK);
-        leftAxis.setAxisMaxValue(10);
-        leftAxis.setAxisMinValue(0);
+        leftAxis.setAxisMaxValue(10f);
+        leftAxis.setAxisMinValue(0f);
         leftAxis.setStartAtZero(false);
         leftAxis.setDrawGridLines(true);
 
@@ -180,7 +213,7 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
             // mChart.setVisibleYRange(30, AxisDependency.LEFT);
 
             // move to the latest entry
-            if(!history)
+            //if(!history)
                 mChart.moveViewToX(data.getXValCount() - 16);
 
             // this automatically refreshes the chart (calls invalidate())
@@ -203,7 +236,7 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
         return true;
     }
 
-    private boolean history = false;
+    //private boolean history = false;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -218,8 +251,8 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
                 }
                 break;
             case R.id.action_continue:
-                history = false;
-                mChart.clear();
+//                history = false;
+//                mChart.clear();
                 try {
                     //TODO start timer task
                     startTimer();
@@ -228,13 +261,13 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
                 }
                 break;
             case R.id.action_history:
-                history = true;
-                try {
-                    stopTimerTask();
-                    new GetSensorDataByIdTask(delegateRef, token, uuid).execute();
-                } catch (Exception e) {
-                    Log.e("History", e.toString());
-                }
+//                history = true;
+//                try {
+//                    stopTimerTask();
+//                    new GetSensorDataByIdTask(delegateRef, token, uuid).execute();
+//                } catch (Exception e) {
+//                    Log.e("History", e.toString());
+//                }
 
         }
         return true;
@@ -243,6 +276,8 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
 
 
     private int lastPirValue = 0;
+
+    private int seconds = 0;
 
     @Override
     public void onGetSensorDataByIdTaskCompleted(SensorAndData sData) {
@@ -256,7 +291,7 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
         }
 
         //History requested
-        if (history == true) {
+        /*if (history == true) {
 
             mChart.clear();
 
@@ -279,44 +314,38 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
                     }
                     Log.e("FillHist", "HISTo");
                     return;
-                } //TODO draw pir history
-
-//                Log.e("FillHist", "HIST");
-//                return;
+                }
+                *TODO draw pir history
 
             }
-
-            //Realtime run
-
-            //int listViewIndex = 0;
-
-        } else {
+        } else {*/
             for (int i = 0; i < measured.size(); i++) {
 
                 if (!measured.get(i).getName().contains("pir") && !measured.get(i).getName().contains("vbat"))
                     continue;
 
-                int lastIndex = measured.get(i).getItems().size() - 1;
-                if (lastIndex < 0) {
-                    continue;
-                }
-
-                Data lastData = measured.get(i).getItems().get(lastIndex);
-
-                DateFormat format = new SimpleDateFormat("MMM d, yyyy HH:mm:ss aaa");
-                try {
-
-                    Date now = new Date();
-                    Date date = format.parse(lastData.getTime());
-
-                    if (now.getTime() > date.getTime() + 120000) continue;
-
-                } catch (ParseException e) {
-                    Log.e("DATE", e.toString());
-                }
-
                 //TODO count people
                 if(measured.get(i).getName().contains("pir")) {
+
+                    int lastIndex = measured.get(i).getItems().size() - 1;
+                    if (lastIndex < 0) {
+                        continue;
+                    }
+
+                    Data lastData = measured.get(i).getItems().get(lastIndex);
+
+                    DateFormat format = new SimpleDateFormat("MMM d, yyyy HH:mm:ss aaa");
+                    try {
+
+                        Date now = new Date();
+                        Date date = format.parse(lastData.getTime());
+
+                        if (now.getTime() > date.getTime() + 120000) continue;
+
+                    } catch (ParseException e) {
+                        Log.e("DATE", e.toString());
+                    }
+
                     Log.e("PIR", lastData.getValue());
                     if (Integer.parseInt(lastData.getValue()) != lastPirValue && lastPirValue == 0) {
                         numOfPersons++;
@@ -325,11 +354,28 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
                     }
                     lastPirValue = Integer.parseInt(lastData.getValue());
                 } else {
-                    Log.e("vbat", lastData.getValue());
-                    addEntry(Float.parseFloat(lastData.getValue()), lastData.getTime());
+
+                    if(seconds < 10) {
+                        seconds++;
+                    } else {
+                        seconds = 0;
+                        mChart.clear();
+                        int increment = measured.get(i).getItems().size() / 100;
+                        if (increment == 0) increment = 1;
+
+                        for(int j = 0; j < measured.get(i).getItems().size(); j+=increment) {
+                            float val = Float.parseFloat(measured.get(i).getItems().get(j).getValue()) / 1000f;
+                            Log.e("VAL", Float.toString(val));
+                            addEntry(val,
+                                    measured.get(i).getItems().get(j).getTime());
+                        }
+                    }
+
+//                    Log.e("vbat", lastData.getValue());
+//                    addEntry(Float.parseFloat(lastData.getValue()), lastData.getTime());
                 }
             }
-        }
+        //}
     }
 
 

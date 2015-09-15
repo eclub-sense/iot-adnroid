@@ -10,7 +10,8 @@ public class SensorEntity {
     @Expose
     private String uuid;
     @Expose private String access;
-    @Expose private Integer type;
+    @Expose private int type;
+    private String description;
     private HubEntity hub;
     @Expose private UserEntity owner;
 
@@ -42,12 +43,16 @@ public class SensorEntity {
         this.uuid = uuid;
     }
 
-    public Integer getType() {
+    public int getType() {
         return type;
     }
 
     public UserEntity getOwner() {
         return owner;
+    }
+
+    public String getOwnerEmail() {
+        return owner.getEmail();
     }
 
     public void setUser(UserEntity user) {
@@ -56,6 +61,15 @@ public class SensorEntity {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public String getDescription() {
+        if(description == null) return "";
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
