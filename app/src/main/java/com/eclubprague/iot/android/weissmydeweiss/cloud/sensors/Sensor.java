@@ -1,5 +1,7 @@
 package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors;
 
+import android.util.Log;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,8 +45,12 @@ public abstract class Sensor implements Identificable {
 	}
 
 	protected Sensor(SensorEntity entity) {
-		this.hubRef = new WeakReference<Hub>(new Hub(entity.getHub().getUuid()));
-		this.hub_uuid = hubRef.get().getUuid();
+		try {
+			this.hubRef = new WeakReference<Hub>(new Hub(entity.getHub().getUuid()));
+			this.hub_uuid = hubRef.get().getUuid();
+		} catch (Exception e) {
+			Log.e("EXC", e.toString());
+		}
 		this.uuid = entity.getUuid();
 		this.type = entity.getType();
 		this.s_type = SensorType.getStringSensorType(type);

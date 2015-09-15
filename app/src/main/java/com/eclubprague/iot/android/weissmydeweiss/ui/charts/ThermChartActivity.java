@@ -53,15 +53,28 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
     private TextView tv_time;
     private SeekBar sb_visible_range;
 
+    private TextView tv_owner;
+    private TextView tv_desc;
+    private TextView tv_access;
+
     private ArrayList<GetSensorDataByIdTask.TaskDelegate> delegateRef = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        setContentView(R.layout.therm_chart);
+        setContentView(R.layout.therm_chart_2);
         tv_temperature = (TextView)findViewById(R.id.tv_temperature);
         tv_time = (TextView)findViewById(R.id.tv_time);
+
+        tv_owner = (TextView) findViewById(R.id.tv_owner);
+        tv_owner.setText(getIntent().getStringExtra("owner"));
+
+        tv_desc = (TextView) findViewById(R.id.tv_description);
+        tv_desc.setText(getIntent().getStringExtra("description"));
+
+        tv_access = (TextView) findViewById(R.id.tv_access);
+        tv_access.setText(getIntent().getStringExtra("access"));
 
         sb_visible_range = (SeekBar) findViewById(R.id.sb_visible_range);
         sb_visible_range.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

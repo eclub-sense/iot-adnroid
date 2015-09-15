@@ -3,6 +3,7 @@ package com.eclubprague.iot.android.weissmydeweiss.tasks;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.eclubprague.iot.android.weissmydeweiss.MainActivity;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.RegisteredSensors;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.SensorRegistrator;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
@@ -15,9 +16,11 @@ import org.restlet.resource.ClientResource;
 public class RegisterSensorTask extends AsyncTask<String, Void, Void> {
 
     private Sensor sensor;
+    private MainActivity activity;
 
-    public RegisterSensorTask(Sensor sensor) {
+    public RegisterSensorTask(Sensor sensor, MainActivity activity) {
         this.sensor = sensor;
+        this.activity = activity;
     }
 
     @Override

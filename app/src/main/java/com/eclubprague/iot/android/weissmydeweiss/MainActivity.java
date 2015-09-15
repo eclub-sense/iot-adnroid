@@ -1,12 +1,18 @@
 package com.eclubprague.iot.android.weissmydeweiss;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -69,7 +75,6 @@ public class MainActivity extends ActionBarActivity
         token = TokenWrapper.getTokenWrapperInstance(tokenWrapperString);
         Log.e("PSTOKEN", token.getAccess_token());
 
-
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
@@ -79,6 +84,20 @@ public class MainActivity extends ActionBarActivity
         //userRef.add(new User(getIntent().getStringExtra("username"), getIntent().getStringExtra("password")));
         activityRef.add(this);
         delegateRef.add(this);
+    }
+
+    public static String getCurrentSsid(Context context) {
+        String ssid = null;
+        ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (networkInfo.isConnected()) {
+            final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            final WifiInfo connectionInfo = wifiManager.getConnectionInfo();
+            if (connectionInfo != null && !TextUtils.isEmpty(connectionInfo.getSSID())) {
+                ssid = connectionInfo.getSSID();
+            }
+        }
+        return ssid;
     }
 
     @Override
@@ -148,7 +167,7 @@ public class MainActivity extends ActionBarActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-
+            Log.e("WIFI", getCurrentSsid(this));
             return true;
         }
 
@@ -241,7 +260,11 @@ public class MainActivity extends ActionBarActivity
 
 //        my = message.getMy();
 //        borrowed = message.getBorrowed();
+        refreshSensorsList(message);
 
+    }
+
+    public void refreshSensorsList(AllSensors message) {
         ExpandableListView sensorsList = (ExpandableListView) findViewById(R.id.sensors_expList);
 
         Hub hub1 = new Hub("My Sensors");
@@ -285,6 +308,6 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onSensorRegisterDialogSubmitted(Sensor sensor) {
-        new RegisterSensorTask(sensor).execute(token.getAccess_token());
+        new RegisterSensorTask(sensor, this).execute(token.getAccess_token());
     }
 }
