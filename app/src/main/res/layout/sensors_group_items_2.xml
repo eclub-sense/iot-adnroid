@@ -7,8 +7,11 @@
 
     <ImageView
         android:id="@+id/iv_sensor_group_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
 
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
@@ -19,8 +22,8 @@
 
     <TextView
         android:id="@+id/sensors_group_item_label_2"
-        android:layout_width="fill_parent"
-        android:layout_height="65dp"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
 
         android:layout_marginLeft="15dp"
 

@@ -278,7 +278,6 @@ public class MainActivity extends ActionBarActivity
 
         HashMap<Hub, List<Sensor>> hubSensors = new LinkedHashMap<>();
 
-        //TODO turn SensorEntity instances to Sensor instances
         hubSensors.put(hub1, message.getMySensors());
         hubSensors.put(hub2, message.getPublicSensors());
         hubSensors.put(hub3, message.getBorrowedSensors());

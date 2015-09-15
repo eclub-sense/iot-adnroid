@@ -10,6 +10,8 @@ import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 
 import org.restlet.resource.ClientResource;
 
+import java.util.ArrayList;
+
 /**
  * Created by Dat on 14.9.2015.
  */
@@ -39,7 +41,7 @@ public class RegisterSensorTask extends AsyncTask<String, Void, Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
+        activity.getSensorsData();
     }
 
 }

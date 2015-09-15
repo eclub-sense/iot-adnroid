@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.eclubprague.iot.android.weissmydeweiss.R;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.Data;
@@ -57,6 +58,8 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
     private TextView tv_desc;
     private TextView tv_access;
 
+    private int range = 15;
+
     private ArrayList<GetSensorDataByIdTask.TaskDelegate> delegateRef = new ArrayList<>();
 
     @Override
@@ -75,23 +78,28 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
         tv_access = (TextView) findViewById(R.id.tv_access);
         tv_access.setText(getIntent().getStringExtra("access"));
 
-        sb_visible_range = (SeekBar) findViewById(R.id.sb_visible_range);
-        sb_visible_range.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(mChart == null) return;
-                mChart.setVisibleXRangeMaximum((float)progress);
-                mChart.invalidate();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
+//        sb_visible_range = (SeekBar) findViewById(R.id.sb_visible_range);
+//        sb_visible_range.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//            int progress;
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//                if(mChart == null) return;
+//                this.progress = progress;
+//                //mChart.setVisibleXRangeMaximum((float)progress);
+//            }
+//
+//            @Override
+//            public void onStartTrackingTouch(SeekBar seekBar) {
+//            }
+//
+//            @Override
+//            public void onStopTrackingTouch(SeekBar seekBar) {
+//                Toast.makeText(PirChartActivity.this, "YRange: " + Integer.toString(progress), Toast.LENGTH_SHORT).show();
+//                mChart.getAxisLeft().setAxisMaxValue((float) progress);
+//                mChart.refreshDrawableState();
+//                mChart.invalidate();
+//            }
+//        });
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -102,7 +110,7 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
 
         actionBar.setTitle("Pir sensor");
 
-        mChart = (LineChart) findViewById(R.id.pir_char);
+        mChart = (LineChart) findViewById(R.id.pir_chart);
 
         // no description text
         mChart.setDescription("");
@@ -138,6 +146,7 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
 
         // get the legend (only possible after setting data)
         Legend legend = mChart.getLegend();
+        //legend.setEnabled(false);
 
         // modify the legend ...
         legend.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);
@@ -156,7 +165,7 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTypeface(tf);
         leftAxis.setTextColor(Color.BLACK);
-        leftAxis.setAxisMaxValue(10f);
+        leftAxis.setAxisMaxValue(15f);
         leftAxis.setAxisMinValue(0f);
         leftAxis.setStartAtZero(false);
         leftAxis.setDrawGridLines(true);
@@ -174,12 +183,12 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
 
     private LineDataSet createSet() {
 
-        LineDataSet set = new LineDataSet(null, "vbat (V)");
+        LineDataSet set = new LineDataSet(null, "Battery (V)");
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
         set.setColor(ColorTemplate.getHoloBlue());
-        set.setCircleColor(Color.RED);
-        set.setLineWidth(4f);
-        set.setCircleSize(4f);
+        set.setCircleColor(ColorTemplate.getHoloBlue());
+        set.setLineWidth(2f);
+        set.setCircleSize(0.5f);
         set.setFillAlpha(65);
         set.setHighLightColor(Color.rgb(244, 117, 117));
         set.setValueTextColor(Color.BLACK);
@@ -191,31 +200,38 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
     private void addEntry(float val, String timeStamp) {
 
         LineData data = mChart.getData();
+        //Log.e("NUM", "1");
 
         if (data != null) {
 
             LineDataSet set = data.getDataSetByIndex(0);
+            //Log.e("NUM", "2");
 
             if (set == null) {
+                //Log.e("NUM", "3");
                 set = createSet();
+                //Log.e("NUM", "4");
                 data.addDataSet(set);
             }
+            //Log.e("NUM", "5");
 
             // add a new x-value first
             data.addXValue(timeStamp);
+            //Log.e("NUM", "6");
             data.addEntry(new Entry(val, set.getEntryCount(), timeStamp), 0);
-
+            //Log.e("NUM", "7");
             // let the chart know it's data has changed
             mChart.notifyDataSetChanged();
-
+            //Log.e("NUM", "8");
             // limit the number of visible entries
-            mChart.setVisibleXRangeMaximum(15);
+            //mChart.setVisibleXRangeMaximum(data.getXValCount());
             // mChart.setVisibleYRange(30, AxisDependency.LEFT);
-
+            //Log.e("NUM", "9");
             // move to the latest entry
             //if(!history)
-                mChart.moveViewToX(data.getXValCount() - 16);
-
+                //mChart.moveViewToX(data.getXValCount() - 16);
+            //mChart.invalidate();
+            //Log.e("NUM", "10");
             // this automatically refreshes the chart (calls invalidate())
             // mChart.moveViewTo(data.getXValCount()-7, 55f,
             // AxisDependency.LEFT);
@@ -277,7 +293,7 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
 
     private int lastPirValue = 0;
 
-    private int seconds = 0;
+    private int seconds = 10;
 
     @Override
     public void onGetSensorDataByIdTaskCompleted(SensorAndData sData) {
@@ -359,7 +375,8 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
                         seconds++;
                     } else {
                         seconds = 0;
-                        mChart.clear();
+                        //mChart.clear();
+                        resetChart();
                         int increment = measured.get(i).getItems().size() / 100;
                         if (increment == 0) increment = 1;
 
@@ -369,6 +386,8 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
                             addEntry(val,
                                     measured.get(i).getItems().get(j).getTime());
                         }
+                        mChart.setVisibleXRangeMaximum(mChart.getData().getXValCount());
+                        mChart.invalidate();
                     }
 
 //                    Log.e("vbat", lastData.getValue());
@@ -376,6 +395,15 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
                 }
             }
         //}
+    }
+
+    private void resetChart() {
+        mChart.clear();
+        LineData data = new LineData();
+        data.setValueTextColor(Color.BLACK);
+
+        // add empty data
+        mChart.setData(data);
     }
 
 
@@ -391,7 +419,7 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
         //initialize the TimerTask's job
         initializeTimerTask();
         //schedule the timer, after the first 3000ms the TimerTask will run every 2000ms
-        timer.schedule(timerTask, 3000, 1000); //
+        timer.schedule(timerTask, 1000, 1000); //
     }
 
     public void stopTimerTask() {

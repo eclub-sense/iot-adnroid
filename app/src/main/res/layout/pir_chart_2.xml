@@ -7,7 +7,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@android:color/holo_red_light">
+        android:background="@android:color/holo_red_light"
+        android:weightSum="1">
 
         <TextView
             android:id="@+id/tv_counter"
@@ -21,17 +22,22 @@
             android:text="0"/>
 
         <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/pir_char"
+            android:id="@+id/pir_chart"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@android:color/white"/>
+            android:layout_height="350dp"
+            android:background="@android:color/white"
+             />
 
-        <TextView
+        <!--<TextView
             android:id="@+id/tv_visible_range"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+
             android:background="@android:color/white"
-            android:text="Range: "
+            android:text="YRange: "
             android:paddingBottom="10dp" />
 
         <SeekBar
@@ -39,8 +45,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
-            android:max="100"
-            android:paddingBottom="10dp"/>
+            android:max="20"
+            android:paddingBottom="10dp"/>-->
 
         <TextView
             android:id="@+id/tv_info_title"
@@ -51,7 +57,9 @@
             android:gravity="center_vertical"
             android:textColor="@android:color/white"
             android:textSize="25sp"
-            android:text="Sensor info:"/>
+            android:text="Sensor info:"
+
+            android:paddingLeft="10dp"/>
         <TextView
             android:id="@+id/tv_owner_label"
             android:layout_width="match_parent"
@@ -61,17 +69,18 @@
             android:gravity="center_vertical"
             android:textColor="@android:color/white"
             android:textSize="15sp"
-            android:text="Owner:"/>
+            android:text="Owner:"
+            android:paddingLeft="10dp"/>
         <TextView
             android:id="@+id/tv_owner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center_vertical"
             android:textColor="@android:color/white"
             android:textSize="12sp"
-            android:text="dat.phamta@gmail.com"/>
+            android:text="dat.phamta@gmail.com"
+            android:paddingLeft="10dp"/>
         <TextView
             android:id="@+id/tv_description_label"
             android:layout_width="match_parent"
@@ -81,17 +90,18 @@
             android:gravity="center_vertical"
             android:textColor="@android:color/white"
             android:textSize="15sp"
-            android:text="Description:"/>
+            android:text="Description:"
+            android:paddingLeft="10dp"/>
         <TextView
             android:id="@+id/tv_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center_vertical"
             android:textColor="@android:color/white"
             android:textSize="12sp"
-            android:text="on the third window"/>
+            android:text="on the third window"
+            android:paddingLeft="10dp"/>
 
         <TextView
             android:id="@+id/tv_access_label"
@@ -102,17 +112,18 @@
             android:gravity="center_vertical"
             android:textColor="@android:color/white"
             android:textSize="15sp"
-            android:text="Access:"/>
+            android:text="Access:"
+            android:paddingLeft="10dp"/>
         <TextView
             android:id="@+id/tv_access"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center_vertical"
             android:textColor="@android:color/white"
             android:textSize="12sp"
-            android:text="only me"/>
+            android:text="only me"
+            android:paddingLeft="10dp"/>
 
     </LinearLayout>
 

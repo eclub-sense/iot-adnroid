@@ -5,7 +5,7 @@
     android:background="@android:color/holo_red_light">
 
     <TextView
-        android:id="@+id/txt_counter"
+        android:id="@+id/tv_counter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -17,11 +17,11 @@
         android:text="0"/>
 
     <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/pir_char"
+        android:id="@+id/pir_chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
-        android:layout_below="@+id/txt_counter"
+        android:layout_below="@+id/tv_counter"
         android:layout_above="@+id/sb_visible_range"/>
 
     <SeekBar
@@ -44,6 +44,6 @@
         android:text="Range "
         android:gravity="right"
         android:paddingBottom="10dp"
-        android:layout_below="@+id/pir_char" />
+        android:layout_below="@+id/pir_chart" />
 
 </RelativeLayout>

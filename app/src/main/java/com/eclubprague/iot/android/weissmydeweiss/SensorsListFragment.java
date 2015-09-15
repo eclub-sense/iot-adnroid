@@ -216,7 +216,7 @@ SensorShareDialog.DialogDelegate{
 
     @Override
     public void onSensorUnregisterRequested(String uuid) {
-        new UnregisterSensorTask().execute(uuid,
+        new UnregisterSensorTask(activityRef.get(0)).execute(uuid,
                 ((MainActivity) SensorsListFragment.this.getActivity()).getToken().getAccess_token());
     }
 

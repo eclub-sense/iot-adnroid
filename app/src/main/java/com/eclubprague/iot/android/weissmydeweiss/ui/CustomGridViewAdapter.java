@@ -35,6 +35,7 @@ public class CustomGridViewAdapter extends ArrayAdapter<GridViewItemWrapper> {
         textView.setText(item.getDesc());
 
         ImageView imageView = (ImageView) convertView.findViewById(R.id.iv_grid_item_img);
+        
         imageView.setImageResource(item.getRes());
 
 
