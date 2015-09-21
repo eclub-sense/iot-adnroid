@@ -22,7 +22,7 @@ public class Gyroscope extends Sensor {
         super(entity);
     }
     public Gyroscope(String uuid, String secret, Hub hub, String name) {
-        super(uuid, SensorType.GYROSCOPE, secret, hub, name);
+        super(uuid, SensorType.GYROSCOPE, secret, hub, name, null);
     }
 
     @Override

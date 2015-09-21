@@ -12,6 +12,7 @@ public class SensorAndData {
     @Expose
     private SensorEntity sensor;
     @Expose private List<SetOfData> measured;
+    private ArrayList<ActionEntity> actions;
 
     public SensorEntity getSensor() {
         return sensor;
@@ -27,7 +28,13 @@ public class SensorAndData {
         return measured;
     }
 
+    public ArrayList<ActionEntity> getActions() {
+        return actions;
+    }
 
+    public void setActions(ArrayList<ActionEntity> actions) {
+        this.actions = actions;
+    }
 
     public void setMeasured(List<SetOfData> measured) {
         this.measured = measured;

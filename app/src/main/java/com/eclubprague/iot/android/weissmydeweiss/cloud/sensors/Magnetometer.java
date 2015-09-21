@@ -23,7 +23,7 @@ public class Magnetometer extends Sensor {
     }
 
     public Magnetometer(String uuid, String secret, Hub hub, String name) {
-        super(uuid, SensorType.MAGNETOMETER, secret, hub, name);
+        super(uuid, SensorType.MAGNETOMETER, secret, hub, name, null);
     }
 
     @Override

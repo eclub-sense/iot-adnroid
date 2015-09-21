@@ -84,7 +84,7 @@
         <activity android:name=".ui.charts.ThermometerChartActivity"/>
         <activity android:name=".ui.charts.PirChartActivity"/>
         <activity android:name=".ui.charts.ThermChartActivity"/>
-
+        <activity android:name=".ui.charts.LcdChartActivity"/>
 
     </application>
 

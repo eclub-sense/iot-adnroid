@@ -20,7 +20,7 @@ public class GPS  extends Sensor {
         super();
     }
     public GPS(String uuid, String secret, Hub hub, String name) {
-        super(uuid, SensorType.GPS, secret, hub, name);
+        super(uuid, SensorType.GPS, secret, hub, name, null);
     }
 
     public GPS(SensorEntity entity) {

@@ -38,7 +38,7 @@ import java.util.List;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        /*RefreshSensorsTask.RefreshSensorsCallbacks,*/ GetSensorsDataTask.TaskDelegate,
+        GetSensorsDataTask.TaskDelegate,
         TestingTask.TaskDelegate, SensorRegisterDialog.DialogDelegate {
 
     /**
@@ -173,15 +173,6 @@ public class MainActivity extends ActionBarActivity
 
         return super.onOptionsItemSelected(item);
     }
-
-//    public void accountLogin() {
-//        new AccountDialog(activityRef, accountRef);
-//    }
-
-//    public void refreshSensorsList(View view) {
-//        RefreshSensorsTask task = new RefreshSensorsTask(this, accountRef.get(0).USERNAME, accountRef.get(0).PASSWORD);
-//        task.execute("hub1");
-//    }
 
     /**
      * Launch a QR code scanner.

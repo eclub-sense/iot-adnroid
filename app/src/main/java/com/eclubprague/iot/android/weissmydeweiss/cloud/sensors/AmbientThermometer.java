@@ -17,7 +17,7 @@ public class AmbientThermometer extends Sensor {
     protected float temperature = 0;
 
     public AmbientThermometer(String uuid, String secret, Hub hub, String name) {
-        super(uuid, SensorType.AMBIENT_THERMOMETER, secret, hub, name);
+        super(uuid, SensorType.AMBIENT_THERMOMETER, secret, hub, name, null);
     }
 
     public AmbientThermometer(SensorEntity entity) {

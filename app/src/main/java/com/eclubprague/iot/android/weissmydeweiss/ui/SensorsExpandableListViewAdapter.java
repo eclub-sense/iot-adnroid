@@ -82,6 +82,8 @@ public class SensorsExpandableListViewAdapter extends BaseExpandableListAdapter 
                 return R.drawable.ic_therm;
             case SensorType.PIR:
                 return R.drawable.ic_pir;
+            case SensorType.LCD:
+                return R.drawable.ic_lcd;
         }
         return R.drawable.ic_sensor;
     }
@@ -131,8 +133,13 @@ public class SensorsExpandableListViewAdapter extends BaseExpandableListAdapter 
             convertView = inflater.inflate(R.layout.sensors_group_items_2, null);
         }
 
-        //RelativeLayout layout = (RelativeLayout) convertView.findViewById(R.id.sensors_group_item_2_id);
-        //layout.setBackgroundColor(colors[groupPosition]);
+        if(isExpanded) {
+            RelativeLayout layout = (RelativeLayout) convertView.findViewById(R.id.sensors_group_item_2_id);
+            layout.setBackgroundColor(convertView.getContext().getResources().getColor(android.R.color.darker_gray));
+        } else {
+            RelativeLayout layout = (RelativeLayout) convertView.findViewById(R.id.sensors_group_item_2_id);
+            layout.setBackgroundColor(convertView.getContext().getResources().getColor(android.R.color.transparent));
+        }
 
         TextView groupLabel = (TextView) convertView
                 .findViewById(R.id.sensors_group_item_label_2);

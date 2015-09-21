@@ -3,6 +3,8 @@ package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 
+import java.util.ArrayList;
+
 /**
  * Created by Dat on 24.8.2015.
  */

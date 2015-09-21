@@ -28,15 +28,12 @@ public class SensorMenuDialog extends AlertDialog.Builder {
         void onSensorChartRequested(Sensor sensor);
         void onSensorShareRequested(String uuid);
         void onSensorUnregisterRequested(String uuid);
+        void onSensorWriteRequested(Sensor sensor);
     }
 
     private DialogDelegate delegate;
     private Sensor sensor;
     private AlertDialog dialog;
-
-//    private Button btn_chart;
-//    private Button btn_share;
-//    private Button btn_unregister;
 
     GridView gridView;
 
@@ -60,7 +57,10 @@ public class SensorMenuDialog extends AlertDialog.Builder {
         gridView = (GridView) view.findViewById(R.id.sensor_menu_grid_view);
 
         CustomGridViewAdapter adapter = new CustomGridViewAdapter(this.getContext(),
-                android.R.layout.simple_list_item_1, GridViewItemWrapper.getGridItems());
+                android.R.layout.simple_list_item_1,
+                sensor.getType() == SensorType.LCD ?
+                        GridViewItemWrapper.getGridItemsForWriteable() : GridViewItemWrapper.getGridItems()
+        );
 
         gridView.setAdapter(adapter);
 
@@ -79,6 +79,8 @@ public class SensorMenuDialog extends AlertDialog.Builder {
                     case UNREGISTER:
                         SensorMenuDialog.this.delegate.onSensorUnregisterRequested(SensorMenuDialog.this.sensor.getUuid());
                         break;
+                    case WRITE:
+                        SensorMenuDialog.this.delegate.onSensorWriteRequested(SensorMenuDialog.this.sensor);
                 }
             }
         });

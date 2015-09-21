@@ -22,7 +22,7 @@ public class PirSensor extends Sensor {
     }
 
     public PirSensor(String uuid, String secret, Hub hub, String name) {
-        super(uuid, SensorType.PIR, secret, hub, name);
+        super(uuid, SensorType.PIR, secret, hub, name, null);
     }
 
     @Override

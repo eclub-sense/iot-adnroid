@@ -18,7 +18,7 @@ public class ESCThermometer extends Sensor {
 	}
 
 	public ESCThermometer(String uuid, String secret, Hub hub, String name) {
-		super(uuid, SensorType.THERMOMETER, secret, hub, name);
+		super(uuid, SensorType.THERMOMETER, secret, hub, name, null);
 	}
 	
 	@Override

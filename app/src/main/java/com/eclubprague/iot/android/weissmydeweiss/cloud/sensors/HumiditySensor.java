@@ -22,7 +22,7 @@ public class HumiditySensor extends Sensor {
     }
 
     public HumiditySensor(String uuid, String secret, Hub hub, String name) {
-        super(uuid, SensorType.HUMIDITY, secret, hub, name);
+        super(uuid, SensorType.HUMIDITY, secret, hub, name, null);
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.GPS;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.GravitySensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Gyroscope;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.HumiditySensor;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.LcdDisplay;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.LightSensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.LinearAccelerometer;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Magnetometer;
@@ -64,6 +65,8 @@ public class SensorDeserializer implements JsonDeserializer<Sensor> {
                 return context.deserialize(json, AmbientThermometer.class);
             case SensorType.PIR:
                 return context.deserialize(json, PirSensor.class);
+            case SensorType.LCD:
+                return context.deserialize(json, LcdDisplay.class);
             default:
                 throw new JsonParseException("We can't deserialize this type of Sensor.");
         }

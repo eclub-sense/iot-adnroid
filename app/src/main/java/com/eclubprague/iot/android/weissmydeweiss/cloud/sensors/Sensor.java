@@ -11,6 +11,7 @@ import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.registry.Identificable;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.NameValuePair;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.ActionEntity;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.SensorEntity;
 import com.google.gson.Gson;
 
@@ -33,6 +34,8 @@ public abstract class Sensor implements Identificable {
 
 	protected transient String owner;
 	protected transient String access;
+
+	protected transient ArrayList<ActionEntity> actions;
 
 	protected transient List<NameValuePair> measured = new ArrayList<>();
 
@@ -58,9 +61,12 @@ public abstract class Sensor implements Identificable {
 		this.description = entity.getDescription();
 		this.access = entity.getAccess();
 		this.owner = entity.getOwnerEmail();
+//		if(entity.getActions() != null && entity.getActions().size() > 0) {
+//			this.actions = entity.getActions();
+//		}
 	}
 
-	protected Sensor(String uuid, int type, String secret, Hub hub, String name) {
+	protected Sensor(String uuid, int type, String secret, Hub hub, String name, ArrayList<ActionEntity> actions) {
 		this.hubRef = new WeakReference<Hub>(hub);
 		this.hub_uuid = hubRef.get().getUuid();
 		this.uuid = uuid;
@@ -70,6 +76,7 @@ public abstract class Sensor implements Identificable {
 		this.description = name;
 		this.access = "only me";
 		this.owner = "me";
+		this.actions = actions;
 	}
 
 	public void readPacket(String p) throws DecoderException {
@@ -100,6 +107,14 @@ public abstract class Sensor implements Identificable {
     /*public String getStringUuid() {
         return String.format("%08d", uuid);
     }*/
+
+	public void setActions(ArrayList<ActionEntity> actions) {
+		this.actions = actions;
+	}
+
+	public ArrayList<ActionEntity> getActions() {
+		return actions;
+	}
 
 	public int getType() {
 		return type;

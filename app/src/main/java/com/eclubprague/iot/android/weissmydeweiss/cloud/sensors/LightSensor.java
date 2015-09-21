@@ -21,7 +21,7 @@ public class LightSensor extends Sensor {
     }
 
     public LightSensor(String uuid, String secret, Hub hub, String name) {
-        super(uuid, SensorType.LIGHT, secret, hub, name);
+        super(uuid, SensorType.LIGHT, secret, hub, name, null);
     }
 
     @Override

@@ -2,7 +2,10 @@ package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors;
 
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.ActionEntity;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities.SensorEntity;
+
+import java.util.ArrayList;
 
 public class VirtualSensorCreator {
 
@@ -11,7 +14,7 @@ public class VirtualSensorCreator {
 			case SensorType.THERMOMETER:
 				return new ESCThermometer(uuid, secret, hub, name);
 			case SensorType.LED:
-				return new ESCLed(uuid, secret, hub, name);
+				return new ESCLed(uuid, secret, hub, name, null);
 			case SensorType.GPS:
 				return new GPS(uuid, secret, hub, name);
 			case SensorType.ACCELEROMETER:
@@ -40,6 +43,10 @@ public class VirtualSensorCreator {
 				return new Accelerometer(uuid, secret, hub, name);
 			case SensorType.PIR:
 				return new PirSensor(uuid, secret, hub, name);
+			case SensorType.LCD:
+				//ArrayList<ActionEntity> actions = new ArrayList<>();
+				//TODO add actions
+				return new LcdDisplay(uuid, secret, hub, name, null);
 			default:
 				return new PublicSensor(uuid, secret, hub, type, name);
 		}
@@ -80,6 +87,8 @@ public class VirtualSensorCreator {
 				return new Accelerometer(entity);
 			case SensorType.PIR:
 				return new PirSensor(entity);
+			case SensorType.LCD:
+				return new LcdDisplay(entity);
 			default:
 				return new PublicSensor(entity);
 		}

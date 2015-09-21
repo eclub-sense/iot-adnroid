@@ -23,7 +23,7 @@ public class LinearAccelerometer extends Sensor {
     }
 
     public LinearAccelerometer(String uuid, String secret, Hub hub, String name) {
-        super(uuid, SensorType.LINEAR_ACCELEROMETER, secret, hub, name);
+        super(uuid, SensorType.LINEAR_ACCELEROMETER, secret, hub, name, null);
     }
 
     @Override

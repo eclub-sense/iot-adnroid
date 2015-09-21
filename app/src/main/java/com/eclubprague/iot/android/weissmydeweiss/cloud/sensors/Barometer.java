@@ -21,7 +21,7 @@ public class Barometer extends Sensor {
     }
 
     public Barometer(String uuid, String secret, Hub hub, String name) {
-        super(uuid, SensorType.PRESSURE, secret, hub, name);
+        super(uuid, SensorType.PRESSURE, secret, hub, name, null);
     }
 
     @Override

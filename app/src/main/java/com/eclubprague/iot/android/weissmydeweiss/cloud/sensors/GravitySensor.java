@@ -24,7 +24,7 @@ public class GravitySensor extends Sensor {
     }
 
     public GravitySensor(String uuid, String secret, Hub hub, String name) {
-        super(uuid, SensorType.GRAVITY, secret, hub, name);
+        super(uuid, SensorType.GRAVITY, secret, hub, name, null);
     }
 
     @Override

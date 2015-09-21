@@ -23,7 +23,7 @@ public class Accelerometer extends Sensor {
     }
 
     public Accelerometer(String uuid, String secret, Hub hub, String name) {
-        super(uuid, SensorType.ACCELEROMETER, secret, hub, name);
+        super(uuid, SensorType.ACCELEROMETER, secret, hub, name, null);
     }
 
     @Override

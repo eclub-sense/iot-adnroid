@@ -17,6 +17,7 @@ import com.eclubprague.iot.android.weissmydeweiss.tasks.UnregisterSensorTask;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorMenuDialog;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorShareDialog;
 import com.eclubprague.iot.android.weissmydeweiss.ui.SensorsExpandableListViewAdapter;
+import com.eclubprague.iot.android.weissmydeweiss.ui.charts.LcdChartActivity;
 import com.eclubprague.iot.android.weissmydeweiss.ui.charts.PirChartActivity;
 import com.eclubprague.iot.android.weissmydeweiss.ui.charts.SensorDataChartActivity;
 import com.eclubprague.iot.android.weissmydeweiss.ui.charts.ThermChartActivity;
@@ -230,5 +231,32 @@ SensorShareDialog.DialogDelegate{
     public void onSensorShareDialogSubmitted(String uuid) {
         new ShareSensorTask().execute(null, uuid,
                 ((MainActivity) SensorsListFragment.this.getActivity()).getToken().getAccess_token());
+    }
+
+
+    @Override
+    public void onSensorWriteRequested(Sensor sensor) {
+
+        //TODO WRITE
+
+        String token = ((MainActivity) SensorsListFragment.this.getActivity()).getToken().getAccess_token();
+
+        switch (sensor.getType()) {
+            case SensorType.LCD:
+                Intent intent3 = new Intent(SensorsListFragment.this.getActivity(), LcdChartActivity.class);
+                intent3.putExtra("token", token);
+                intent3.putExtra("uuid", sensor.getUuid());
+                intent3.putExtra("owner", sensor.getOwner());
+                intent3.putExtra("description", sensor.getDescription());
+                intent3.putExtra("access", sensor.getAccess());
+                startActivity(intent3);
+                break;
+            default:
+                //TODO CHARTS FOR THE REST
+                return;
+        }
+
+        getActivity()
+                .overridePendingTransition(R.anim.move_right_in_activity, R.anim.move_left_out_activity);
     }
 }

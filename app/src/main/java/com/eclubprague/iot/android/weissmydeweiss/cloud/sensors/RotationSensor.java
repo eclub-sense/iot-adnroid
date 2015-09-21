@@ -23,7 +23,7 @@ public class RotationSensor extends Sensor {
     }
 
     public RotationSensor(String uuid, String secret, Hub hub, String name) {
-        super(uuid, SensorType.ROTATION, secret, hub, name);
+        super(uuid, SensorType.ROTATION, secret, hub, name, null);
     }
 
     @Override

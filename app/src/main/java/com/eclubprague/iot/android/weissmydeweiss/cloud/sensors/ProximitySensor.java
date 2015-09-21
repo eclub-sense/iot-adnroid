@@ -21,7 +21,7 @@ public class ProximitySensor extends Sensor {
     }
 
     public ProximitySensor(String uuid, String secret, Hub hub, String name) {
-        super(uuid, SensorType.PROXIMITY, secret, hub, name);
+        super(uuid, SensorType.PROXIMITY, secret, hub, name, null);
     }
 
     @Override
