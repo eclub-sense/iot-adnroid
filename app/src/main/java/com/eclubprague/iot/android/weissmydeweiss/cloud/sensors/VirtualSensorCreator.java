@@ -48,7 +48,8 @@ public class VirtualSensorCreator {
 				//TODO add actions
 				return new LcdDisplay(uuid, secret, hub, name, null);
 			default:
-				return new PublicSensor(uuid, secret, hub, type, name);
+				//return new PublicSensor(uuid, secret, hub, type, name);
+				return null;
 		}
 	}
 
@@ -90,7 +91,8 @@ public class VirtualSensorCreator {
 			case SensorType.LCD:
 				return new LcdDisplay(entity);
 			default:
-				return new PublicSensor(entity);
+				//return new PublicSensor(entity);
+				return null;
 		}
 	}
 }

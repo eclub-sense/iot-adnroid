@@ -36,7 +36,10 @@ public class AllSensors {
 
         for(int i = 0; i < _my.size(); i++) {
             SensorEntity entity = _my.get(i);
-            sensors.add(VirtualSensorCreator.createSensorInstance(entity));
+            Sensor sensor = VirtualSensorCreator.createSensorInstance(entity);
+            if(sensor != null) {
+                sensors.add(sensor);
+            }
         }
 
         return sensors;
@@ -49,7 +52,10 @@ public class AllSensors {
 
         for(int i = 0; i < _borrowed.size(); i++) {
             SensorEntity entity = _borrowed.get(i).getSensor();
-            sensors.add(VirtualSensorCreator.createSensorInstance(entity));
+            Sensor sensor = VirtualSensorCreator.createSensorInstance(entity);
+            if(sensor != null) {
+                sensors.add(sensor);
+            }
         }
 
         return sensors;
@@ -62,7 +68,10 @@ public class AllSensors {
 
         for(int i = 0; i < _public.size(); i++) {
             SensorEntity entity = _public.get(i);
-            sensors.add(VirtualSensorCreator.createSensorInstance(entity));
+            Sensor sensor = VirtualSensorCreator.createSensorInstance(entity);
+            if(sensor != null) {
+                sensors.add(sensor);
+            }
         }
 
         return sensors;
