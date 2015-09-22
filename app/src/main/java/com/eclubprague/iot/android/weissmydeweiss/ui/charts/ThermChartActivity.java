@@ -10,6 +10,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -28,13 +30,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
-import org.w3c.dom.Text;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -57,6 +53,15 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
     private TextView tv_desc;
     private TextView tv_access;
 
+    private ImageView iv_vbat_mode;
+    private ImageView iv_temp_mode;
+    private ImageView iv_pressure_mode;
+
+    private int chartMode = VBAT;
+    private static final int VBAT = 0;
+    private static final int TEMPERATURE = 1;
+    private static final int PRESSURE = 2;
+
     private ArrayList<GetSensorDataByIdTask.TaskDelegate> delegateRef = new ArrayList<>();
 
     @Override
@@ -64,8 +69,8 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.therm_chart_2);
-        tv_temperature = (TextView)findViewById(R.id.tv_temperature);
-        tv_time = (TextView)findViewById(R.id.tv_time);
+        tv_temperature = (TextView) findViewById(R.id.tv_temperature);
+        tv_time = (TextView) findViewById(R.id.tv_time);
 
         tv_owner = (TextView) findViewById(R.id.tv_owner);
         tv_owner.setText(getIntent().getStringExtra("owner"));
@@ -76,6 +81,40 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
         tv_access = (TextView) findViewById(R.id.tv_access);
         tv_access.setText(getIntent().getStringExtra("access"));
 
+        iv_vbat_mode = (ImageView) findViewById(R.id.iv_vbat_mode);
+        iv_temp_mode = (ImageView) findViewById(R.id.iv_temp_mode);
+        iv_pressure_mode = (ImageView) findViewById(R.id.iv_pressure_mode);
+
+        iv_vbat_mode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chartMode = VBAT;
+                stopTimerTask();
+                drawChart();
+                startTimer();
+            }
+        });
+
+        iv_temp_mode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chartMode = TEMPERATURE;
+                stopTimerTask();
+                drawChart();
+                startTimer();
+            }
+        });
+
+        iv_pressure_mode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chartMode = PRESSURE;
+                stopTimerTask();
+                drawChart();
+                startTimer();
+            }
+        });
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
@@ -85,6 +124,21 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
 
         actionBar.setTitle("Thermometer");
 
+        drawChart();
+
+        //dataSets = createSetList();
+
+        delegateRef.add(this);
+        //todo start timer task
+        startTimer();
+
+    }
+
+    public void drawChart() {
+        if(mChart != null) {
+            mChart.clear();
+        }
+        mChart = null;
         mChart = (LineChart) findViewById(R.id.therm_chart);
 
         // no description text
@@ -139,25 +193,41 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTypeface(tf);
         leftAxis.setTextColor(Color.BLACK);
-        leftAxis.setAxisMaxValue(15f);
-        leftAxis.setAxisMinValue(0f);
+        switch (chartMode) {
+            case VBAT:
+                leftAxis.setAxisMaxValue(40f);
+                leftAxis.setAxisMinValue(0f);
+                break;
+            case TEMPERATURE:
+                leftAxis.setAxisMaxValue(40f);
+                leftAxis.setAxisMinValue(-40f);
+                break;
+            case PRESSURE:
+                leftAxis.setAxisMaxValue(1100f);
+                leftAxis.setAxisMinValue(500f);
+                break;
+        }
         leftAxis.setStartAtZero(false);
         leftAxis.setDrawGridLines(true);
 
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setEnabled(false);
-
-        //dataSets = createSetList();
-
-        delegateRef.add(this);
-        //todo start timer task
-        startTimer();
-
+        mChart.invalidate();
     }
 
     private LineDataSet createSet() {
 
-        LineDataSet set = new LineDataSet(null, "Battery (V)");
+        LineDataSet set;
+        switch (chartMode) {
+            case VBAT:
+                set = new LineDataSet(null, "Battery (V)");
+                break;
+            case TEMPERATURE:
+                set = new LineDataSet(null, "Temperature (C)");
+                break;
+            default:
+                set = new LineDataSet(null, "Pressure (hPa)");
+        }
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
         set.setColor(ColorTemplate.getHoloBlue());
         set.setCircleColor(ColorTemplate.getHoloBlue());
@@ -203,7 +273,7 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
 
             // move to the latest entry
             //if(!history)
-               // mChart.moveViewToX(data.getXValCount() - 16);
+            // mChart.moveViewToX(data.getXValCount() - 16);
             //Log.e("NUM", "8");
 
             // this automatically refreshes the chart (calls invalidate())
@@ -275,91 +345,75 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
             return;
         }
 
-        //History requested
-        /*if (history == true) {
+        for (int i = 0; i < measured.size(); i++) {
 
-            mChart.clear();
+//            if (!measured.get(i).getName().contains("temperature") && !measured.get(i).getName().contains("vbat"))
+//                continue;
 
-            for (int i = 0; i < measured.size(); i++) {
-                Log.e("NAME", measured.get(i).getName());
+            if (measured.get(i).getName().contains("temperature")) {
 
-                if (measured.get(i).getItems().size() <= 0) {
+                int lastIndex = measured.get(i).getItems().size() - 1;
+                if (lastIndex < 0) {
                     continue;
                 }
 
-                int increment = measured.get(i).getItems().size() / 100;
-                if (increment == 0) increment = 1;
+                Data lastData = measured.get(i).getItems().get(lastIndex);
 
-                if (measured.get(i).getName().contains("vbat")) {
+                Log.e("TEMP", lastData.getValue());
+                float val = Float.parseFloat(lastData.getValue());
+                int i_val = (val - (int) val >= 0.5 ? (int) val + 1 : (int) val);
+                //int val = ()
+                tv_temperature.setText(Integer.toString(i_val) + " \u00B0" + "C");
+                tv_temperature.invalidate();
+                tv_time.setText(lastData.getTime());
+                tv_time.invalidate();
 
-                    for (int j = 0; j < measured.get(i).getItems().size(); j += increment) {
-                        Log.e("Entry", Float.toString(Float.parseFloat(measured.get(i).getItems().get(j).getValue()) / 100f));
-                        addEntry(Float.parseFloat(measured.get(i).getItems().get(j).getValue()) / 100f,
-                                measured.get(i).getItems().get(j).getTime());
-                    }
-                    Log.e("FillHist", "HISTo");
-                    return;
+                if(chartMode == TEMPERATURE) {
+                    fillChart(measured.get(i).getItems());
                 }
-                *TODO draw temperature history
+            } else if (measured.get(i).getName().contains("vbat") && chartMode == VBAT) {
+                fillChart(measured.get(i).getItems());
 
-            }
-
-        } else {*/
-            for (int i = 0; i < measured.size(); i++) {
-
-                if (!measured.get(i).getName().contains("temperature") && !measured.get(i).getName().contains("vbat"))
-                    continue;
-
-                if(measured.get(i).getName().contains("temperature")) {
-
-                    int lastIndex = measured.get(i).getItems().size() - 1;
-                    if (lastIndex < 0) {
-                        continue;
-                    }
-
-                    Data lastData = measured.get(i).getItems().get(lastIndex);
-
-//                    DateFormat format = new SimpleDateFormat("MMM d, yyyy HH:mm:ss aaa");
-//                    try {
+//                resetChart();
 //
-//                        Date now = new Date();
-//                        Date date = format.parse(lastData.getTime());
+//                int increment = measured.get(i).getItems().size() / 100;
+//                if (increment == 0) increment = 1;
 //
-//                        if (now.getTime() > date.getTime() + 120000) continue;
-//
-//                    } catch (ParseException e) {
-//                        Log.e("DATE", e.toString());
-//                    }
-
-                    Log.e("TEMP", lastData.getValue());
-                    float val = Float.parseFloat(lastData.getValue());
-                    int i_val = (val - (int)val >= 0.5 ? (int)val + 1 : (int) val);
-                    //int val = ()
-                    tv_temperature.setText(Integer.toString(i_val) + " \u00B0" + "C");
-                    tv_temperature.invalidate();
-                    tv_time.setText(lastData.getTime());
-                    tv_time.invalidate();
-                } else {
-
-                    resetChart();
-
-                    int increment = measured.get(i).getItems().size() / 100;
-                    if (increment == 0) increment = 1;
-
-                    for(int j = 0; j < measured.get(i).getItems().size(); j+=increment) {
-                        float val = Float.parseFloat(measured.get(i).getItems().get(j).getValue()) / 1000f;
-                        Log.e("VAL", Float.toString(val));
-                        addEntry(val,
-                                measured.get(i).getItems().get(j).getTime());
-                    }
-                    mChart.setVisibleXRangeMaximum(mChart.getData().getXValCount());
-                    mChart.invalidate();
+//                for (int j = 0; j < measured.get(i).getItems().size(); j += increment) {
+//                    float val = Float.parseFloat(measured.get(i).getItems().get(j).getValue()) / 1000f;
+//                    Log.e("VAL", Float.toString(val));
+//                    addEntry(val,
+//                            measured.get(i).getItems().get(j).getTime());
+//                }
+//                mChart.setVisibleXRangeMaximum(mChart.getData().getXValCount());
+//                mChart.invalidate();
 
 //                    Log.e("vbat", lastData.getValue());
 //                    addEntry(Float.parseFloat(lastData.getValue()), lastData.getTime());
-                }
+            } else if (measured.get(i).getName().contains("pressure") && chartMode == PRESSURE) {
+                fillChart(measured.get(i).getItems());
             }
+        }
         //}
+    }
+
+    private void fillChart(ArrayList<Data> items) {
+        resetChart();
+
+        int increment = items.size() / 100;
+        if (increment == 0) increment = 1;
+
+        for (int j = 0; j < items.size(); j += increment) {
+            float val = Float.parseFloat(items.get(j).getValue());
+            if(chartMode == VBAT) {
+                val = val / 1000f;
+            }
+            Log.e("VAL", Float.toString(val));
+            addEntry(val,
+                    items.get(j).getTime());
+        }
+        mChart.setVisibleXRangeMaximum(mChart.getData().getXValCount());
+        mChart.invalidate();
     }
 
     private void resetChart() {
