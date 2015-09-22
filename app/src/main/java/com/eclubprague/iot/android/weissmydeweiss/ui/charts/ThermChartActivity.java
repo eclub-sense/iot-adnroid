@@ -76,25 +76,6 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
         tv_access = (TextView) findViewById(R.id.tv_access);
         tv_access.setText(getIntent().getStringExtra("access"));
 
-//        sb_visible_range = (SeekBar) findViewById(R.id.sb_visible_range);
-//        sb_visible_range.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//            @Override
-//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                if(mChart == null) return;
-//                mChart.setVisibleXRangeMaximum((float)progress);
-//                //mChart.notifyDataSetChanged();
-//                mChart.invalidate();
-//            }
-//
-//            @Override
-//            public void onStartTrackingTouch(SeekBar seekBar) {
-//            }
-//
-//            @Override
-//            public void onStopTrackingTouch(SeekBar seekBar) {
-//            }
-//        });
-
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);

@@ -51,6 +51,8 @@ public class VirtualSensorCreator {
 				return new Beacon(uuid, secret, hub, name);
 			case SensorType.EASY:
 				return new EasyButton(uuid, secret, hub, name);
+			case SensorType.ACCELEROMETER2:
+				return new Accelerometer2(uuid, secret, hub, name);
 			default:
 				return new PublicSensor(uuid, secret, hub, type, name);
 		}
@@ -97,6 +99,8 @@ public class VirtualSensorCreator {
 				return new Beacon(entity);
 			case SensorType.EASY:
 				return new EasyButton(entity);
+			case SensorType.ACCELEROMETER2:
+				return new Accelerometer2(entity);
 			default:
 				return new PublicSensor(entity);
 		}

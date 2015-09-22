@@ -1,8 +1,10 @@
 package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.cloud_entities;
 
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.PublicSensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.VirtualSensorCreator;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 
@@ -37,7 +39,7 @@ public class AllSensors {
         for(int i = 0; i < _my.size(); i++) {
             SensorEntity entity = _my.get(i);
             Sensor sensor = VirtualSensorCreator.createSensorInstance(entity);
-            if(sensor != null) {
+            if(sensor != null && !(sensor instanceof PublicSensor)) {
                 sensors.add(sensor);
             }
         }
@@ -53,7 +55,7 @@ public class AllSensors {
         for(int i = 0; i < _borrowed.size(); i++) {
             SensorEntity entity = _borrowed.get(i).getSensor();
             Sensor sensor = VirtualSensorCreator.createSensorInstance(entity);
-            if(sensor != null) {
+            if(sensor != null && !(sensor instanceof PublicSensor)) {
                 sensors.add(sensor);
             }
         }
@@ -69,7 +71,7 @@ public class AllSensors {
         for(int i = 0; i < _public.size(); i++) {
             SensorEntity entity = _public.get(i);
             Sensor sensor = VirtualSensorCreator.createSensorInstance(entity);
-            if(sensor != null) {
+            if(sensor != null && !(sensor instanceof PublicSensor)) {
                 sensors.add(sensor);
             }
         }
