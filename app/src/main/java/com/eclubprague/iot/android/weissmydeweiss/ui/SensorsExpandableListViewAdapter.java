@@ -84,6 +84,12 @@ public class SensorsExpandableListViewAdapter extends BaseExpandableListAdapter 
                 return R.drawable.ic_pir;
             case SensorType.LCD:
                 return R.drawable.ic_lcd;
+            case SensorType.ACCELEROMETER2:
+                return R.drawable.ic_accel;
+            case SensorType.BEACON:
+                return R.drawable.ic_beacon;
+            case SensorType.EASY:
+                return R.drawable.ic_easy;
         }
         return R.drawable.ic_sensor;
     }

@@ -47,9 +47,12 @@ public class VirtualSensorCreator {
 				//ArrayList<ActionEntity> actions = new ArrayList<>();
 				//TODO add actions
 				return new LcdDisplay(uuid, secret, hub, name, null);
+			case SensorType.BEACON:
+				return new Beacon(uuid, secret, hub, name);
+			case SensorType.EASY:
+				return new EasyButton(uuid, secret, hub, name);
 			default:
-				//return new PublicSensor(uuid, secret, hub, type, name);
-				return null;
+				return new PublicSensor(uuid, secret, hub, type, name);
 		}
 	}
 
@@ -90,9 +93,12 @@ public class VirtualSensorCreator {
 				return new PirSensor(entity);
 			case SensorType.LCD:
 				return new LcdDisplay(entity);
+			case SensorType.BEACON:
+				return new Beacon(entity);
+			case SensorType.EASY:
+				return new EasyButton(entity);
 			default:
-				//return new PublicSensor(entity);
-				return null;
+				return new PublicSensor(entity);
 		}
 	}
 }

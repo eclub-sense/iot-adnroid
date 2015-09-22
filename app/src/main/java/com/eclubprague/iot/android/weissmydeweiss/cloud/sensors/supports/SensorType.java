@@ -19,6 +19,9 @@ public class SensorType {
 	public static final int AMBIENT_THERMOMETER = 18;
 	public static final int PIR = 129;
 	public static final int LCD = 123;
+	public static final int BEACON = 130;
+	public static final int EASY = 200;
+	public static final int ACCELEROMETER2 = 89;
 
 
 	public static final String getStringSensorType(int type) {
@@ -55,30 +58,14 @@ public class SensorType {
 				return "Pir sensor";
 			case LCD:
 				return "LCD display";
+			case BEACON:
+				return "Beacon";
+			case EASY:
+				return "Easy Button";
+			case ACCELEROMETER2:
+				return "Accelerometer";
 			default:
 				return "Public sensor";
 		}
 	}
 }
-
-/*public enum SensorType {
-	THERMOMETER(0x41, "thermometer"),
-	LED(0x1, "led"),
-	GPS(0x3232, "gps");
-
-	private final int code;
-	private final String name;
-
-	public int getCode() {
-		return code;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	private SensorType(int code, String name) {
-		this.code = code;
-		this.name = name;
-	}
-}*/

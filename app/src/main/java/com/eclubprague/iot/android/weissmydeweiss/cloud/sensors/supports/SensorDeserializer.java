@@ -1,10 +1,13 @@
 package com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports;
 
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Accelerometer;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Accelerometer2;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.AmbientThermometer;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Barometer;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Beacon;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.ESCLed;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.ESCThermometer;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.EasyButton;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.GPS;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.GravitySensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Gyroscope;
@@ -67,6 +70,12 @@ public class SensorDeserializer implements JsonDeserializer<Sensor> {
                 return context.deserialize(json, PirSensor.class);
             case SensorType.LCD:
                 return context.deserialize(json, LcdDisplay.class);
+            case SensorType.BEACON:
+                return context.deserialize(json, Beacon.class);
+            case SensorType.EASY:
+                return context.deserialize(json, EasyButton.class);
+            case SensorType.ACCELEROMETER2:
+                return context.deserialize(json, Accelerometer2.class);
             default:
                 throw new JsonParseException("We can't deserialize this type of Sensor.");
         }

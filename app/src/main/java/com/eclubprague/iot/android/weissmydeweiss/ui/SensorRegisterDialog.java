@@ -12,6 +12,7 @@ import com.eclubprague.iot.android.weissmydeweiss.SensorsListFragment;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.hubs.Hub;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.VirtualSensorCreator;
+import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.supports.SensorType;
 
 /**
  * Created by Dat on 14.9.2015.
@@ -66,7 +67,9 @@ public class SensorRegisterDialog extends AlertDialog.Builder {
                                 createSensorInstance(SensorRegisterDialog.this.sensorId,
                                                 SensorRegisterDialog.this.sensorType,
                                                 SensorRegisterDialog.this.sensorSecret,
-                                                new Hub("00000001"), edit.getText().toString())
+                                        SensorRegisterDialog.this.sensorType == SensorType.BEACON ?
+                                                new Hub("00000000") : new Hub("00000001"),
+                                        edit.getText().toString())
                 );
             }
         });
