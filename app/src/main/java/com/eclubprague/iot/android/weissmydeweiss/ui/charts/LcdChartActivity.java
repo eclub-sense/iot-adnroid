@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.eclubprague.iot.android.weissmydeweiss.R;
 import com.eclubprague.iot.android.weissmydeweiss.cloud.sensors.Sensor;
@@ -70,6 +71,7 @@ WriteToSensorTask.TaskDelegate {
         et_text = (EditText) findViewById(R.id.et_text);
 
         btn_connect = (Button) findViewById(R.id.btn_connect);
+        btn_connect.setEnabled(false);
         btn_write = (Button) findViewById(R.id.btn_write);
 
         btn_write.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +133,7 @@ WriteToSensorTask.TaskDelegate {
             for(final ActionEntity action : sensor.getActions()) {
                 Log.e("ACTION", action.getName());
                 if(action.getName().equals("connect")) {
+                    btn_connect.setEnabled(true);
                     btn_connect.setText("Connect");
                     btn_connect.invalidate();
                     btn_connect.setOnClickListener(new View.OnClickListener() {
@@ -143,6 +146,7 @@ WriteToSensorTask.TaskDelegate {
                     btn_write.setEnabled(false);
 
                 } else if(action.getName().equals("disconnect")) {
+                    btn_connect.setEnabled(true);
                     btn_connect.setText("Disconnect");
                     btn_connect.invalidate();
                     btn_connect.setOnClickListener(new View.OnClickListener() {
@@ -160,6 +164,9 @@ WriteToSensorTask.TaskDelegate {
 
         } else {
             Log.e("WRITEABLEINIT", "empty actions");
+            btn_connect.setEnabled(false);
+            btn_write.setEnabled(false);
+            Toast.makeText(this, "No actions available", Toast.LENGTH_SHORT).show();
         }
     }
 
