@@ -31,7 +31,7 @@ public class GetSensorsDataTask extends AsyncTask<Void, Void, AllSensors> {
     protected AllSensors doInBackground(Void... params) {
 
         try {
-            ClientResource resource = new ClientResource("http://mlha-139.sin.cvut.cz:8080/registered_sensors");
+            ClientResource resource = new ClientResource("http://zettor.sin.cvut.cz:8080/registered_sensors");
             resource.setQueryValue("access_token", token);
 
             RegisteredSensors sr = resource.wrap(RegisteredSensors.class);

@@ -16,23 +16,28 @@ import java.util.ArrayList;
 public class GetSensorDataByIdTask extends AsyncTask<Void, Void, SensorAndData> {
 
     public interface TaskDelegate {
-        public void onGetSensorDataByIdTaskCompleted(SensorAndData sData);
+        void onGetSensorDataByIdTaskCompleted(SensorAndData sData);
+        void onGetSensorDataByIdTaskWithFlageCompleted(SensorAndData sData);
     }
 
     private ArrayList<TaskDelegate> delegateRef;
     private String token;
     private String uuid;
 
-    public GetSensorDataByIdTask(ArrayList<TaskDelegate> delegateRef, String token, String uuid) {
+    private boolean flag;
+
+    public GetSensorDataByIdTask(ArrayList<TaskDelegate> delegateRef, String token, String uuid, boolean flag) {
         this.delegateRef = delegateRef;
         this.token = token;
         this.uuid = uuid;
+        this.flag = flag;
     }
 
     @Override
     protected SensorAndData doInBackground(Void ... params) {
         try {
-            ClientResource resource = new ClientResource("http://mlha-139.sin.cvut.cz:8080/registered_sensors/" + uuid);
+            ClientResource resource = new ClientResource("http://zettor.sin.cvut.cz:8080/registered_sensors/" + uuid);
+            resource.setQueryValue("limit", flag == true ? "1" : "100");
             resource.setQueryValue("access_token", token);
 
             RegisteredSensors sr = resource.wrap(RegisteredSensors.class);
@@ -50,6 +55,10 @@ public class GetSensorDataByIdTask extends AsyncTask<Void, Void, SensorAndData> 
             Log.e("DATA","NULL");
             return;
         }
-        delegateRef.get(0).onGetSensorDataByIdTaskCompleted(sData);
+        if(!flag) {
+            delegateRef.get(0).onGetSensorDataByIdTaskCompleted(sData);
+        } else {
+            delegateRef.get(0).onGetSensorDataByIdTaskWithFlageCompleted(sData);
+        }
     }
 }

@@ -28,7 +28,7 @@ public class RegisterSensorTask extends AsyncTask<String, Void, Void> {
     @Override
     protected Void doInBackground(String... params) {
         try {
-            ClientResource cr = new ClientResource("http://mlha-139.sin.cvut.cz:8080/sensor_registration");
+            ClientResource cr = new ClientResource("http://zettor.sin.cvut.cz:8080/sensor_registration");
             cr.setQueryValue("access_token", params[0]);
             SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
             Log.e("REGISTERING", sensor.toString());

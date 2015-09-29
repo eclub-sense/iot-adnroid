@@ -320,7 +320,7 @@ public class SensorDataChartTestActivity extends ActionBarActivity implements
                 history = true;
                 try {
                     //stopTimerTask();
-                    new GetSensorDataByIdTask(delegateRef, token, uuid).execute();
+                    new GetSensorDataByIdTask(delegateRef, token, uuid, false).execute();
                 } catch (Exception e) {
                     Log.e("History", e.toString());
                 }
@@ -407,6 +407,11 @@ public class SensorDataChartTestActivity extends ActionBarActivity implements
 //        }
     }
 
+    @Override
+    public void onGetSensorDataByIdTaskWithFlageCompleted(SensorAndData sData) {
+
+    }
+
     //----------------------------------------------------------------
     // TIMER TASK
     // DO SOME WORKS PERIODICALLY
@@ -442,7 +447,7 @@ public class SensorDataChartTestActivity extends ActionBarActivity implements
                 handler.post(new Runnable() {
                     public void run() {
 
-                        new GetSensorDataByIdTask(delegateRef, token, uuid).execute();
+                        new GetSensorDataByIdTask(delegateRef, token, uuid, false).execute();
                     }
                 });
             }

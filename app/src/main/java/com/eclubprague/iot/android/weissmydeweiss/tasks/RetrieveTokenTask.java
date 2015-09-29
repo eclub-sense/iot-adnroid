@@ -31,7 +31,7 @@ public class RetrieveTokenTask extends AsyncTask<String, Void, TokenWrapper> {
 
         try {
 
-            ClientResource resource = new ClientResource("http://mlha-139.sin.cvut.cz:8080/new_token");
+            ClientResource resource = new ClientResource("http://zettor.sin.cvut.cz:8080/new_token");
             //resource.post( (new NewTokenJson(codes[0]))  );
             //return resource.get(TokenWrapper.class);
             UserRegistrator ur = resource.wrap(UserRegistrator.class);

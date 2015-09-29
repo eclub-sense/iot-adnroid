@@ -25,7 +25,7 @@ public class UnregisterSensorTask extends AsyncTask<String, Void, Void> {
     @Override
     protected Void doInBackground(String... params) {
         try {
-            ClientResource resource = new ClientResource("http://mlha-139.sin.cvut.cz:8080/registered_sensors/" + params[0]);
+            ClientResource resource = new ClientResource("http://zettor.sin.cvut.cz:8080/registered_sensors/" + params[0]);
             resource.setQueryValue("access_token", params[1]);
 
             RegisteredSensors sr = resource.wrap(RegisteredSensors.class);

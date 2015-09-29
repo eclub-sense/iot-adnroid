@@ -397,6 +397,11 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
         //}
     }
 
+    @Override
+    public void onGetSensorDataByIdTaskWithFlageCompleted(SensorAndData sData) {
+
+    }
+
     private void resetChart() {
         mChart.clear();
         LineData data = new LineData();
@@ -435,7 +440,7 @@ public class PirChartActivity extends ActionBarActivity implements GetSensorData
                 handler.post(new Runnable() {
                     public void run() {
 
-                        new GetSensorDataByIdTask(delegateRef, token, uuid).execute();
+                        new GetSensorDataByIdTask(delegateRef, token, uuid, false).execute();
                     }
                 });
             }

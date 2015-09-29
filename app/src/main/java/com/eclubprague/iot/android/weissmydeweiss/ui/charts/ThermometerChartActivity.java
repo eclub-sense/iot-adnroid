@@ -135,7 +135,7 @@ public class ThermometerChartActivity extends ActionBarActivity implements GetSe
                 history = true;
                 try {
                     stopTimerTask();
-                    new GetSensorDataByIdTask(delegateRef, token, uuid).execute();
+                    new GetSensorDataByIdTask(delegateRef, token, uuid, false).execute();
                 } catch (Exception e) {
                     Log.e("History", e.toString());
                 }
@@ -262,6 +262,12 @@ public class ThermometerChartActivity extends ActionBarActivity implements GetSe
 
 
     }
+
+    @Override
+    public void onGetSensorDataByIdTaskWithFlageCompleted(SensorAndData sData) {
+
+    }
+
     /** adapter that supports 3 different item types */
     private class ChartDataAdapter extends ArrayAdapter<ChartItem> {
 
@@ -321,7 +327,7 @@ public class ThermometerChartActivity extends ActionBarActivity implements GetSe
                 handler.post(new Runnable() {
                     public void run() {
 
-                        new GetSensorDataByIdTask(delegateRef, token, uuid).execute();
+                        new GetSensorDataByIdTask(delegateRef, token, uuid, false).execute();
                     }
                 });
             }

@@ -112,7 +112,7 @@ WriteToSensorTask.TaskDelegate {
         actionBar.setTitle("LCD");
 
         delegateRef.add(this);
-        new GetSensorDataByIdTask(delegateRef, token, uuid).execute();
+        new GetSensorDataByIdTask(delegateRef, token, uuid, false).execute();
 
     }
 
@@ -171,7 +171,12 @@ WriteToSensorTask.TaskDelegate {
     }
 
     @Override
+    public void onGetSensorDataByIdTaskWithFlageCompleted(SensorAndData sData) {
+
+    }
+
+    @Override
     public void onWriteToSensorTaskCompleted() {
-        new GetSensorDataByIdTask(delegateRef, token, uuid).execute();
+        new GetSensorDataByIdTask(delegateRef, token, uuid, false).execute();
     }
 }

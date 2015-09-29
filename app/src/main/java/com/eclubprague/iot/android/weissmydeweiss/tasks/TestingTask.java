@@ -31,7 +31,7 @@ public class TestingTask extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... params) {
 
         try {
-            ClientResource cr = new ClientResource("http://147.32.107.139:8080/registered_sensors");
+            ClientResource cr = new ClientResource("http://zettor.sin.cvut.cz:8080/registered_sensors");
             //?access_token="+ params[0]
 
             cr.setChallengeResponse(ChallengeScheme.HTTP_OAUTH_BEARER, params[0], null);

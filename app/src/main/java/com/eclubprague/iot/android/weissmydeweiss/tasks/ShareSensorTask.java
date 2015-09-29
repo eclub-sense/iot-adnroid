@@ -16,7 +16,7 @@ public class ShareSensorTask extends AsyncTask<String, Void, Void> {
     @Override
     protected Void doInBackground(String... params) {
         try {
-            ClientResource resource = new ClientResource("http://mlha-139.sin.cvut.cz:8080/share_sensor");
+            ClientResource resource = new ClientResource("http://zettor.sin.cvut.cz:8080/share_sensor");
             resource.setQueryValue("access_token", params[2]);
 
             RegisteredSensors sr = resource.wrap(RegisteredSensors.class);

@@ -29,7 +29,7 @@ public class UserRegistrationTask extends AsyncTask<String, Void, TokenWrapper> 
 
         try {
 
-            ClientResource resource = new ClientResource("http://mlha-139.sin.cvut.cz:8080/user_registration");
+            ClientResource resource = new ClientResource("http://zettor.sin.cvut.cz:8080/user_registration");
             //resource.post( (new NewTokenJson(codes[0]))  );
             //return resource.get(TokenWrapper.class);
             UserRegistrator ur = resource.wrap(UserRegistrator.class);
