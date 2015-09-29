@@ -331,17 +331,8 @@ public class ThermChartActivity extends ActionBarActivity implements GetSensorDa
                 tv_temperature.invalidate();
                 tv_time.setText(lastData.getTime());
                 tv_time.invalidate();
-
-//                if(chartMode == TEMPERATURE) {
-//                    fillChart(measured.get(i).getItems());
-//                }
-//            } else if (measured.get(i).getName().contains("vbat") && chartMode == VBAT) {
-//                fillChart(measured.get(i).getItems());
-//            } else if (measured.get(i).getName().contains("pressure") && chartMode == PRESSURE) {
-//                fillChart(measured.get(i).getItems());
             }
         }
-        //}
     }
 
     @Override

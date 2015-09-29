@@ -21,6 +21,44 @@
             android:textSize="100sp"
             android:text="0"/>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/darker_gray">
+
+            <ImageView
+                android:id="@+id/iv_vbat_mode"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+
+                android:src="@drawable/ic_vbat" />
+
+            <ImageView
+                android:id="@+id/iv_pir_mode"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+
+                android:layout_toRightOf="@+id/iv_vbat_mode"
+
+                android:src="@drawable/ic_pir" />
+
+        </RelativeLayout>
+
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/pir_chart"
             android:layout_width="match_parent"

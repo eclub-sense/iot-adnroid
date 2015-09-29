@@ -52,6 +52,7 @@ public class MainActivity extends ActionBarActivity
     private CharSequence mTitle;
 
     private TokenWrapper token;
+    private String email;
 
 
 
@@ -74,6 +75,8 @@ public class MainActivity extends ActionBarActivity
 
         token = TokenWrapper.getTokenWrapperInstance(tokenWrapperString);
         Log.e("PSTOKEN", token.getAccess_token());
+
+        email = getIntent().getStringExtra("email");
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -111,10 +114,12 @@ public class MainActivity extends ActionBarActivity
                 ((SensorsListFragment)(fragment)).setMainActivityRef(activityRef);
                 break;
             case 1:
-                fragment = HubsListFragment.newInstance();
+                fragment = BuiltInSensorsListFragment.newInstance();
                 break;
             case 2:
-                fragment = BuiltInSensorsListFragment.newInstance();
+                //fragment = HubsListFragment.newInstance();
+                fragment = ProfileFragment.newInstance();
+                ((ProfileFragment)(fragment)).setEmail(email);
         }
 
         // update the main content by replacing fragments

@@ -2,8 +2,8 @@
     <string name="app_name">IoT Control</string>
 
     <string name="title_section1">Sensors</string>
-    <string name="title_section2">Hubs</string>
-    <string name="title_section3">Built-ins</string>
+    <string name="title_section2">Built-ins</string>
+    <string name="title_section3">Profile</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

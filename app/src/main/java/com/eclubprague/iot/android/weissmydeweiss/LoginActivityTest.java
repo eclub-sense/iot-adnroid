@@ -204,6 +204,7 @@ UserRegistrationDialog.TaskDelegate, UserRegistrationTask.TaskDelegate {
     public void startApplication(TokenWrapper token) {
         Intent intent = new Intent(LoginActivityTest.this, MainActivity.class);
         intent.putExtra("token", token.toString());
+        intent.putExtra("email", email);
         startActivity(intent);
         this.finish();
     }

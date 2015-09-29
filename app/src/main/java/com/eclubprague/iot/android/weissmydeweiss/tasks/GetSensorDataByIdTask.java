@@ -37,7 +37,7 @@ public class GetSensorDataByIdTask extends AsyncTask<Void, Void, SensorAndData> 
     protected SensorAndData doInBackground(Void ... params) {
         try {
             ClientResource resource = new ClientResource("http://zettor.sin.cvut.cz:8080/registered_sensors/" + uuid);
-            resource.setQueryValue("limit", flag == true ? "1" : "100");
+            resource.setQueryValue("limit", flag == true ? "100" : "1");
             resource.setQueryValue("access_token", token);
 
             RegisteredSensors sr = resource.wrap(RegisteredSensors.class);
