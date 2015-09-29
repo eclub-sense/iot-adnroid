@@ -79,8 +79,12 @@ SensorShareDialog.DialogDelegate{
                 return false;
             }
         });
-
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        activityRef.get(0).getSensorsData();
     }
 
     @Override

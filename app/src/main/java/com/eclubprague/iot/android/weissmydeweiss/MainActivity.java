@@ -202,33 +202,6 @@ public class MainActivity extends ActionBarActivity
                     Log.e("QRCODE", sensorId + ", " + Integer.toString(sensorType) + ", " + sensorSecret);
 
                     new SensorRegisterDialog(this, sensorId, sensorType, sensorSecret);
-
-//                    Thread thr = new Thread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            try {
-//
-//                                Engine.getInstance().getRegisteredConverters().add(new GsonConverter());
-//
-//                                // try connection
-//
-//                                ClientResource cr = new ClientResource("http://mlha-139.sin.cvut.cz:8080/sensor_registration");
-//                                //ClientResource cr = new ClientResource("http://192.168.201.240:8080/sensor_registration");
-//                                cr.setQueryValue("access_token", token.getAccess_token());
-//                                SensorRegistrator sr = cr.wrap(SensorRegistrator.class);
-//
-//                                Sensor sensor = VirtualSensorCreator.
-//                                        createSensorInstance(sensorId, sensorType, sensorSecret, new Hub("00000001"));
-//                                sr.store(sensor);
-//
-//                            }catch(Throwable e) {
-//                                e.printStackTrace();
-//                                Toast t2 = Toast.makeText(MainActivity.this, ":-( Exception: " + e.getMessage(), Toast.LENGTH_LONG);
-//                                t2.show();
-//                            }
-//                        }
-//                    });
-//                    thr.start();
                 }
                 catch(Exception e) {
                     Toast t2 = Toast.makeText(this, "Exception: NaN", Toast.LENGTH_SHORT);
@@ -253,9 +226,6 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onGetSensorsDataTaskCompleted(AllSensors message) {
-
-//        my = message.getMy();
-//        borrowed = message.getBorrowed();
         refreshSensorsList(message);
 
     }

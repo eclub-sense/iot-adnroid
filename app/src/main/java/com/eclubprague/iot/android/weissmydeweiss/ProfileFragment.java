@@ -8,14 +8,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestBuilder;
 
-import org.w3c.dom.Text;
+import org.restlet.resource.ClientResource;
+import org.restlet.resource.Get;
+
+import java.util.List;
 
 import fr.tkeunebr.gravatar.Gravatar;
 
@@ -61,7 +64,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(2);
+        ((MainActivity) activity).onSectionAttached(3);
     }
 
     public void setEmail(String email) {
@@ -69,26 +72,121 @@ public class ProfileFragment extends Fragment {
     }
 
 
-    private class GetAvatarTask extends AsyncTask<Void, Void, Void> {
+    private class GetAvatarTask extends AsyncTask<Void, Void, GravatarUser> {
+
+        RequestBuilder builder;
 
         @Override
-        protected Void doInBackground(Void... params) {
-            return null;
+        protected GravatarUser doInBackground(Void... params) {
+
+            try {
+
+                String imageUrl = Gravatar.init().with(email).force404().size(mAvatarImageViewPixelSize).build();
+
+                Log.e("GURL", imageUrl);
+
+                builder = Picasso.with(getActivity()).load(imageUrl);
+
+                String userUrl = "";
+
+                int no_slashes = 0;
+                for (int i = 0; i < imageUrl.length(); i++) {
+                    if (imageUrl.charAt(i) == '?') break;
+                    if (imageUrl.charAt(i) == '/') {
+                        no_slashes++;
+                    }
+                    if (no_slashes <= 3) continue;
+                    userUrl += imageUrl.charAt(i);
+
+                }
+
+                Log.e("UURL", userUrl);
+
+                //ClientResource resource = new ClientResource("http://en.gravatar.com/bffa8cdcccb527156e2bd502afdf2d19.json");
+                ClientResource resource = new ClientResource("http://en.gravatar.com" + userUrl + ".json");
+                GravatarInterface gr = resource.wrap(GravatarInterface.class);
+                return gr.getGravatarEntry().getEntry().get(0);
+            }catch (Exception e) {
+                Log.e("URLFAILED", e.toString());
+                return null;
+            }
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            String gravatarUrl = Gravatar.init().with(email).force404().size(mAvatarImageViewPixelSize).build();
+        protected void onPostExecute(GravatarUser user) {
 
-            Log.e("GURL", gravatarUrl);
-
-            Picasso.with(getActivity())
-                    .load(gravatarUrl)
-                    .placeholder(R.drawable.ic_contact_picture)
+            builder.placeholder(R.drawable.ic_contact_picture)
                     .error(R.drawable.ic_contact_picture)
-                    .into((ImageView) rootView.findViewById(R.id.user_avatar));
+                    .into(user_avatar);
+
+            if(user == null) {
+                Toast.makeText(ProfileFragment.this.getActivity(), "Cannot fetch profile", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            user_email.setText("Email: " + email);
+            user_first_name.setText("First name: " + user.getName().getGivenName());
+            user_last_name.setText("Last name: " + user.getName().getFamilyName());
+            user_location.setText("Location: " + user.getCurrentLocation());
 
             rootView.invalidate();
         }
     }
+
+
+    private class Name {
+        private String givenName;
+        private String familyName;
+
+        public Name(String givenName, String familyName) {
+            this.givenName = givenName;
+            this.familyName = familyName;
+        }
+
+        public String getGivenName() {
+            return givenName;
+        }
+
+        public String getFamilyName() {
+            return familyName;
+        }
+    }
+
+    private class GravatarUser {
+        private Name name;
+        private String currentLocation;
+
+        public GravatarUser(Name name, String currentLocation) {
+            this.name = name;
+            this.currentLocation = currentLocation;
+        }
+
+        public Name getName() {
+            return name;
+        }
+
+        public String getCurrentLocation() {
+            return currentLocation;
+        }
+    }
+
+    private class GravatarEntry {
+        private List<GravatarUser> entry;
+
+        public GravatarEntry(List<GravatarUser> entry) {
+            this.entry = entry;
+        }
+
+        public List<GravatarUser> getEntry() {
+            return entry;
+        }
+    }
+
+
+    private interface GravatarInterface {
+
+        @Get("json")
+        public GravatarEntry getGravatarEntry();
+    }
+
 }
